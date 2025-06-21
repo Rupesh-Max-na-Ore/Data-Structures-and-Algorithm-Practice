@@ -1,0 +1,737 @@
+package Strings_Basic_and_Medium.Basic_and_Easy_String_Problems;
+/*
+ * Q1
+ * 1021. Remove Outermost Parentheses
+Easy
+A valid parentheses string is either empty "", "(" + A + ")", or A + B, where A and B are valid parentheses strings, and + represents string concatenation.
+
+For example, "", "()", "(())()", and "(()(()))" are all valid parentheses strings.
+A valid parentheses string s is primitive if it is nonempty, and there does not exist a way to split it into s = A + B, with A and B nonempty valid parentheses strings.
+
+Given a valid parentheses string s, consider its primitive decomposition: s = P1 + P2 + ... + Pk, where Pi are primitive valid parentheses strings.
+
+Return s after removing the outermost parentheses of every primitive string in the primitive decomposition of s.
+
+ 
+
+Example 1:
+
+Input: s = "(()())(())"
+Output: "()()()"
+Explanation: 
+The input string is "(()())(())", with primitive decomposition "(()())" + "(())".
+After removing outer parentheses of each part, this is "()()" + "()" = "()()()".
+Example 2:
+
+Input: s = "(()())(())(()(()))"
+Output: "()()()()(())"
+Explanation: 
+The input string is "(()())(())(()(()))", with primitive decomposition "(()())" + "(())" + "(()(()))".
+After removing outer parentheses of each part, this is "()()" + "()" + "()(())" = "()()()()(())".
+Example 3:
+
+Input: s = "()()"
+Output: ""
+Explanation: 
+The input string is "()()", with primitive decomposition "()" + "()".
+After removing outer parentheses of each part, this is "" + "" = "".
+ 
+
+Constraints:
+
+1 <= s.length <= 105
+s[i] is either '(' or ')'.
+s is a valid parentheses string.
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+316.2K
+Submissions
+382.3K
+Acceptance Rate
+82.7%
+ */
+
+import java.util.Stack;
+
+public class Remove_Outermost_Parentheses {
+    public String removeOuterParentheses(String s) {
+        Stack<Character> stack=new Stack<>();
+        StringBuilder ans=new StringBuilder();
+        for(int i=0; i<s.length(); i++){
+            char ch=s.charAt(i);
+            if(ch=='('){
+                if(!(stack.isEmpty())) ans.append("(");
+                stack.push('(');
+            } else if(ch==')'){
+                stack.pop();
+                if(stack.isEmpty()) continue;
+                else ans.append(")");
+            }
+        } return ans.toString();
+    }
+
+    public static void main(String[] args) {
+        Remove_Outermost_Parentheses solution = new Remove_Outermost_Parentheses();
+
+        // Test cases
+        String s1 = "(()())(())";
+        String s2 = "(()())(())(()(()))";
+        String s3 = "()()";
+
+        System.out.println(solution.removeOuterParentheses(s1)); // Output: "()()()"
+        System.out.println(solution.removeOuterParentheses(s2)); // Output: "()()()()(())"
+        System.out.println(solution.removeOuterParentheses(s3)); // Output: ""
+    }
+}
+// Lc submission, better SC
+// class Solution {
+//     public String removeOuterParentheses(String s) {
+//         StringBuilder result = new StringBuilder();
+//         int opened = 0;
+        
+//         for (char c : s.toCharArray()) {
+//             if ((c == '(' && opened++ > 0) || 
+//                 (c == ')' && opened-- > 1)) {
+//                 result.append(c);
+//             }
+//         }
+
+//         return result.toString();
+//     }
+// }
+
+package Strings_Basic_and_Medium.Basic_and_Easy_String_Problems;
+/*
+ * Q2
+ * 151. Reverse Words in a String
+Medium
+
+Given an input string s, reverse the order of the words.
+
+A word is defined as a sequence of non-space characters. The words in s will be separated by at least one space.
+
+Return a string of the words in reverse order concatenated by a single space.
+
+Note that s may contain leading or trailing spaces or multiple spaces between two words. The returned string should only have a single space separating the words. Do not include any extra spaces.
+
+ 
+
+Example 1:
+
+Input: s = "the sky is blue"
+Output: "blue is sky the"
+Example 2:
+
+Input: s = "  hello world  "
+Output: "world hello"
+Explanation: Your reversed string should not contain leading or trailing spaces.
+Example 3:
+
+Input: s = "a good   example"
+Output: "example good a"
+Explanation: You need to reduce multiple spaces between two words to a single space in the reversed string.
+ 
+
+Constraints:
+
+1 <= s.length <= 104
+s contains English letters (upper-case and lower-case), digits, and spaces ' '.
+There is at least one word in s.
+ 
+
+Follow-up: If the string data type is mutable in your language, can you solve it in-place with O(1) extra space?
+
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+1.5M
+Submissions
+3.6M
+Acceptance Rate
+43.0%
+ */
+import java.util.Stack;
+
+public class Reverse_Words {
+    public String reverseWords(String s) {
+        Stack<Character> stack=new Stack<>();
+        StringBuilder ans=new StringBuilder();
+        for(int i=s.length()-1; i>=-1; i--){
+            char ch=(i>=0)?s.charAt(i):' ';
+            if(ch==' '||i==-1) {
+                while(!(stack.isEmpty()))
+                {
+                    char c= stack.pop();
+                    ans.append(c);
+                } if (ans.length()>=1 && ans.charAt(ans.length()-1)!=' ') ans.append(ch);
+            } else stack.push(ch);
+        } return ans.toString().trim() ;
+
+    }
+
+    public static void main(String[] args) {
+        Reverse_Words solution = new Reverse_Words();
+
+        // Test cases
+        String s1 = "the sky is blue";
+        String s2 = "  hello world  ";
+        String s3 = "a good   example";
+
+        System.out.println(solution.reverseWords(s1)); // Output: "blue is sky the"
+        System.out.println(solution.reverseWords(s2)); // Output: "world hello"
+        System.out.println(solution.reverseWords(s3)); // Output: "example good a"
+    }
+}
+// //lc faster soln
+// class Solution {
+//     public String reverseWords(String s) {
+//         StringBuilder ans = new StringBuilder();
+//         int i = s.length() - 1;
+
+//         while (i >= 0) {
+//             while (i >= 0 && s.charAt(i) == ' ') i--; // Skip trailing spaces
+//             int j = i;
+//             if (i < 0) break; // Break if no more words
+//             while (i >= 0 && s.charAt(i) != ' ') i--; // Find the start of the word
+//             if (ans.length() > 0) ans.append(' '); // Append a space before the next word
+//             ans.append(s.substring(i + 1, j + 1)); // Append the word
+//         }
+
+//         return ans.toString();
+//     }
+// }
+// another lc soln, using regular expressions
+// class Solution {
+//     public String reverseWords(String s) {
+//         String[] arr = s.trim().split("\\s+");
+//         int i=0,j=arr.length-1;
+//         while(i<j) {
+//             String t = arr[i];
+//             arr[i] = arr[j];
+//             arr[j] = t;
+//             i++;
+//             j--;
+//         }
+//         return String.join(" ", arr);
+//     }
+// }
+
+package Strings_Basic_and_Medium.Basic_and_Easy_String_Problems;
+/* Q3
+ * 1903. Largest Odd Number in String
+Easy
+You are given a string num, representing a large integer. Return the largest-valued odd integer (as a string) that is a non-empty substring of num, or an empty string "" if no odd integer exists.
+
+A substring is a contiguous sequence of characters within a string.
+
+ 
+
+Example 1:
+
+Input: num = "52"
+Output: "5"
+Explanation: The only non-empty substrings are "5", "2", and "52". "5" is the only odd number.
+Example 2:
+
+Input: num = "4206"
+Output: ""
+Explanation: There are no odd numbers in "4206".
+Example 3:
+
+Input: num = "35427"
+Output: "35427"
+Explanation: "35427" is already an odd number.
+ 
+
+Constraints:
+
+1 <= num.length <= 105
+num only consists of digits and does not contain any leading zeros.
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+249K
+Submissions
+394.3K
+Acceptance Rate
+63.1%
+
+ */
+public class LargestOdd {
+    public String largestOddNumber(String s) {
+        int i=s.length()-1;
+        while(i>=0){
+            int n= Integer.parseInt(s.charAt(i)+"");
+            if(n%2==0) {
+                i--; continue;
+            } else break;
+        } return s.substring(0, i+1);
+    }
+}
+// lc submission, fastest
+// class Solution {
+//     public String largestOddNumber(String s) {
+//         int i=s.length()-1;
+//         while(i>=0){
+//             int n= s.charAt(i) - '0';
+//             if(n%2==0) {
+//                 i--;
+//             } else break;
+//         } return s.substring(0, i+1);
+//     }
+// }
+
+// another lc submission, using different in-built method
+// class Solution {
+//     public String largestOddNumber(String s) {
+//         int i=s.length()-1;
+//         while(i>=0){
+//             int n= Character.getNumericValue(s.charAt(i));
+//             if(n%2==0) {
+//                 i--;
+//             } else break;
+//         } return s.substring(0, i+1);
+//     }
+// }
+
+package Strings_Basic_and_Medium.Basic_and_Easy_String_Problems;
+
+import java.util.Arrays;
+
+/*
+ * Q4
+ * 14. Longest Common Prefix
+Easy
+Topics
+Companies
+Write a function to find the longest common prefix string amongst an array of strings.
+
+If there is no common prefix, return an empty string "".
+
+ 
+
+Example 1:
+
+Input: strs = ["flower","flow","flight"]
+Output: "fl"
+Example 2:
+
+Input: strs = ["dog","racecar","car"]
+Output: ""
+Explanation: There is no common prefix among the input strings.
+ 
+
+Constraints:
+
+1 <= strs.length <= 200
+0 <= strs[i].length <= 200
+strs[i] consists of only lowercase English letters.
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+3.4M
+Submissions
+7.8M
+Acceptance Rate
+42.9%
+ */
+public class LongestCommonPrefix {
+    public String longestCommonPrefix(String[] A) {
+        StringBuilder ans = new StringBuilder();
+        Arrays.sort(A);
+        String first = A[0]; 
+        String last = A[A.length-1];
+        int n1=first.length();
+        int nlast=last.length();
+        int stop= (n1<nlast)?n1: nlast;
+        for (int i=0; i<stop; i++) {
+            if (first.charAt(i) == last.charAt(i)) {
+                ans.append(first.charAt(i));     
+            } else break;
+        }
+        return ans.toString();
+    }
+}
+// //lc submission
+// class Solution {
+//     public String longestCommonPrefix(String[] A) {
+//         StringBuilder ans = new StringBuilder();
+//         Arrays.sort(A);
+//         String first = A[0];
+//         String last = A[A.length-1];
+//         int n1=first.length();
+//         int nlast=last.length();
+//         int stop= (n1<nlast)?n1: nlast;
+//         for (int i=0; i<stop; i++) {
+//             if (first.charAt(i) == last.charAt(i)) {
+//                 ans.append(first.charAt(i));     
+//             } else return ans.toString();
+//         }
+//         return ans.toString();
+//     }
+// }
+
+//another lc submission, little faster
+// class Solution {
+//     public String longestCommonPrefix(String[] A) {
+//         //StringBuilder ans = new StringBuilder();
+//         Arrays.sort(A);
+//         String first = A[0];
+//         String last = A[A.length-1];
+//         int n1=first.length();
+//         int nlast=last.length();
+//         int stop= (n1<nlast)?n1: nlast;
+//         int i;
+//         for (i=0; i<stop; i++) {
+//             if (first.charAt(i) == last.charAt(i)) {
+//                 //ans.append(first.charAt(i));
+//                 continue;  
+//             } else break;
+//         }
+//         return first.substring(0,i);
+//     }
+// }
+
+package Strings_Basic_and_Medium.Basic_and_Easy_String_Problems;
+/*Q5
+ * 205. Isomorphic Strings
+Solved
+Easy
+Topics
+Companies
+Given two strings s and t, determine if they are isomorphic.
+
+Two strings s and t are isomorphic if the characters in s can be replaced to get t.
+
+All occurrences of a character must be replaced with another character while preserving the order of characters. No two characters may map to the same character, but a character may map to itself.
+
+ 
+
+Example 1:
+
+Input: s = "egg", t = "add"
+Output: true
+Example 2:
+
+Input: s = "foo", t = "bar"
+Output: false
+Example 3:
+
+Input: s = "paper", t = "title"
+Output: true
+ 
+
+Constraints:
+
+1 <= s.length <= 5 * 104
+t.length == s.length
+s and t consist of any valid ascii character.
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+1.4M
+Submissions
+3M
+Acceptance Rate
+45.2%
+ */
+public class Isomorphic {
+    public boolean isIsomorphic(String s, String t) {
+        if(s.length()!=t.length())
+            return false;
+
+        int pos1[]=new int[256];
+        int pos2[]=new int[256];
+
+        for(int i=0;i<s.length();i++)
+        {
+            if(pos1[s.charAt(i)]!=pos2[t.charAt(i)])
+                return false;
+
+            pos1[s.charAt(i)]=i+1;
+            pos2[t.charAt(i)]=i+1;
+        }
+        return true;
+    }
+}
+/*
+ * //anOTHER WAY TO DO SAME, JUST FASTER
+ * class Solution {
+        public boolean isIsomorphic(String s, String t) {
+
+        int pos1[]=new int[128];
+        int pos2[]=new int[128];
+
+        char[] arr1 = s.toCharArray();
+        char[] arr2 = t.toCharArray();
+        int i = 0;
+
+        for(char ch1: arr1)
+        {   
+            char ch2 = arr2[i++];
+            if(pos1[ch1] != pos2[ch2])
+                return false;
+
+            pos1[ch1]=i+1;
+            pos2[ch2]=i+1;
+        }
+        return true;
+    }
+}
+ */
+
+ package Strings_Basic_and_Medium.Basic_and_Easy_String_Problems;
+/*
+ * Q6
+ * 796. Rotate String
+Solved
+Easy
+Topics
+Companies
+Given two strings s and goal, return true if and only if s can become goal after some number of shifts on s.
+
+A shift on s consists of moving the leftmost character of s to the rightmost position.
+
+For example, if s = "abcde", then it will be "bcdea" after one shift.
+ 
+
+Example 1:
+
+Input: s = "abcde", goal = "cdeab"
+Output: true
+Example 2:
+
+Input: s = "abcde", goal = "abced"
+Output: false
+ 
+
+Constraints:
+
+1 <= s.length, goal.length <= 100
+s and goal consist of lowercase English letters.
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+314.2K
+Submissions
+539.5K
+Acceptance Rate
+58.2%
+ */
+public class RotationOfString {
+    public boolean rotateString(String A, String B) {
+        if(A == null || B == null) {
+            //throw exception on A and B both being null
+            return false;
+        }
+        if(A.length() != B.length()) {
+            return false;
+        }
+        int N=A.length();
+        if(N == 0) {
+            return true;
+        }
+        for(int i = 0; i < N; i++) {
+            if(CheckRotatedString(A, B, N, i)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    private boolean CheckRotatedString(String A, String B, int N, int rotation) {
+        for(int i = 0; i < N; i++) {
+            if(A.charAt(i) == B.charAt((i+rotation)%N)) continue;
+            else return false;
+        }
+        return true;
+    }
+}
+
+// //lc solution, small code, little less efficient
+// class Solution {
+//     public boolean rotateString(String A, String B) {
+//          return (A.length() == B.length() && (B+B).contains(A));
+//      }
+//  }
+
+package Strings_Basic_and_Medium.Basic_and_Easy_String_Problems;
+
+import java.util.HashMap;
+
+/*Q7
+242. Valid Anagram
+Easy
+Topics
+Companies
+Given two strings s and t, return true if t is an anagram of s, and false otherwise.
+
+An Anagram is a word or phrase formed by rearranging the letters of a different word or phrase, typically using all the original letters exactly once.
+
+ 
+
+Example 1:
+
+Input: s = "anagram", t = "nagaram"
+Output: true
+Example 2:
+
+Input: s = "rat", t = "car"
+Output: false
+ 
+
+Constraints:
+
+1 <= s.length, t.length <= 5 * 104
+s and t consist of lowercase English letters.
+ 
+
+Follow up: What if the inputs contain Unicode characters? How would you adapt your solution to such a case?
+
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+3.5M
+Submissions
+5.5M
+Acceptance Rate
+64.7%
+*/
+public class ValidAnagrams {
+    public boolean isAnagram(String s, String t) {
+        int n=s.length();
+        if(t.length()!=n) return false;
+        HashMap<Character,Integer> Freq = new HashMap<>();
+        // Ini. freq. of all LoCase letters to 0
+        // for(int i = 0; i < 26; i++){
+        //     Freq.put((char)(i + 'a'), 0);
+        // }
+        // Count freq. of chars in s
+        for(int i = 0; i < n; i++){
+            // store current char of s in ch
+            char ch = s.charAt(i);
+            //check if ch is present in HM
+            //if(Freq.containsKey(ch)){
+                //if present, store its (int)
+                //freq. of occurence in count var.
+                int count = (Freq.containsKey(ch))?Freq.get(ch):0;
+                //increase freq. of ch by 1
+                Freq.put(ch, count + 1);
+            //}
+
+            char ct=t.charAt(i);
+            //if(Freq.containsKey(ct)){
+                int cnt=(Freq.containsKey(ct))?Freq.get(ct):0;
+                Freq.remove(ct);
+                Freq.put(ct, cnt-1);
+            //}
+        }
+        for (char key : Freq.keySet()) {
+                if(Freq.get(key)!=0) return false;
+            } return true;
+    }
+}
+
+/*
+ * lc soln
+ * class Solution {
+    public boolean isAnagram(String s, String t) {
+        int n=s.length();
+        if(t.length()!=n) return false;
+        HashMap<Character,Integer> Freq = new HashMap<>();
+        
+        for(int i = 0; i < n; i++){
+            char ch = s.charAt(i);
+                int count = (Freq.containsKey(ch))?Freq.get(ch):0;
+                Freq.put(ch, count + 1);
+
+            char ct=t.charAt(i);
+                int cnt=(Freq.containsKey(ct))?Freq.get(ct):0;
+                Freq.remove(ct);
+                Freq.put(ct, cnt-1);
+        }
+        for (char key : Freq.keySet()) {
+                if(Freq.get(key)!=0) return false;
+            } return true;
+    }
+}
+ */
+
+//  //lc submission using count array
+//  public boolean isAnagram(String str1, String str2) {
+
+//     // Convert both to lowercase to ignore case match
+//     str1 = str1.toLowerCase();
+//     str2 = str2.toLowerCase();
+
+//     // Strip of all the white spaces
+//     str1 = str1.replace(" ", "");
+//     str2 = str2.replace(" ", "");
+
+//     // Initialize the bucket array
+//     int[] counts = new int[26];
+
+//     // Fill the buckets
+//     for (int i = 0; i < str1.length(); i++) {
+//       counts[str1.charAt(i) - 'a']++;
+//     }
+
+//     // Empty the buckets
+//     for (int i = 0; i < str2.length(); i++) {
+//       counts[str2.charAt(i) - 'a']--;
+//     }
+
+//     // Check if all buckets are empty
+//     for (int count : counts) {
+//       if (count != 0)
+//         return false;
+//     }
+
+//     return true;
+//   }
+
+// // More optimized array soln
+// public boolean isAnagram(String str1, String str2) {
+//     int n=str1.length();
+//     if(str2.length()!=n) return false;
+// // Convert both to lowercase to ignore case match
+// str1 = str1.toLowerCase();
+// str2 = str2.toLowerCase();
+
+// // Strip of all the white spaces
+// str1 = str1.replace(" ", "");
+// str2 = str2.replace(" ", "");
+
+// // Initialize the bucket array
+// int[] counts = new int[26];
+
+// // Fill the buckets
+// for (int i = 0; i < str1.length(); i++) {
+//   counts[str1.charAt(i) - 'a']++;
+//   counts[str2.charAt(i) - 'a']--;
+// }
+
+
+// // Check if all buckets are empty
+// for (int count : counts) {
+//   if (count != 0)
+//     return false;
+// }
+
+// return true;
+// }

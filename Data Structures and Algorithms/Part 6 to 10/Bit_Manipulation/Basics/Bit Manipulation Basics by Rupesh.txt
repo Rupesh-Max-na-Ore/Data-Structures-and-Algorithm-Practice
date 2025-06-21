@@ -1,0 +1,855 @@
+package Bit_Manipulation.Basics;
+/*Q1 Bit Manipulation
+EasyAccuracy: 49.84%Submissions: 17K+Points: 2
+Be the comment of the day in POTD and win a GfG T-Shirt!
+Solve right now
+
+banner
+Given a 32 bit unsigned integer num and an integer i. Perform following operations on the number - 
+
+1. Get ith bit
+
+2. Set ith bit
+
+3. Clear ith bit
+
+Note : For better understanding, we are starting bits from 1 instead 0. (1-based)
+
+Example 1:
+
+Input: 70 3
+Output: 1 70 66
+Explanation: Bit at the 3rd position from LSB is 1. (1 0 0 0 1 1 0)
+The value of the given number after setting the 3rd bit is 70. 
+The value of the given number after clearing 3rd bit is 66. (1 0 0 0 0 1 0)
+Example 2:
+
+Input: 8 1
+Output: 0 9 8
+Explanation: Bit at the first position from LSB is 0. (1 0 0 0)
+The value of the given number after setting the 1st bit is 9. (1 0 0 1)
+The value of the given number after clearing 1st bit is 8. (1 0 0 0)
+ 
+
+Your Task:
+
+Complete the function bitManipulation() which takes two integers num and i as input and prints the results after each operation separted by a space in the same line. You don't have to print any new lines after printing the output, that will be handled by driver code.
+
+ 
+
+Constraints:
+
+0<=num<=109
+
+1<=i<=32
+
+  */
+public class BasicBitManip {
+    static void bitManipulation(int num, int i) {
+        // code here
+        // 1. get ith bit
+        int ithbit;
+        if((num & (1<<(i-1)))!=0) ithbit=1;
+        else ithbit = 0; 
+        System.out.print(ithbit+" ");
+        //2. set ith bit
+        num=num|(1<<(i-1));
+        System.out.print(num+" ");
+        //3. clear ith bit
+        num=num&(~(1<<(i-1)));
+        System.out.print(num);
+
+    }
+}
+
+package Bit_Manipulation.Basics;
+/*Q2 Check whether K-th bit is set or not
+EasyAccuracy: 52.75%Submissions: 166K+Points: 2
+Given a number N and a bit number K, check if Kth index bit of N is set or not. A bit is called set if it is 1. Position of set bit '1' should be indexed starting with 0 from LSB side in binary representation of the number.
+Note: Index is starting from 0. You just need to return true or false, driver code will take care of printing "Yes" and "No".
+
+Example 1:
+
+Input: 
+N = 4
+K = 0
+Output: 
+No
+Explanation: 
+Binary representation of 4 is 100, in which 0th index bit from LSB is not set. So, return false.
+Example 2:
+
+Input: 
+N = 4
+K = 2
+Output: 
+Yes
+Explanation: 
+Binary representation of 4 is 100, in which 2nd index bit from LSB is set. So, return true.
+Example 3:
+
+Input: 
+N = 500
+K = 3
+Output: 
+No
+Explanation: 
+Binary representation of 500 is 111110100, in which 3rd index bit from LSB is not set. So, return false.
+Your task:
+You don't have to read input or print anything. Your task is to complete the function checkKthbit that takes n and k as parameters and returns either true(if kth bit is set) or false(if kth bit is not set).
+
+Expected Time Complexity: O(1).
+Expected Auxiliary Space: O(1).
+
+Constraints:
+1 ≤ N ≤ 109
+0 ≤ K ≤ 31 */
+public class CheakIfKthBitSet {
+    // Function to check if Kth bit is set or not.
+    static boolean checkKthBit(int n, int k)
+    {
+        // Your code here
+        //Wrong attempt
+        //if(n & (1<<k) == (1<<k)) return true;
+        //right attempt, don't forget parenthesis
+        //if((n & (1<<k)) == (1<<k)) return true;
+        //best attempt
+        if((n & (1<<k)) != 0) return true;
+        return false; //else
+    }
+    public static void main(String[] args) {
+        // Test cases
+        System.out.println(checkKthBit(4, 0)); // Output: false
+        System.out.println(checkKthBit(4, 2)); // Output: true
+        System.out.println(checkKthBit(500, 3)); // Output: false
+    }
+}
+package Bit_Manipulation.Basics;
+/*Q3 Odd or Even
+SchoolAccuracy: 60.6%Submissions: 68K+Points: 0
+Be the comment of the day in POTD and win a GfG T-Shirt!
+Solve right now
+
+banner
+Given a positive integer N, determine whether it is odd or even.
+
+Example 1:
+
+Input:
+N = 1
+Output:
+odd
+Explanation:
+The output is self-
+explanatory.
+ 
+
+Example 2:
+
+Input:
+N = 2
+Output:
+even
+Explanation:
+The output is self-
+explanatory.
+ 
+
+Your Task:
+
+You don't need to read input or print anything. Your task is to complete the function oddEven() which takes the integer N and return "even" if number is even and "odd" if the number is odd.
+
+Expected Time Complexity: O(1)
+Expected Auxiliary Space: O(1)
+
+Constraints:
+0 <= N <= 10000
+
+ */
+public class OddOrEven {
+    static String oddEven(int n){
+        // code here
+        if((n&1)==1) return "odd";
+        //else
+        return "even";
+    }
+}
+package Bit_Manipulation.Basics;
+/*Q4  231. Power of Two
+Easy
+Topics
+Companies
+Given an integer n, return true if it is a power of two. Otherwise, return false.
+
+An integer n is a power of two, if there exists an integer x such that n == 2x.
+
+ 
+
+Example 1:
+
+Input: n = 1
+Output: true
+Explanation: 20 = 1
+Example 2:
+
+Input: n = 16
+Output: true
+Explanation: 24 = 16
+Example 3:
+
+Input: n = 3
+Output: false
+ 
+
+Constraints:
+
+-231 <= n <= 231 - 1
+ 
+
+Follow up: Could you solve it without loops/recursion?
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+1.3M
+Submissions
+2.8M
+Acceptance Rate
+47.8%*/
+public class PowerOf2orNot {
+    public boolean isPowerOfTwo(int n) {
+        //first attempt
+        // if((n&(n-1))==0) return true;// fail tc, n=0
+        // //else
+        // return false;
+        if((n>0) && ((n&(n-1))==0)) return true;
+        //else
+        return false;
+    }
+}
+/*
+//found some elegant solns. on LC forum
+class Solution {
+    public boolean isPowerOfTwo(int n) {
+        return n > 0 && (n & n - 1) == 0;
+    }
+}
+
+public boolean isPowerOfTwo(int n) {
+        return n>0 && Integer.bitCount(n)==1;
+    }
+
+    public boolean isPowerOfTwo(int n) {
+        return (((n&(-1*n)) == n) && n!=0);
+    }
+*/
+/*
+ * C++ EASY TO SOLVE || All INTERVIEW APPROACHES with Detailed Explanations
+
+Cosmic_Phantom
+Annual Badge 2023
+5684
+77862
+Dec 21, 2021
+C++
+C
+Bit Manipulation
+Recursion
+Intuition:
+Well well, the question is quite the tough one today. So make your focus lasersharp and let's jump in. The question is return true or false if the given n is power of two or not. The simple approach that comes to mind after reading this, is our classsic reminder and divident menthod that we used for finding odd and even . The question is easy but can be solved in tooo many ways .Try to understand all the solution as it may help in interviews where there can be restriction of using certain methods
+
+Codes:-
+
+1. Using Reminder-divident method:-
+
+class Solution {
+public:
+    bool isPowerOfTwo(int n) {
+        if(n==0) return false;
+        while(n%2==0) n/=2;
+        return n==1;
+    }
+};
+Time Complexity: O(logn)
+Space Complexity: O(1)
+
+2. Using Reminder-divident method via Recursion:-
+
+class Solution {
+public:
+    bool isPowerOfTwo(int n) {
+        if(n==0) return false;
+        return ((n==1) || (n%2==0 && isPowerOfTwo(n/2)));
+    }
+};
+Time Complexity : O(logn)
+Space Complexity : O(logn) [Rcursive stack is counted]
+
+3. Bit manipulation :-
+Tip: Always remember that bit manipulation techniques are usually based on observations from multiple examples
+
+Let's take some good exampes :
+number->binary form
+3->0000 0011
+4->0000 0100
+5->0000 0101
+6->0000 0110
+7->0000 0111
+8->0000 1000
+The observation we can conclude is that the number which is a power of two has always compulsoryily 1 true bit.
+
+Now consider :-
+bit representation of 7  -> 0111
+bit representation of 8  -> 1000
+bitwise AND of 7 and 8 -> 0000
+we are gonna use this property for for all numbers which are powers of two
+class Solution {
+public:
+    bool isPowerOfTwo(int n) {
+        if(n<=0) return false;
+        return ((n&(n-1))==0);
+    }
+};
+Time Complexity : O(1)
+Space Complexity : O(1)
+
+4. Using ceil-floor method
+
+class Solution {
+public:
+    bool isPowerOfTwo(int n) {
+        if(n <= 0) return false;
+        return ceil(log2(n)) == floor(log2(n));
+    }
+};
+Time Complexity : O(logn)
+Space Complexity : O(1)
+
+5. Using C++ STL method #Thanks to @rajab1691 :)
+
+class Solution {
+public:
+    bool isPowerOfTwo(int n) {
+        if(n<0)return false;
+        
+        int bits=__builtin_popcount(n);
+        
+        if(bits==1)
+            return true;
+        return false;
+    }
+};
+6. LMAO method
+We are literally gonna take the advantage of the constraints. I dont recommend you all to use this method during your interviews. It's a fun method . Do this on your own, you will enjoy it ;))
+
+Hint:Constraints [-2^31 <= n <= 2^31 - 1] also 2^30 is 1073741824
+class Solution {
+public:
+    bool isPowerOfTwo(int n) {
+        if(n==0) return false;
+        return (n>0)&&(1073741824%n==0);
+    }
+};
+Time Complexity : O(1)
+Space Complexity : O(1)
+
+Here's my github link where I keep my solutions.
+
+Feel free to comment if you have some suggestion or upvote if you liked my post ;)
+//https://leetcode.com/problems/power-of-two/solutions/1638704/c-easy-to-solve-all-interview-approaches-with-detailed-explanations/
+ */
+ package Bit_Manipulation.Basics;
+/*Q5 Count total set bits
+MediumAccuracy: 35.77%Submissions: 158K+Points: 4
+Be the comment of the day in POTD and win a GfG T-Shirt!
+Solve right now
+
+banner
+You are given a number N. Find the total count of set bits for all numbers from 1 to N(both inclusive).
+
+Example 1:
+
+Input: N = 4
+Output: 5
+Explanation:
+For numbers from 1 to 4.
+For 1: 0 0 1 = 1 set bits
+For 2: 0 1 0 = 1 set bits
+For 3: 0 1 1 = 2 set bits
+For 4: 1 0 0 = 1 set bits
+Therefore, the total set bits is 5.
+Example 2:
+
+Input: N = 17
+Output: 35
+Explanation: From numbers 1 to 17(both inclusive), 
+the total number of set bits is 35.
+
+Your Task: The task is to complete the function countSetBits() that takes n as a parameter and returns the count of all bits.
+
+Expected Time Complexity: O(log N).
+Expected Auxiliary Space: O(1).
+
+Constraints:
+1 ≤ N ≤ 108 */
+//Brute force, 1st attempt, TLE
+// public class CountNoOfSetBits {
+//     //Function to return sum of count of set bits in the integers from 1 to n.
+//     public static int countSetBits(int n){
+//         int count=0;
+//         for(int i=1;i<=n;i++){
+//             count+= cntSetBits(i);
+//         }
+//         return count;
+//     }
+//     //Fn to count set bits in a individual no.
+//     public static int cntSetBits(int n){
+//         int cnt=0;
+//         while(n!=0){
+//             //remove a set bit per itr and ++cnt;
+//             n=n&(n-1);
+//             cnt++;
+//         } return cnt;       
+//     }
+// }
+
+public class CountNoOfSetBits {
+    // Function to return sum of count of set bits in the integers from 1 to n.
+    //iterative soln.
+    public static int countSetBits(int n) {
+        int cnt=0;
+        int x;
+        while(n>0){
+            x=0;
+            //find highest pow of 2 =< n
+            while((1<<(x+1))<=n) x++;
+            //no. of set bits from 1 to 2^x-1
+            int setBitsTill2x = (1<<(x-1))*x;
+            //msb bits after 2^x-1 == nos. remaining after 2^x-1 (incl. 2^x itself hence the +1)
+            int msbBitsAfter2xMinus1 = n - (1<<(x)) + 1;
+            //reduce n size problem to n-2^x size subproblem
+            n= n - (1<<x); //continue in next itr, till n becomes==0
+            //incr cnt
+            cnt+=setBitsTill2x+msbBitsAfter2xMinus1;
+        } return cnt;
+    }
+
+    public static void main(String[] args) {
+        // Test cases
+        System.out.println(countSetBits(3)); // Output: 4
+
+        System.out.println(countSetBits(4));  // Output: 5
+        System.out.println(countSetBits(5)); // Output: 7
+        System.out.println(countSetBits(16)); // Output: 33
+
+        System.out.println(countSetBits(17)); // Output: 35
+        System.out.println(countSetBits(19)); // Output: 40
+
+    }
+}
+// //Recursive soln., tried on gfg, works
+// class Solution{
+    
+//     //Function to return sum of count of set bits in the integers from 1 to n.
+// public static int countSetBits(int n) {
+//     if (n == 0) return 0; //Base
+
+//     // Get the highest power of 2 <= n
+//     int x = highestPowerOf2(n);
+    
+//     // Calc. set bits in numbers from 1 to 2^x - 1
+//     int bitsUpTo2X = x * (1 << (x - 1));
+
+//     // Calc. the set bits in the MSB of remaining numbers
+//     int msb2XToN = n - (1 << x) + 1;
+
+//     // Recursively count the remaining bits
+//     int remaining = n - (1 << x);
+    
+//     return bitsUpTo2X + msb2XToN + countSetBits(remaining);
+// }
+
+// // Fn to find the highest power of 2 <= 'n'
+// public static int highestPowerOf2(int n) {
+//     int x = 0;
+//     while ((1 << x) <= n) x++;
+//     return x - 1;
+// }
+
+// }
+// //Dp soln top down, found on StackOverflow forum
+
+// A quick search for the values of the sequence F lead to this integer sequence http://oeis.org/A000788
+
+// There I spotted a formula: a(0) = 0, a(2n) = a(n)+a(n-1)+n, a(2n+1) = 2a(n)+n+1 (a is the same as F since I just copy the formula from oeis)
+
+// which could be used to compute a(n) in log(n).
+
+// Here's my sample C++ code:
+
+// memset(cache, -1, sizeof(cache))
+// cache[0] = 0
+
+// int f(int n)
+//     if cache[n] != -1 return cache[n];
+//     cache[n] = n % 2 ? (2 * f(n / 2) + n / 2 + 1) : (f(n / 2) + f(n / 2 - 1) + n / 2)
+// Share
+// Improve this answer
+// Follow
+// answered Mar 21, 2012 at 22:26
+
+package Bit_Manipulation.Basics;
+/*Q5 related Q on lc
+ * 338. Counting Bits
+Easy
+Topics
+Companies
+Hint
+Given an integer n, return an array ans of length n + 1 such that for each i (0 <= i <= n), ans[i] is the number of 1's in the binary representation of i.
+
+ 
+
+Example 1:
+
+Input: n = 2
+Output: [0,1,1]
+Explanation:
+0 --> 0
+1 --> 1
+2 --> 10
+Example 2:
+
+Input: n = 5
+Output: [0,1,1,2,1,2]
+Explanation:
+0 --> 0
+1 --> 1
+2 --> 10
+3 --> 11
+4 --> 100
+5 --> 101
+ 
+
+Constraints:
+
+0 <= n <= 105
+ 
+
+Follow up:
+
+It is very easy to come up with a solution with a runtime of O(n log n). Can you do it in linear time O(n) and possibly in a single pass?
+Can you do it without using any built-in function (i.e., like __builtin_popcount in C++)?
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+1.1M
+Submissions
+1.4M
+Acceptance Rate
+78.4%
+ */
+public class CountBitsArray {
+    public int[] countBits(int n) {
+        int a[]=new int[n+1];
+        a[0]=0;
+        //a[n] = a[n/2] + last bit set or not(ie,1 if odd and 0 if even)
+        for(int i=0; i<=n;i++) a[i]=a[i>>1]+(i&1);
+        return a;
+    }
+}
+// a general method based on different observation- https://leetcode.com/problems/counting-bits/solutions/79557/how-we-handle-this-question-on-interview-thinking-process-dp-solution/
+
+package Bit_Manipulation.Basics;
+/*Q6 Set the rightmost unset bit
+BasicAccuracy: 47.64%Submissions: 23K+Points: 1
+Given a non-negative number N. 
+The problem is to set the rightmost unset bit in the binary representation of N.
+
+Example 1:
+
+Input:
+N = 6
+Output:
+7
+Explanation:
+The binary representation of 6 is 110.
+After setting right most bit it becomes
+111 which is 7.
+Example 2:
+
+Input:
+N = 15
+Output:
+31
+Explanation:
+The binary representation of 15 is 01111.
+After setting right most bit it becomes
+11111 which is 31.
+Your Task:  
+You don't need to read input or print anything. Your task is to complete the function setBit() which takes an integer N as input parameter and returns the integer after setting a rightmost unset bit.
+
+Expected Time Complexity: O(LogN)
+Expected Auxiliary Space: O(1)
+
+
+Constraints:
+1 <= N <= 109 */
+public class setRightMostUnsetBit {
+    //step by step way
+    static int setBit(int n){
+        n = ~n; //1. flip n
+        n = n & (n-1); //2. unset first set bit of curr n
+        n = ~n; //3. re-flip n, unset bit becomes set (everything else reverts to normal)
+        return n;
+
+    }
+
+    // direct way
+    // static int setBit(int n){
+    //     // find rightmost unset bit by flipping all bits of N then find rightmost set bit
+    //     // use(~n & (~n-1)) to set the unset the set bit of ~n 
+    //     // use ~ on whole to get the no. which is n with last unset bit setted
+    //     return (~((~n)&((~n-1)))); 
+
+    // }
+    // First wrong attempt
+    // static int setBit(int n){
+    //     // find rightmost unset bit by flipping all bits of N then find rightmost set bit
+    //     // use(~n & ~(n-1)) for 1 based bit 
+    //     //make 0 based by 1 right shift
+    //     // make this result bitwise OR with N to set that unset bit
+    //     return (((~n)&(~(n-1))>>1)|(n)); 
+
+    // }
+}
+package Bit_Manipulation.Basics;
+
+import java.util.ArrayList;
+import java.util.List;
+/*Q7 Swap two numbers
+SchoolAccuracy: 70.02%Submissions: 49K+Points: 0
+Be the comment of the day in POTD and win a GfG T-Shirt!
+Solve right now
+
+banner
+Swap given two numbers and print them. (Try to do it without a temporary variable.) and return it.
+
+Example 1:
+
+Input: a = 13, b = 9
+Output: 9 13
+Explanation: after swapping it
+becomes 9 and 13.
+Example 2:
+
+Input: a = 15, b = 8
+Output: 8 15
+Explanation: after swapping it
+becomes 8 and 15.
+Your Task:  
+You don't need to read input or print anything. Your task is to complete the function get() which takes a, b as inputs and returns the list of integers contains the new value of a and b after swap.
+
+Expected Time Complexity: O(1)
+Expected Auxiliary Space: O(1)
+
+Constraints:
+1 ≤ a, b ≤ 106 */
+public class Swap2Nos {
+    static List<Integer> get(int a,int b)
+    {
+        List<Integer> ans = new ArrayList<>();
+        a=a^b;
+        b=a^b;//b => (a^b)^b == a
+        a=a^b;//a => (a^b)^a == b
+        ans.add(a);
+        ans.add(b);
+        return ans;
+    }
+}
+package Bit_Manipulation.Basics;
+
+/*Q8 29. Divide Two Integers
+Medium
+Topics
+Companies
+Given two integers dividend and divisor, divide two integers without using multiplication, division, and mod operator.
+
+The integer division should truncate toward zero, which means losing its fractional part. For example, 8.345 would be truncated to 8, and -2.7335 would be truncated to -2.
+
+Return the quotient after dividing dividend by divisor.
+
+Note: Assume we are dealing with an environment that could only store integers within the 32-bit signed integer range: [−231, 231 − 1]. For this problem, if the quotient is strictly greater than 231 - 1, then return 231 - 1, and if the quotient is strictly less than -231, then return -231.
+
+ 
+
+Example 1:
+
+Input: dividend = 10, divisor = 3
+Output: 3
+Explanation: 10/3 = 3.33333.. which is truncated to 3.
+Example 2:
+
+Input: dividend = 7, divisor = -3
+Output: -2
+Explanation: 7/-3 = -2.33333.. which is truncated to -2.
+ 
+
+Constraints:
+
+-231 <= dividend, divisor <= 231 - 1
+divisor != 0
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+757.1K
+Submissions
+4.3M
+Acceptance Rate
+17.6% */
+public class DivideWithoutDivideOperator {
+    public int divide(int dividend, int divisor) {
+        // Handle edge cases
+        if (divisor == 0) {
+            throw new IllegalArgumentException("Divisor cannot be zero");
+        }
+        if (dividend == Integer.MIN_VALUE && divisor == -1) {
+            return Integer.MAX_VALUE; // Prevent overflow
+        }
+        if(divisor == dividend) return 1; // Improve best case
+        
+        // Determine sign of quotient, using xor
+        int sign = ((dividend < 0) ^ (divisor < 0))? -1 : 1;
+
+        // Convert to long to handle overflow cases
+        long n = Math.abs((long) dividend);
+        long d = Math.abs((long) divisor);
+
+        long quotient = 0;
+        while (n >= d) {
+            long temp = d, multiple = 1;
+            while (n >= (temp << 1)) {
+                temp <<= 1;
+                multiple <<= 1;
+            }
+            n -= temp;
+            quotient += multiple;
+        }
+
+        // Apply the sign to the quotient
+        quotient = (sign==-1)? (-quotient):quotient;
+
+        // Ensure the quotient is within the 32-bit signed integer range
+        if (quotient > Integer.MAX_VALUE) {
+            return Integer.MAX_VALUE;
+        }
+        if (quotient < Integer.MIN_VALUE) {
+            return Integer.MIN_VALUE;
+        }
+
+        return (int) quotient;
+    }
+    //1st attmpt, not able to handle edge cases
+    // public int divide(int dividend, int divisor) {
+    //     // Handle edge cases
+    //     if (divisor == 0) {
+    //         throw new IllegalArgumentException("Divisor can't be zero");
+    //     }
+    //     if (dividend == Integer.MIN_VALUE && divisor == -1) {
+    //         return Integer.MAX_VALUE; // Prevent overflow
+    //     }
+    //     //if(dividend<divisor) return 0;//wrong thinking
+    //     if(dividend==divisor) return 1;
+    //     int sign=1;
+    //     if((dividend>=0 && divisor<0)||(dividend<=0 && divisor>0)) sign=-1;
+    //     long n= Math.abs(dividend); long d= Math.abs(divisor);
+    //     long ans=0;
+    //     while(n>=d){
+    //         long cnt=0;
+    //         while(n>=(d<<(cnt+1))) cnt++;
+    //         ans+=1<<cnt;
+    //         n-= d*(1<<cnt);
+    //     }
+    //     if(sign==-1) ans=-ans;
+    //     if(ans<Integer.MIN_VALUE) return Integer.MIN_VALUE;
+    //     if(ans>Integer.MAX_VALUE) return Integer.MAX_VALUE;
+
+    //     return (int)ans;
+    // }
+
+    public static void main(String[] args) {
+        DivideWithoutDivideOperator solution = new DivideWithoutDivideOperator();
+        System.out.println(solution.divide(10, 3));  // Output: 3
+        System.out.println(solution.divide(7, -3)); // Output: -2
+        System.out.println(solution.divide(-10, -2)); // Output: 5
+        System.out.println(solution.divide(1, 1)); // Output: 1
+        System.out.println(solution.divide(-2147483648, -1)); // Output: 2147483647
+    }
+}
+// ANother way to do it, given problem constraints, O(32) soln.
+// class Solution {
+//     public int divide(int A, int B) {
+//         if (A == 1 << 31 && B == -1) return (1 << 31) - 1;// handle overflow case 1st
+//         int a = Math.abs(A), b = Math.abs(B), q = 0;
+//         for (int x = 31; x >= 0; x--)
+//             // can also check like: if(a >= b<<x), but cause overflow in case  A=-2147483648, B=1, as a=2^31
+//             //(a>>x) not works as it moves the sign bit to right too, being arithmetic shift, which we don't want
+//             if ((a >>> x) >= b) { //itr bwds till a/2^x < b
+//                 //subtract greatest b*2^x that's still under a from a
+//                 q = q + 1 << x; // add 2^x to quotient
+//                 a = a - b << x;
+//             }
+//         return (A > 0) == (B > 0) ? q : -q; //check if a and b have same sign or not
+//     }
+// }
+//inspired from
+//https://leetcode.com/problems/divide-two-integers/solutions/142849/c-java-python-should-not-use-long-int/
+//nice explanations-
+//https://leetcode.com/problems/divide-two-integers/solutions/1516367/complete-thinking-process-intuitive-explanation-all-rules-followed-c-code/
+//https://leetcode.com/problems/divide-two-integers/solutions/1601170/java-1ms-single-recursive-function/
+
+//a wrong attempt, tho learnt a lot from it
+// class Solution {
+//     public int divide(int A, int B) {
+//         if (A == 1 << 31 && B == -1) return (1 << 31) - 1;// handle overflow case 1st
+//         if (A == -(1 << 31) && B == 1) return -(1 << 31);// handle overflow case 
+//         if (A == -(1 << 31) && B == -1) return (1 << 31) - 1;// handle overflow case 1st
+//         // even after this still problems in A=-2147483648, B=2, expected- -1073741824, cuz a=2^31 can't be stored(overflow)
+
+//         int a = Math.abs(A), b = Math.abs(B), q = 0;
+//         for (int x = 31; x >= 0; x--)
+//             // can also check like: 
+//             if(a >= (b*Math.pow(2,x))){
+//             //if ((a >>> x) >= b) { //itr bwds till a/2^x < b
+//                 //subtract greatest b*2^x that's still under a from a
+//                 q = q + (1 << x); // add 2^x to quotient
+//                 a = a - (b << x);
+//             }
+//         return (A > 0) == (B > 0) ? q : -q; //check if a and b have same sign or not
+//     }
+// }
+//ANother code to recount possibilitities and edge cases w/o long for all cases but overflow ones, even tho it uses '/' op.
+// class Solution {
+//     public int divide(int A, int B) {
+//         if (A == 1 << 31 && B == -1) return (1 << 31) - 1;// handle overflow case 1st
+//         if (A == -(1 << 31) && B == 1) return -(1 << 31);// handle overflow case 
+//         if (A == -(1 << 31) && B == -1) return (1 << 31) - 1;// handle overflow case 1st
+//         if (A == -(1 << 31)) return -(int)(((long)1 << 31)/B);// handle overflow case 
+//         if (A == -(1 << 31)||B == -(1 << 31)) return -(int)(((long)A)/(long)B);// handle overflow case 
+
+//         int a = Math.abs(A), b = Math.abs(B), q = 0;
+//         for (int x = 31; x >= 0; x--)
+//             // can also check like: 
+//             if(a >= (b*Math.pow(2,x))){
+//             //if ((a >>> x) >= b) { //itr bwds till a/2^x < b
+//                 //subtract greatest b*2^x that's still under a from a
+//                 q = q + (1 << x); // add 2^x to quotient
+//                 a = a - (b << x);
+//             }
+//         return (A > 0) == (B > 0) ? q : -q; //check if a and b have same sign or not
+//     }
+// }

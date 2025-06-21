@@ -1,0 +1,1489 @@
+package Linked_Lists.Medium_Qs_LL;
+/*
+ * Q1
+ * 876. Middle of the Linked List
+Solved
+Easy
+Topics
+Companies
+Given the head of a singly linked list, return the middle node of the linked list.
+
+If there are two middle nodes, return the second middle node.
+
+ 
+
+Example 1:
+
+
+Input: head = [1,2,3,4,5]
+Output: [3,4,5]
+Explanation: The middle node of the list is node 3.
+Example 2:
+
+
+Input: head = [1,2,3,4,5,6]
+Output: [4,5,6]
+Explanation: Since the list has two middle nodes with values 3 and 4, we return the second one.
+ 
+
+Constraints:
+
+The number of nodes in the list is in the range [1, 100].
+1 <= Node.val <= 100
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+1.9M
+Submissions
+2.4M
+Acceptance Rate
+78.6%
+
+ */
+import Linked_Lists.Singly_Linked_List.LinkedList.Node;
+
+public class MiddleOfLL {
+    public Node LeftMiddleNode(Node h) {
+        if(h==null||h.next==null) return h;
+
+        Node slow = h;
+        Node fast = h.next;
+        while(fast!=null && fast.next!=null){
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        return slow;
+    }
+    public Node RightMiddleNode(Node h) {
+        if(h==null||h.next==null) return h;
+
+        Node slow = h;
+        Node fast = h;
+        while(fast!=null && fast.next!=null){
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        return slow;
+    }
+
+}
+package Linked_Lists.Medium_Qs_LL;
+/*Q2
+ * 206. Reverse Linked List
+Solved
+Easy
+Topics
+Companies
+Given the head of a singly linked list, reverse the list, and return the reversed list.
+
+ 
+
+Example 1:
+
+
+Input: head = [1,2,3,4,5]
+Output: [5,4,3,2,1]
+Example 2:
+
+
+Input: head = [1,2]
+Output: [2,1]
+Example 3:
+
+Input: head = []
+Output: []
+ 
+
+Constraints:
+
+The number of nodes in the list is the range [0, 5000].
+-5000 <= Node.val <= 5000
+ 
+
+Follow up: A linked list can be reversed either iteratively or recursively. Could you implement both?
+
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+4.2M
+Submissions
+5.4M
+Acceptance Rate
+76.7%
+ */
+import Linked_Lists.Singly_Linked_List.LinkedList.Node;
+
+public class ReverseSLL {
+    public Node reverseSLL(Node h){
+        if(h==null||h.next==null) return h;
+
+        Node Pt=null;
+        Node t=h;
+        Node Ft=h.next;
+
+        while(t!=null){
+            t.next=Pt;
+            Pt=t;
+            t=Ft;
+            if(Ft==null) h=t;
+            else Ft = Ft.next;
+        }
+        return Pt;
+    }
+}
+// // lc submission
+// /**
+//  * Definition for singly-linked list.
+//  * public class ListNode {
+//  *     int val;
+//  *     ListNode next;
+//  *     ListNode() {}
+//  *     ListNode(int val) { this.val = val; }
+//  *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+//  * }
+//  */
+// class Solution {
+//     public ListNode reverseList(ListNode h) {
+//         if(h==null||h.next==null) return h;
+
+//         ListNode Pt=null;
+//         ListNode t=h;
+//         ListNode Ft=h.next;
+
+//         while(t!=null){
+//             t.next=Pt;
+//             Pt=t;
+//             t=Ft;
+//             if(Ft==null) h=t;
+//             else Ft = Ft.next;
+//         }
+//         return Pt;
+//     }
+// }
+
+package Linked_Lists.Medium_Qs_LL;
+//Q3
+import Linked_Lists.Singly_Linked_List.LinkedList.Node;
+
+public class RecursiveReverseSLL {
+    public Node reverseSLL(Node h){
+        if(h==null||h.next==null) return h; // true for only last node, pass to recursive calls, make newHead in First call
+
+        Node newHead = reverseSLL(h.next);
+        
+        h.next.next = h; // change link
+        h.next=null; // changes for all nodes except first node, as we want first node next to be null, make it end node for reverse 
+        return newHead;
+    }
+}
+
+// // LC submit
+// class Solution {
+//     public ListNode reverseList(ListNode h) {
+//         if(h==null||h.next==null) return h;
+
+//         ListNode newHead = reverseList(h.next);
+        
+//         h.next.next = h;
+//         h.next=null;
+
+//         return newHead;
+//     }
+// }
+
+package Linked_Lists.Medium_Qs_LL;
+
+import Linked_Lists.Singly_Linked_List.LinkedList.Node;
+
+package Linked_Lists.Medium_Qs_LL;
+
+import Linked_Lists.Singly_Linked_List.LinkedList.Node;
+
+/*Q4 141. Linked List Cycle
+Solved
+Easy
+Topics
+Companies
+Given head, the head of a linked list, determine if the linked list has a cycle in it.
+
+There is a cycle in a linked list if there is some node in the list that can be reached again by continuously following the next pointer. Internally, pos is used to denote the index of the node that tail's next pointer is connected to. Note that pos is not passed as a parameter.
+
+Return true if there is a cycle in the linked list. Otherwise, return false.
+
+ 
+
+Example 1:
+
+
+Input: head = [3,2,0,-4], pos = 1
+Output: true
+Explanation: There is a cycle in the linked list, where the tail connects to the 1st node (0-indexed).
+Example 2:
+
+
+Input: head = [1,2], pos = 0
+Output: true
+Explanation: There is a cycle in the linked list, where the tail connects to the 0th node.
+Example 3:
+
+
+Input: head = [1], pos = -1
+Output: false
+Explanation: There is no cycle in the linked list.
+ 
+
+Constraints:
+
+The number of the nodes in the list is in the range [0, 104].
+-105 <= Node.val <= 105
+pos is -1 or a valid index in the linked-list.
+ 
+
+Follow up: Can you solve it using O(1) (i.e. constant) memory?
+
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+3M
+Submissions
+5.9M
+Acceptance Rate
+50.5%
+*/
+public class DetectLoop {
+    // fifth attempt, just curious
+    // public boolean hasCycle(Node h) {
+    //     if(h==null||h.next==null) return false;
+    //     Node fast=h.next;
+    //     Node slow=h;
+    //     //if(fast==fast.next) return true;
+    //     while(fast!=null && fast.next!=null){
+    //         if(fast==slow) return true;
+    //         fast=fast.next.next;
+            
+    //         if(fast==slow) return true;
+    //         slow=slow.next;
+    //     }
+    //     return false;
+
+    // }
+    // second attempt, shorter code due to updating slow ptr first, no worries dealing with null ptr exception
+    public boolean hasCycle(Node head) {
+        Node slow = head;
+        Node fast = head;
+    
+        while (fast != null && fast.next != null) {
+          slow = slow.next;
+          fast = fast.next.next;
+          if (slow == fast)
+            return true;
+        }
+    
+        return false;
+      }
+    // first Attempt, correct, but code could be shorter, long due to updating fast ptr before slow
+    // to avoid null ptr exception
+    // @SuppressWarnings("null")
+    // public boolean hasCycle(Node h) {
+    //     if(h==null||h.next==null) return false;
+    //     Node fast=h.next;
+    //     Node slow=h;
+    //     while(fast!=null||fast.next!=null){
+    //         if(fast==slow) return true;
+    //         if(fast.next!=null){
+    //         fast=fast.next;
+    //         } else break;
+    //         if(fast==slow) return true;
+    //          if(fast.next!=null){
+    //         fast=fast.next;
+    //         } else break;
+            
+    //         slow=slow.next;
+    //     }
+    //     return false;
+    // }
+
+
+      // third attempt just to experiment, got to know && is very imp in condn
+    /**
+ * Definition for singly-linked list.
+ * class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) {
+ *         val = x;
+ *         next = null;
+ *     }
+ * }
+ */
+// public class Solution {
+//     public boolean hasCycle(ListNode h) {
+//         if(h==null||h.next==null) return false;
+//        ListNode fast=h.next;
+//        ListNode slow=h;
+//        //if(fast==fast.next) return true;
+//         while(fast!=null && fast.next!=null){
+//             if(fast==slow) return true;
+//             fast=fast.next;
+//             if(fast==slow) return true;
+//             fast=fast.next;
+//             if(fast==slow) return true;
+//             slow=slow.next;
+//         }
+//         return false;
+
+//     }
+}
+
+package Linked_Lists.Medium_Qs_LL;
+
+import Linked_Lists.Singly_Linked_List.LinkedList.Node;
+
+/*Q5 142. Linked List Cycle II
+Medium
+Topics
+Companies
+Given the head of a linked list, return the node where the cycle begins. If there is no cycle, return null.
+
+There is a cycle in a linked list if there is some node in the list that can be reached again by continuously following the next pointer. Internally, pos is used to denote the index of the node that tail's next pointer is connected to (0-indexed). It is -1 if there is no cycle. Note that pos is not passed as a parameter.
+
+Do not modify the linked list.
+
+ 
+
+Example 1:
+
+
+Input: head = [3,2,0,-4], pos = 1
+Output: tail connects to node index 1
+Explanation: There is a cycle in the linked list, where tail connects to the second node.
+Example 2:
+
+
+Input: head = [1,2], pos = 0
+Output: tail connects to node index 0
+Explanation: There is a cycle in the linked list, where tail connects to the first node.
+Example 3:
+
+
+Input: head = [1], pos = -1
+Output: no cycle
+Explanation: There is no cycle in the linked list.
+ 
+
+Constraints:
+
+The number of the nodes in the list is in the range [0, 104].
+-105 <= Node.val <= 105
+pos is -1 or a valid index in the linked-list.
+ 
+
+Follow up: Can you solve it using O(1) (i.e. constant) memory?
+
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+1.3M
+Submissions
+2.5M
+Acceptance Rate
+ */
+public class CycleStart {
+    public Node detectCycleStartNode(Node h) {
+        Node s=h;
+        Node f=h;
+        while(f!=null&&f.next!=null){
+            s=s.next;
+            f=f.next.next;
+            if(s==f) break; // if cycle. s has travelled L1+d 
+        }
+        if(f==null||f.next==null) return null; // no cycle
+        s=h; // if cycle
+        while(s!=f){
+            s=s.next;
+            f=f.next;
+        } //s remeet f after L1 nodes
+        return s;// or f
+    }
+}
+
+// // ANother way to write it
+// /**
+//  * Definition for singly-linked list.
+//  * class ListNode {
+//  *     int val;
+//  *     ListNode next;
+//  *     ListNode(int x) {
+//  *         val = x;
+//  *         next = null;
+//  *     }
+//  * }
+//  */
+// public class Solution {
+//     public ListNode detectCycle(ListNode head) {
+//         ListNode slow=head;
+//         ListNode fast=head;
+
+//         // Detect cycle using Floyd's Tortoise and Hare algorithm
+//         while (fast != null && fast.next != null) {
+//             slow = slow.next;
+//             fast = fast.next.next;
+
+//             // Cycle detected
+//             if (slow == fast) {
+//                 // Find the start of the cycle
+//                 slow = head;
+//                 while (slow != fast) {
+//                     slow = slow.next;
+//                     fast = fast.next;
+//                 }
+//                 return slow; // The start of the cycle
+//             }
+//         }
+
+//         // No cycle
+//         return null;    
+//         }
+// }
+package Linked_Lists.Medium_Qs_LL;
+// q6
+import Linked_Lists.Singly_Linked_List.LinkedList.Node;
+
+public class LengthOfCycle {
+    // attempt 2, correct
+        //Function to find the length of a loop in the linked list.
+        static int countNodesinLoop(Node h)
+        {
+            Node s=h;
+            Node f=h;
+            int cnt=0;
+            while(f!=null&&f.next!=null){
+                s=s.next;
+                f=f.next.next;
+                if(s==f) break; // if cycle. s has travelled L1+d 
+            }
+            if(f==null||f.next==null) return 0; // no cycle
+            cnt++;
+            s=s.next; // if cycle
+            while(s!=f){
+                s=s.next;
+                cnt++;
+            } //s remeet f after L1 nodes
+            return cnt;
+        }
+    
+    // attempt 1
+    //Function to find the length of a loop in the linked list.
+    // static int countNodesinLoop(Node h)
+    // {
+    //     Node s=h;
+    //     Node f=h;
+    //     int cnt=1;
+    //     while(f!=null&&f.next!=null){
+    //         s=s.next;
+    //         //cnt++;
+    //         f=f.next.next;
+    //         if(s==f) break; // if cycle. s has travelled L1+d 
+    //     }
+    //     if(f==null||f.next==null) return 0; // no cycle
+    //     cnt++;
+    //     s=h; // if cycle
+    //     while(s!=f){
+    //         s=s.next;
+    //         cnt--;
+    //         //f=f.next;
+    //     } //s remeet f after L1 nodes
+    //     return cnt;
+    // }
+}
+package Linked_Lists.Medium_Qs_LL;
+
+import Linked_Lists.Singly_Linked_List.LinkedList.Node;
+
+/*q7
+ * 
+0
+
+avatar
+Premium
+Debugging...
+Debugging...
+
+
+
+
+
+
+
+Run
+Description
+Editorial
+Editorial
+Solutions
+Solutions
+Submissions
+Submissions
+
+
+Code
+Testcase
+Test Result
+Test Result
+328. Odd Even Linked List
+Medium
+Topics
+Companies
+Given the head of a singly linked list, group all the nodes with odd indices together followed by the nodes with even indices, and return the reordered list.
+
+The first node is considered odd, and the second node is even, and so on.
+
+Note that the relative order inside both the even and odd groups should remain as it was in the input.
+
+You must solve the problem in O(1) extra space complexity and O(n) time complexity.
+
+ 
+
+Example 1:
+
+
+Input: head = [1,2,3,4,5]
+Output: [1,3,5,2,4]
+Example 2:
+
+
+Input: head = [2,1,3,5,6,4,7]
+Output: [2,3,6,7,1,5,4]
+ 
+
+Constraints:
+
+The number of nodes in the linked list is in the range [0, 104].
+-106 <= Node.val <= 106
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+932.5K
+Submissions
+1.5M
+Acceptance Rate
+61.4%
+Topics
+Companies
+Similar Questions
+Discussion (115)
+ */
+public class OddEvenLL {
+    public Node oddEvenList(Node h) {
+        if(h==null||h.next==null) return h;
+        Node ev=h.next;
+        Node od=h;
+        Node evStart=ev;
+        while(ev!=null&&ev.next!=null){
+            od.next=od.next.next;
+            ev.next=ev.next.next;
+
+            od=od.next;
+            ev=ev.next;
+        } od.next=evStart;
+
+        return h;
+
+    }
+}
+package Linked_Lists.Medium_Qs_LL;
+
+import Linked_Lists.Singly_Linked_List.LinkedList.Node;
+/*Q8 */
+public class RemoveNthNodeFromEnd {
+    public Node removeNthFromEnd(Node h, int n) {
+        if(h==null) return h;
+        Node L=h; Node R=h;
+        int i=0;
+        while(i<=n){
+            if(R.next==null) return h.next;
+
+            R=R.next;
+            i++;
+        }
+        while(R!=null && R.next!=null){
+            L=L.next;
+            R=R.next;
+        }
+        L.next=L.next.next;
+        return h;
+
+    }
+
+}
+package Linked_Lists.Medium_Qs_LL;
+
+import Linked_Lists.Singly_Linked_List.LinkedList.Node;
+//Q9
+/*2095. Delete the Middle Node of a Linked List
+Medium
+Topics
+Companies
+Hint
+You are given the head of a linked list. Delete the middle node, and return the head of the modified linked list.
+
+The middle node of a linked list of size n is the ⌊n / 2⌋th node from the start using 0-based indexing, where ⌊x⌋ denotes the largest integer less than or equal to x.
+
+For n = 1, 2, 3, 4, and 5, the middle nodes are 0, 1, 1, 2, and 2, respectively.
+ 
+
+Example 1:
+
+
+Input: head = [1,3,4,7,1,2,6]
+Output: [1,3,4,1,2,6]
+Explanation:
+The above figure represents the given linked list. The indices of the nodes are written below.
+Since n = 7, node 3 with value 7 is the middle node, which is marked in red.
+We return the new list after removing this node. 
+Example 2:
+
+
+Input: head = [1,2,3,4]
+Output: [1,2,4]
+Explanation:
+The above figure represents the given linked list.
+For n = 4, node 2 with value 3 is the middle node, which is marked in red.
+Example 3:
+
+
+Input: head = [2,1]
+Output: [2]
+Explanation:
+The above figure represents the given linked list.
+For n = 2, node 1 with value 1 is the middle node, which is marked in red.
+Node 0 with value 2 is the only node remaining after removing node 1.
+ 
+
+Constraints:
+
+The number of nodes in the list is in the range [1, 105].
+1 <= Node.val <= 105
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+400.8K
+Submissions
+679.1K
+Acceptance Rate
+59.0% */
+public class DeleteMiddleNodeOdSLL {
+    public Node deleteMiddle(Node h) {
+        if(h==null||h.next==null) return null;
+        Node s=h; Node f=h;
+        //1 extra f update
+        f=f.next.next;
+        while(f!=null && f.next!=null){
+            s=s.next;
+            f=f.next.next;
+        }
+        //s is at 1 node before middle(floor of size of LL), skip middle node
+        s.next=s.next.next;
+        return h;
+    }
+}
+package Linked_Lists.Medium_Qs_LL;
+
+import Linked_Lists.Singly_Linked_List.LinkedList.Node;
+//q10 Recursive
+public class MergeSLL {
+    // Fn to merge 2 sorted LLs
+    public Node merge2LLs(Node h1, Node h2) {
+        // Dummy node to help with the merge process
+        Node dummy = new Node(0);
+        Node curr = dummy;
+
+        // While both LLs are not empty, compare the values
+        while (h1 != null && h2 != null) {
+            if (h1.value <= h2.value) {
+                curr.next = h1;
+                h1 = h1.next;
+            } else {
+                curr.next = h2;
+                h2 = h2.next;
+            }
+            curr = curr.next;
+        }
+
+        // If one of the LLs is not empty, append it to the result
+        if (h1 != null) {
+            curr.next = h1;
+        } else {
+            curr.next = h2;
+        }
+
+        return dummy.next; // The merged LL starts from dummy.next
+    }
+}
+package Linked_Lists.Medium_Qs_LL;
+// Q12
+import Linked_Lists.Singly_Linked_List.LinkedList.Node;
+
+public class SortLinkedList {
+    // Fn to sort a LL using merge sort
+    public Node sortLL(Node h) {
+        if (h == null || h.next == null) return h;
+
+        Node middle = getMiddle(h);
+        Node nextOfMiddle = middle.next;
+        middle.next = null;
+
+        Node l = sortLL(h);
+        Node r = sortLL(nextOfMiddle);
+
+        return merge2LLs(l, r);
+    }
+
+    // Fn to find the middle of the LL
+    public Node getMiddle(Node h) {
+        if (h == null) return h;
+        
+        Node S = h, F = h.next; //note the change
+        while (F != null && F.next != null) {
+            S = S.next;
+            F = F.next.next;
+        }
+        return S;
+    }
+
+    // Fn to merge 2 sorted LLs
+    public Node merge2LLs(Node h1, Node h2) {
+        // Dummy node to help with the merge process
+        Node dummy = new Node(0);
+        Node curr = dummy;
+
+        // While both LLs are not empty, compare the values
+        while (h1 != null && h2 != null) {
+            if (h1.value <= h2.value) {
+                curr.next = h1;
+                h1 = h1.next;
+            } else {
+                curr.next = h2;
+                h2 = h2.next;
+            }
+            curr = curr.next;
+        }
+
+        // If one of the LLs is not empty, append it to the result
+        if (h1 != null) {
+            curr.next = h1;
+        } else {
+            curr.next = h2;
+        }
+
+        return dummy.next; // The merged LL starts from dummy.next
+    }
+
+    // Fn to print the LL
+    public void printLL(Node h) {
+        Node curr = h;
+        while (curr != null) {
+            System.out.print(curr.value + " -> ");
+            curr = curr.next;
+        }
+        System.out.println("null");
+    }
+
+
+    public static void main(String[] args) {
+        SortLinkedList sortAndMergeLLs = new SortLinkedList();
+
+        // Create first unsorted LL: 7 -> 3 -> 1 -> 5 -> null
+        Node h1 = new Node(7);
+        h1.next = new Node(3);
+        h1.next.next = new Node(1);
+        h1.next.next.next = new Node(5);
+
+        // Create second unsorted LL: 8 -> 2 -> 6 -> 4 -> null
+        Node h2 = new Node(8);
+        h2.next = new Node(2);
+        h2.next.next = new Node(6);
+        h2.next.next.next = new Node(4);
+
+        // Sort the LLs
+        h1 = sortAndMergeLLs.sortLL(h1);
+        h2 = sortAndMergeLLs.sortLL(h2);
+
+        // Print the sorted LLs
+        System.out.println("First sorted  LL:");
+        sortAndMergeLLs.printLL(h1); // Expected output: 1 -> 3 -> 5 -> 7 -> null
+
+        System.out.println("Second sorted  LL:");
+        sortAndMergeLLs.printLL(h2); // Expected output: 2 -> 4 -> 6 -> 8 -> null
+
+        // Merge the 2 sorted LLs
+        Node mergedHead = sortAndMergeLLs.merge2LLs(h1, h2);
+
+        // Print the merged LL
+        System.out.println("Merged  LL:");
+        sortAndMergeLLs.printLL(mergedHead); // Expected output: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> null
+    }
+}
+
+
+// // /*
+// //  * Faster Soln In LC forum
+// //  * 
+// //  */
+// Runtime: 2ms
+
+
+// Java
+// /**
+//  * Definition for singly-linked list.
+//  * public class ListNode {
+//  *     int val;
+//  *     ListNode next;
+//  *     ListNode() {}
+//  *     ListNode(int val) { this.val = val; }
+//  *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+//  * }
+//  */
+// class Solution {
+//     public ListNode sortList(ListNode head) {
+//         return sortList(head, null);
+//     }
+
+//     private ListNode sortList(ListNode start, ListNode end){
+//         if(start == null || start.next == null || start == end)return start;
+//         ListNode left = start, right = start, cur = start.next;
+//         boolean sorted = true;
+//         while(cur != null && cur != end){
+//             ListNode tmp = cur.next;
+//             if(cur.val < start.val){
+//                 cur.next = left;
+//                 left = cur;
+//                 right.next = tmp;
+//                 sorted = false;
+//             }else{
+//                 if(cur.val < right.val)sorted = false;
+//                 right = cur;
+//             }
+//             cur = tmp;
+//         }
+//         if(sorted)return left;
+//         left = sortList(left, start);
+//         start.next = sortList(start.next, end);
+//         return left;
+//     }
+// }
+
+// //O(1) space soln in LC forum, using bottom up merge sort
+// public class Solution {
+//     public ListNode SortList(ListNode head) {
+//         if (head == null) return null;
+//         var n = 0;
+//         for (var current = head; current != null; current = current.next) n += 1;
+//         var dummy1 = new ListNode(-1);
+//         dummy1.next = head;
+//         var dummy2 = new ListNode(-1);
+//         for (var m = 1; m < n; m *= 2) {
+//             var prev1 = dummy1;
+//             while (prev1.next != null) {
+
+//                 // Grab up to the next m items into list1.
+//                 var list1 = prev1.next;
+//                 var prev2 = list1;
+//                 for (var i = 0; i < m - 1 && prev2 != null; i++) prev2 = prev2.next;
+
+//                 if (prev2 == null) break;
+
+//                 // Grab up to the next m items into list2.
+//                 var list2 = prev2.next;
+//                 var prev3 = list2;
+//                 for (var i = 0; i < m - 1 && prev3 != null; i++) prev3 = prev3.next;
+
+//                 // Save the remaining items, if any.
+//                 var list3 = prev3 != null ? prev3.next : null;
+
+//                 // Terminate list1 and list2.
+//                 prev2.next = null;
+//                 if (prev3 != null) prev3.next = null;
+
+//                 // Merge the two lists, terminating with remaining items.
+//                 (prev1.next, prev1) = Merge(dummy2, list1, list2, list3);
+//             }
+//         }
+//         return dummy1.next;
+//     }
+//     private (ListNode, ListNode) Merge(ListNode dummy, ListNode list1, ListNode list2, ListNode list3) {
+//         var prev = dummy;
+//         while (list1 != null || list2 != null) {
+//             var first = false;
+//             if (list1 == null) first = false;
+//             else if (list2 == null) first = true;
+//             else first = list1.val <= list2.val;
+//             if (first) {
+//                 prev.next = list1;
+//                 list1 = list1.next;
+//             }
+//             else {
+//                 prev.next = list2;
+//                 list2 = list2.next;
+//             }
+//             prev = prev.next;
+//         }
+//         prev.next = list3;
+//         return (dummy.next, prev);
+//     }
+// }
+/*
+ * Meeting the O(1) requirement
+
+sladkey
+26
+288
+Apr 04, 2019
+Because of the O(1) requirement, you cannot use recursion or any collections. So supplementary arrays are out, priority queues are out, quicksort is out, heapsort is out, and even recursive merge sort is out.
+
+So the trick to solving the problem is to realize that with log n passes over the list, you can do a bottom up merge sort with no supplementary storage such as a stack or recursion.
+
+This particular algorithm is much easier to understand conceptually than it is to program because the linked-list structure means you need to keep the whole list connected for each of the passes. As a result, tracking previous nodes that need to be updated is messy and error-prone, but still just a simple matter of programming. But as far as understanding how the sort works, you can just imagine that you are sorting an array in-place and keep in mind that you must proceed from left to right in order to avoid costly random access.
+
+How does bottom-up merge sort work? In the first pass we take adjacent pairs of items and "merge" them into a sequence of sorted pairs. In the next pass we take adjacent pairs of pairs (which are already sorted) and merge them into a sequence of sorted subsquences of length four. By doubling the length each iteration, we gradually go from sorted by twos, to sorted by fours, to sorted by eights, etc. until completely sorted. Since we are doubling with each pass, we do a total of log n passes.
+
+The final complexity is coping with lists whose length are not a power of two. This creates two situations where either the first subsequence is too short or the first subsequence is full length but the second sequence is short. In the former case, nothing needs to be done because it was sorted in the prior iteration. In the latter case, we just merge two linked lists of unequal length.
+ */
+
+//  Insertion Sort
+// Runtime: 467 ms
+// Space: O(1)
+
+// class Solution {
+//     public ListNode sortList(ListNode head) {
+//         ListNode cur = head;
+//         ListNode temp = new ListNode(0);
+//         ListNode prev = temp;
+//         while(cur != null){
+//             ListNode nxt = cur.next;
+//             if(prev.val >= cur.val)
+//                prev = temp;
+//             while(prev.next != null && prev.next.val < cur.val)
+//                 prev = prev.next;
+//             cur.next = prev.next;
+//             prev.next = cur;
+//             cur = nxt;
+//         }
+//         return temp.next;
+//     }
+// }
+// Sharing bottom-up true O(1) space
+
+// al7bashkatov
+// 12
+// 131
+// May 07, 2019
+// class Solution {
+//     public ListNode sortList(ListNode head) {
+//         if (head == null || head.next == null) {
+//             return head;
+//         }
+        
+//         int len = getLength(head);
+//         ListNode dummy = new ListNode(0);
+//         dummy.next = head;
+        
+//         for (int step = 1; step < len; step <<= 1) {
+//             ListNode l1Start = dummy.next;
+//             ListNode tail = dummy;
+//             ListNode right = null;
+            
+//             while (l1Start != null) {
+//                 ListNode l1End = l1Start;
+//                 int count = step;
+                
+//                 while (--count > 0 && l1End.next != null) {
+//                     l1End = l1End.next;
+//                 }
+                
+//                 ListNode l2Start = l1End.next;
+//                 l1End.next = null;
+                
+//                 if (l2Start == null) {
+//                     break;
+//                 }
+                
+//                 ListNode l2End = l2Start;
+//                 count = step;
+                
+//                 while (--count > 0 && l2End.next != null) {
+//                     l2End = l2End.next;
+//                 }
+                
+//                 right = l2End.next;
+//                 l2End.next = null;
+                
+//                 ListNode sorted = merge(l1Start, l2Start, tail);
+//                 tail = sorted;
+//                 sorted.next = right;
+//                 l1Start = right;
+//             }
+//         }
+        
+//         return dummy.next;
+//     }
+    
+//     private ListNode merge(ListNode l1, ListNode l2, ListNode head) {
+//         ListNode cur = head;
+        
+//         while (l1 != null && l2 != null) {
+//             if (l1.val > l2.val) {
+//                 cur.next = l2;
+//                 cur = l2;
+                
+//                 l2 = l2.next;
+//             } else {
+//                 cur.next = l1;
+//                 cur = l1;
+//                 l1 = l1.next;
+//             }
+//         }
+        
+//         cur.next = l1 != null ? l1 : l2;
+        
+//         while (cur.next != null) {
+//             cur = cur.next;
+//         }
+        
+//         return cur;
+//     }
+    
+//     private int getLength(ListNode list) {
+//         int count = 0;
+//         ListNode curr = list;
+        
+//         while (curr != null) {
+//             count++;
+//             curr = curr.next;
+//         }
+        
+//         return count;
+//     }
+// }
+
+package Linked_Lists.Medium_Qs_LL;
+
+import Linked_Lists.Singly_Linked_List.LinkedList.Node;
+/*Q12 
+Given a linked list of 0s, 1s and 2s, sort it.
+EasyAccuracy: 60.75%Submissions: 169K+Points: 2
+
+Given a linked list of N nodes where nodes can contain values 0s, 1s, and 2s only. The task is to segregate 0s, 1s, and 2s linked list such that all zeros segregate to head side, 2s at the end of the linked list, and 1s in the mid of 0s and 2s.
+
+Example 1:
+
+Input:
+N = 8
+value[] = {1,2,2,1,2,0,2,2}
+Output: 0 1 1 2 2 2 2 2
+Explanation: All the 0s are segregated
+to the left end of the linked list,
+2s to the right end of the list, and
+1s in between.
+Example 2:
+
+Input:
+N = 4
+value[] = {2,2,0,1}
+Output: 0 1 2 2
+Explanation: After arranging all the
+0s,1s and 2s in the given format,
+the output will be 0 1 2 2.
+Your Task:
+The task is to complete the function segregate() which segregates the nodes in the linked list as asked in the problem statement and returns the head of the modified linked list. The printing is done automatically by the driver code.
+
+Expected Time Complexity: O(N).
+Expected Auxiliary Space: O(N).
+
+Constraints:
+1 <= N <= 106 */
+public class SortLL012only {
+    static Node segregate(Node h) {
+        if(h==null||h.next==null) return h;
+        // Dummy Nodes
+        Node zH = new Node(-1);
+        Node oH = new Node(-1);
+        Node tH = new Node(-1);
+        // Ptr to Dummy Nodes for Linking next of LL in sorted waY
+        Node z = zH;
+        Node o = oH;
+        Node t = tH;
+        Node travel=h;
+        while(travel!=null){
+            int elem=travel.value;
+            // Linkup as per curr node value
+            switch (elem) {
+                case 0:
+                    z.next=travel;
+                    z=travel;
+                    break;
+                case 1:
+                    o.next=travel;
+                    o=travel;
+                    break;
+                case 2:
+                    t.next=travel;
+                    t=travel;
+                    break;
+                default:
+                    break;
+            } 
+            travel=travel.next; // keep travesing
+        }
+        // COnnect up all 3 list parts
+        t.next=null;
+        o.next=tH.next;
+        z.next=oH.next;
+
+        // return the new head, zero Dummy's next
+        return zH.next;
+
+    }
+}
+package Linked_Lists.Medium_Qs_LL;
+
+import Linked_Lists.Singly_Linked_List.LinkedList.Node;
+// Q13
+public class Yintersection {
+    public Node getIntersectionNode(Node h1, Node h2) {
+        if(h1==null||h2==null) return null;
+        Node t1=h1;
+        Node t2=h2;
+        while(t2!=t1){
+            t2=t2.next;
+            t1=t1.next;
+            if(t1==t2) return t1;// ort t2
+            else if(t1==null) t1=h2;
+            else if(t2==null) t2=h1;
+        } return t1;
+    }
+}
+package Linked_Lists.Medium_Qs_LL;
+
+import Linked_Lists.Singly_Linked_List.LinkedList.Node;
+// Q14
+public class Add1toSLL {
+    public static Node addOne(Node h) 
+    { 
+            if(h==null){
+                // create a node with 1 and return it
+                Node One = new Node(1);
+                One.next=null;
+                return One;
+            }
+            // reverse SLL
+            h = RecursiveReverseSLL.reverseSLL(h);
+            // 1st place(LSB)
+            int c=1;
+            // To traverse
+            Node t = h;
+            while(t!=null){
+                if(t.value+c>=10){
+                    t.value=0;
+                    c=1;
+                } else if (t.value+c<10) {
+                    t.value+=c;
+                    c=0; // carry for next higher place
+                } t=t.next;
+            }
+
+            h = RecursiveReverseSLL.reverseSLL(h);
+
+            if(c!=1){
+                return h;
+            } else{
+                // create a node with 1 and return it
+                Node One = new Node(1);
+                One.next=h;
+                return One;
+            }
+    }
+
+}
+
+// // gfg sub
+// //{ Driver Code Starts
+//     import java.io.*;
+//     import java.util.*;
+//     class Node
+//     {
+//         int data;
+//         Node next;
+        
+//         Node(int x)
+//         {
+//             data = x;
+//             next = null;
+//         }
+//     }
+//     class GfG
+//     {
+//         public static void printList(Node node) 
+//         { 
+//             while (node != null)
+//             { 
+//                 System.out.print(node.data);
+//                 node = node.next; 
+//             }  
+//             System.out.println();
+//         } 
+//         public static void main(String args[])throws IOException
+//             {
+//                 Scanner sc = new Scanner(System.in);
+//                 int t = sc.nextInt();
+//                 while(t-->0)
+//                     {
+//                         String s = sc.next();
+//                         Node head = new Node( s.charAt(0) - '0' );
+//                         Node tail = head;
+//                         for(int i=1; i<s.length(); i++)
+//                         {
+//                             tail.next = new Node( s.charAt(i) - '0' );
+//                             tail = tail.next;
+//                         }
+//                         Solution obj = new Solution();
+//                         head = obj.addOne(head);
+//                         printList(head); 
+//                     }
+//             }
+//     }
+    // // } Driver Code Ends
+    
+    
+    // /*
+    // class Node{
+    //     int data;
+    //     Node next;
+        
+    //     Node(int x){
+    //         data = x;
+    //         next = null;
+    //     }
+    // } 
+    // */
+    
+    // class Solution
+    // {
+    //     public static Node addOne(Node h) 
+    //     { 
+    //         //code here.
+    //         if(h==null){
+    //                 // create a node with 1 and return it
+    //                 Node One = new Node(1);
+    //                 One.next=null;
+    //                 return One;
+    //             }
+    //             // reverse SLL
+    //             h = reverseSLL(h);
+    //             // 1st place(LSB)
+    //             int c=1;
+    //             // To traverse
+    //             Node t = h;
+    //             while(t!=null){
+    //                 if(t.data+c>=10){
+    //                     t.data=0;
+    //                     c=1;
+    //                 } else if (t.data+c<10) {
+    //                     t.data+=c;
+    //                     c=0; // carry for next higher place
+    //                 } t=t.next;
+    //             }
+    
+    //             h = reverseSLL(h);
+    
+    //             if(c!=1){
+    //                 return h;
+    //             } else{
+    //                 // create a node with 1 and return it
+    //                 Node One = new Node(1);
+    //                 One.next=h;
+    //                 return One;
+    //             }
+    //     }
+    //     public static Node reverseSLL(Node h){
+    //         if(h==null||h.next==null) return h;
+    
+    //         Node Pt=null;
+    //         Node t=h;
+    //         Node Ft=h.next;
+    
+    //         while(t!=null){
+    //             t.next=Pt;
+    //             Pt=t;
+    //             t=Ft;
+    //             if(Ft==null) h=t;
+    //             else Ft = Ft.next;
+    //         }
+    //         return Pt;
+    //     }
+    // }
+    package Linked_Lists.Medium_Qs_LL;
+
+import Linked_Lists.Singly_Linked_List.LinkedList.Node;
+
+// Q14 
+/*Add two numbers represented as Linked Lists
+
+
+22
+
+1
+Problem Statement: Given the heads of two non-empty linked lists representing two non-negative integers. The digits are stored in reverse order, and each of their nodes contains a single digit. Add the two numbers and return the sum as a linked list.
+
+Examples:
+
+Input Format: 
+(Pointer/Access to the head of the two linked lists)
+
+num1  = 243, num2 = 564
+
+l1 = [2,4,3]
+l2 = [5,6,4]
+
+Result: sum = 807; L = [7,0,8]
+
+Explanation: Since the digits are stored in reverse order, reverse the numbers first to get the or                                                original number and then add them as → 342 + 465 = 807. Refer to the image below.
+  
+
+
+
+Input Format: 
+(Pointer/Access to the head of the two linked lists)
+
+l1 = [9,9,9,9,9,9,9], l2 = [9,9,9,9]
+
+Result: [8,9,9,9,0,0,0,1]
+
+Explanation: Since the digits are stored in reverse order, reverse the numbers first to get the     original number and then add them as → 9999999 + 9999 = 8999001. Refer to the image below.
+
+
+Solution
+Disclaimer: Don't jump directly to the solution, try it out yourself first.
+
+Solution 1: Elementary Math
+
+Intuition: Keep track of the carry using a variable and simulate digits-by-digits sum starting from the head of the list, which contains the least significant digit.
+
+Approach: 
+
+
+
+Visualization of the addition of two numbers: 
+
+342 + 465 = 807
+
+342+465=807.
+
+Each node contains a single digit and the digits are stored in reverse order.
+
+Just like how you would sum two numbers on a piece of paper, we begin by summing the least significant digits, which is the head of l1 and l2. Since each digit is in the range of 0…9, summing two digits may "overflow". For example 
+
+5 + 7 = 12. In this case, we set the current digit to 2 and bring over the carry=1 to the next iteration. 
+
+carry must be either 0 or 1 because the largest possible sum of two digits (including the carry) is 9 + 9 + 1 = 19.
+
+Psuedocode:
+
+Create a dummy node which is the head of new linked list.
+Create a node temp, initialise it with dummy.
+Initialize carry to 0.
+Loop through lists l1 and l2 until you reach both ends, and until carry is present.
+Set sum=l1.val+ l2.val + carry.
+Update carry=sum/10.
+Create a new node with the digit value of (sum%10) and set it to temp node's next, then advance temp node to next.
+Advance both l1 and l2.
+Return dummy's next node.
+Note that we use a dummy head to simplify the code. Without a dummy head, you would have to write extra conditional statements to initialize the head's value.
+
+Take extra caution in the following cases:
+
+Test case	Explanation
+l1=[0,1], l2=[0,1,2]	When one list is longer than the other.
+l1=[], l2=[0,1]	When one list is null, which means an empty list.
+l1=[9,9], l2=[1]	The sum could have an extra carry of one at the end, which is easy to forget.
+ */
+public class Add2NosInSLL {
+    public Node addTwoNumbers(Node l1, Node l2) {
+        if(l1==null) return l2;
+        if(l2==null) return l1;
+
+        Node D=new Node(-1);
+        int c=0;
+        Node t=D;
+        while(!(l1==null && l2==null && c!=1)){
+            int sum=0;
+
+            if(l1!=null){
+                sum+=l1.value;
+                l1=l1.next;
+            }
+            if(l2!=null){
+                sum+=l2.value;
+                l2=l2.next;
+            }
+            sum+=c;
+            if(sum>9) c=1; // or c=sum/10;
+            else c=0;
+            int nextHiDig=sum%10;
+            Node newNextNode=new Node(nextHiDig);
+            t.next=newNextNode;
+            t=t.next;
+        } return D.next;
+    }
+}
+// // ANother soln, little different way, same algo
+// /**
+//  * Definition for singly-linked list.
+//  * public class ListNode {
+//  *     int val;
+//  *     ListNode next;
+//  *     ListNode() {}
+//  *     ListNode(int val) { this.val = val; }
+//  *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+//  * }
+//  */
+// class Solution {
+//     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+//         ListNode dummy = new ListNode(); 
+//         ListNode temp = dummy; 
+//         int carry = 0;
+//         while( l1 != null || l2 != null || carry == 1) {
+//             int sum = 0; 
+//             if(l1 != null) {
+//                 sum += l1.val; 
+//                 l1 = l1.next; 
+//             }
+            
+//             if(l2 != null) {
+//                 sum += l2.val; 
+//                 l2 = l2.next; 
+//             }
+            
+//             sum += carry; 
+//             carry = sum / 10; 
+//             ListNode node = new ListNode(sum % 10); 
+//             temp.next = node; 
+//             temp = temp.next; 
+//         }
+//         return dummy.next;
+//     }
+// }
+// Time Complexity: O(max(m,n)). Assume that m and n represent the length of l1 and l2 respectively, the algorithm above iterates at most max(m,n) times.
+
+// Space Complexity: O(max(m,n)). The length of the new list is at most max(m,n)+1.

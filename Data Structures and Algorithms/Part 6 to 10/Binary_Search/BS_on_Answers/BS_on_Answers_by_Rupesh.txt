@@ -1,0 +1,1320 @@
+package Binary_Search.BS_on_Answers;
+/*
+ * Q1
+ * Finding Sqrt of a number using Binary Search
+
+Problem Statement: You are given a positive integer n. 
+Your task is to find and return its square root. 
+If ‘n’ is not a perfect square, then return the floor value of 'sqrt(n)'.
+
+Note: The question explicitly states that if the given number, n, is not a perfect square, 
+our objective is to find the maximum number, x, such that x squared is less than or equal to n (x*x <= n). 
+In other words, we need to determine the floor value of the square root of n.
+ */
+public class SquareRoot {
+    public long floorSqrt(long x)
+	 {  
+        // Special case for 0 and 1, just to optimize edge case
+        if (x == 0 || x == 1) {
+            return x;
+        }
+		// root lies b/w (for x=1)1 to x, given x is +ve
+        long l=1; long r=x;
+        long sqrt=x;
+        while(l<=r){
+            long m = l + (r - l) / 2;
+            long v = m*m;
+            if(v==x) return m; // happens when x is perfect square
+            else if(v<x){
+                sqrt=m;// possible answer
+                l=m+1; // eliminate left, narrow search space to right part, try to get v closer(righter) to x
+            }
+            else if(v>x) r=m-1; // eliminate right, narrow search space to left part, try to get v closer(lefter) to x
+        }
+        return sqrt;
+
+	 }
+     public static void main(String[] args) {
+        SquareRoot sqrtCalculator = new SquareRoot();
+
+        // Test cases
+        long[] testCases = {0, 1, 2,3, 4,5,6,7, 8, 9, 16, 25,50, 100, 2147395600};
+
+        for (long x : testCases) {
+            long result = sqrtCalculator.floorSqrt(x);
+            System.out.println("The floor square root of " + x + " is: " + result);
+        }
+     }
+}
+
+// gfg submisiion, slightly better
+/*
+ * 
+
+// Function to find square root
+// x: element to find square root
+class Solution
+{
+     long floorSqrt(long x)
+	 {
+            // Special case for 0 and 1, just to optimize edge case
+            if (x == 0 || x == 1) {
+                return x;
+            }
+            // root lies b/w (for x=1)1 to x, given x is +ve
+            long l=1; long r=x;
+            
+            while(l<=r){
+                long m = l + (r - l) / 2;
+                long v = m*m;
+                if(v==x) return m; // happens when x is perfect square
+                else if(v<x){
+                    l=m+1; // eliminate left, narrow search space to right part, try to get v closer(righter) to x
+                }
+                else if(v>x) r=m-1; // eliminate right, narrow search space to left part, try to get v closer(lefter) to x
+            }
+            return r; // at end, r ends up converging to closest left space answer to actual root
+	 }
+}
+ */
+
+ package Binary_Search.BS_on_Answers;
+/*
+ * Q3
+ * Koko Eating Bananas
+
+
+38
+
+0
+Problem Statement: A monkey is given ‘n’ piles of bananas, whereas the 'ith' pile has ‘a[i]’ bananas. An integer ‘h’ is also given, which denotes the time (in hours) for all the bananas to be eaten.
+
+Each hour, the monkey chooses a non-empty pile of bananas and eats ‘k’ bananas. If the pile contains less than ‘k’ bananas, then the monkey consumes all the bananas and won’t eat any more bananas in that hour.
+
+Find the minimum number of bananas ‘k’ to eat per hour so that the monkey can eat all the bananas within ‘h’ hours.
+
+Examples
+Example 1:
+Input Format:
+ N = 4, a[] = {7, 15, 6, 3}, h = 8
+Result:
+ 5
+Explanation:
+ If Koko eats 5 bananas/hr, he will take 2, 3, 2, and 1 hour to eat the piles accordingly. So, he will take 8 hours to complete all the piles.  
+
+Example 2:
+Input Format:
+ N = 5, a[] = {25, 12, 8, 14, 19}, h = 5
+Result:
+ 25
+Explanation:
+ If Koko eats 25 bananas/hr, he will take 1, 1, 1, 1, and 1 hour to eat the piles accordingly. So, he will take 5 hours to complete all the piles.
+
+
+Before moving on to the solution, let’s understand how Koko will eat the bananas. Assume, the given array is {3, 6, 7, 11} and the given time i.e. h is 8. 
+
+First of all, Koko cannot eat bananas from different piles. He should complete the pile he has chosen and then he can go for another pile.
+Now, Koko decides to eat 2 bananas/hour. So, in order to complete the first he will take
+3 / 2 = 2 hours. Though mathematically, he should take 1.5 hrs but it is clearly stated in the question that after completing a pile Koko will not consume more bananas in that hour. So, for the first pile, Koko will eat 2 bananas in the first hour and then he will consume 1 banana in another hour. 
+From here we can conclude that we have to take ceil of (3/2). Similarly, we will calculate the times for other piles.
+
+1st pile: ceil(3/2) = 2 hrs
+2nd pile: ceil(6/2) = 3 hrs
+3rd pile: ceil(7/2) = 4 hrs
+4th pile: ceil(11/2) = 6 hrs
+Koko will take 15 hrs in total to consume all the bananas from all the piles. 
+
+Observation: Upon observation, it becomes evident that the maximum number of bananas (represented by 'k') that Koko can consume in an hour is obtained from the pile that contains the largest quantity of bananas. Therefore, the maximum value of 'k' corresponds to the maximum element present in the given array.
+
+So, our answer i.e. the minimum value of ‘k’ lies between 1 and the maximum element in the array i.e. max(a[]).
+
+Now, let’s move on to the solution.
+ */
+// Attempt 4 at later time
+public class KokoEatingBananas {
+    public int minEatingSpeed(int[] piles, int h) {
+        int n = piles.length;
+        if (h < n) return -1; // Not possible to eat all piles if hours are less than piles, even with 1 pile/hr. speed
+
+        // Find the max pile size
+        int max = piles[0];
+        for(int i=1; i<n; i++) max=(piles[i]>max)? piles[i]:max;
+        if (h == n) return max; // If hours are exactly the no. of piles, eat at 1 pile/hr. speed
+
+        // Ini. range for binary search
+        int l = 1;
+        int r = max;
+        int k = max;
+
+        while (l <= r) {
+            int m = l + (r - l) / 2;
+            long hours = 0; // Use long to prevent overflow
+
+            // Calc. the total hours needed at eating speed m
+            for (int pile : piles) {
+                hours += (pile + m - 1) / m; // Equivalent to ceil(pile / m)
+                if (hours > h) break; // Early exit if hours exceed h
+            }
+
+            if (hours <= h) {
+                k = m; // Update the minimum possible eating speed
+                r = m - 1; // Try to find a smaller valid eating speed
+            } else {
+                l = m + 1; // Increase the eating speed
+            }
+        }
+
+        return k;
+    }
+
+    public static void main(String[] args) {
+        KokoEatingBananas koko = new KokoEatingBananas();
+
+        // Test cases
+        int[][] testPiles = {
+            {7, 15, 6, 3},
+            {25, 12, 8, 14, 19},
+            {805306368, 805306368, 805306368}
+        };
+        int[] testHours = {8, 5, 1000000000};
+
+        for (int i = 0; i < testPiles.length; i++) {
+            int result = koko.minEatingSpeed(testPiles[i], testHours[i]);
+            System.out.println("Minimum eating speed for test case " + (i + 1) + " is: " + result);
+        }
+    }
+}
+
+
+// public class KokoEatingBananas {
+//     public int minEatingSpeed(int[] piles, int h) {
+//        /* Attempt 2: works for all cases where overflow ain't an concern
+//         int n = piles.length;
+//         if (h < n) return -1; // Not possible to eat all piles if hours are less than piles
+
+//         // Find the max pile size
+//         int max = piles[0];
+//         for (int i = 1; i < n; i++) {
+//             max = Math.max(piles[i], max);
+//         }
+//         if (h == n) return max; // If hours are exactly the number of piles, eat one pile per hour
+
+//         // Ini. range for binary search
+//         int l = 1;
+//         int r = max;
+//         int k = max; // k is speed/rate of eating banaas/hr.
+
+//         while (l <= r) {
+//             int m = l + (r - l) / 2;
+//             int hours = 0;
+
+//             // Calc. total hours needed at eating speed m
+//             for (int pile : piles) {
+//                 hours += (pile + m - 1) / m; // == ceil(pile / m)
+//             }
+
+//             if (hours <= h) {
+//                 k = m; // Update the minimum possible eating speed
+//                 r = m - 1; // Try to find a smaller valid eating speed
+//             } else {
+//                 l = m + 1; // Increase the eating speed
+//             }
+//         }
+
+//         return k;
+//         */
+
+        
+//     }
+//     public static void main(String[] args) {
+//         KokoEatingBananas koko = new KokoEatingBananas();
+
+//         // Test cases
+//         int[][] testPiles = {
+//             {7, 15, 6, 3},
+//             {25, 12, 8, 14, 19}
+//         };
+//         int[] testHours = {8, 5};
+
+//         for (int i = 0; i < testPiles.length; i++) {
+//             int result = koko.minEatingSpeed(testPiles[i], testHours[i]);
+//             System.out.println("Minimum eating speed for test case " + (i + 1) + " is: " + result);
+//         }
+//     }
+// }
+// // lc submission 1, some mistakes
+// /*
+//  * class Solution {
+//     public int minEatingSpeed(int[] piles, int h) {
+//         int n=piles.length;
+//         if(h<n) return -1; //Not possible to eat all piles if hours less than piles, even with 1 pile/hr. speed
+//         int max=piles[0];
+//         for(int i=1; i<n; i++) max=(piles[i]>max)? piles[i]:max;
+//         if(h==n) return max; //in this case, have to ensure we go at 1 pile/hr. speed on all piles
+
+//         // Ini. Range for Binary Search
+//         int l=1; int  r=max; int k=max; // k is speed/rate of eating banaas/hr.
+//         while(l<=r){
+//             int m=l+(r-l)/2;
+//             int hours=0;
+//             for(int pile : piles){
+//                 hours+=pile/m+pile%m; // ceil of (piles[i]/m)
+//             }
+//             if(hours<h) // Too fast
+//             {
+//                 //actually not require this below line due to convergence prop. of BSrch
+//                 k=(m<k)? m:k; // if m is slower yet still allow completion of all bananas, update k
+//                 //k=m; //is enough
+//                 r=m-1; // try to slow
+//             }
+//             else if(hours>h) // Too slow
+//             {
+//                 l=m+1; // try to hasten
+//             }
+//             else if(hours==h) return m; //just right speed
+//         } return k;  
+        
+//     }
+// }
+//  */
+
+ package Binary_Search.BS_on_Answers;
+/*
+ * Q6
+ * 
+ * Capacity to Ship Packages within D Days
+
+Problem Statement: You are the owner of a Shipment company. You use conveyor belts to ship packages from one port to another. The packages must be shipped within 'd' days.
+The weights of the packages are given in an array 'of weights'. The packages are loaded on the conveyor belts every day in the same order as they appear in the array. The loaded weights must not exceed the maximum weight capacity of the ship.
+Find out the least-weight capacity so that you can ship all the packages within 'd' days.
+
+Examples
+Example 1:
+Input Format:
+ N = 5, weights[] = {5,4,5,2,3,4,5,6}, d = 5
+Result:
+ 9
+Explanation:
+ If the ship capacity is 9, the shipment will be done in the following manner:
+Day         Weights            Total
+1        -       5, 4          -        9
+2        -       5, 2          -        7
+3        -       3, 4          -        7
+4        -       5              -        5
+5        -       6              -        6
+So, the least capacity should be 9.
+
+Example 2:
+Input Format:
+ N = 10, weights[] = {1,2,3,4,5,6,7,8,9,10}, d = 1
+Result:
+ 55
+Explanation:
+ We have to ship all the goods in a single day. So, the weight capacity should be the summation of all the weights i.e. 55.
+
+Observation:
+
+Minimum ship capacity: The minimum ship capacity should be the maximum value in the given array. Let’s understand using an example. Assume the given weights array is {1, 2, 3, 4, 5, 6, 7, 8, 9, 10} and the ship capacity is 8. Now in the question, it is clearly stated that the loaded weights in the ship must not exceed the maximum weight capacity of the ship. For this constraint, we can never ship the weights 9 and 10, if the ship capacity is 8. That is why, in order to ship all the weights, the minimum ship capacity should be equal to the maximum of the weights array i.e. nax(weights[]).
+Maximum capacity: If the ship capacity is equal to the sum of all the weights, we can ship all goods within a single day. Any capacity greater than this will yield the same result. So, the maximum capacity will be the summation of all the weights i.e. sum(weights[]).
+From the observations, it is clear that our answer lies in the range
+[max(weights[]), sum(weights[])].
+
+How to calculate the number of days required to ship all the weights for a certain ship capacity:
+
+In order to calculate this, we will write a function findDays(). This function accepts the weights array and a capacity as parameters and returns the number of days required for that particular capacity. The steps will be the following:
+
+findDays(weights[], cap):
+
+We will declare to variables i.e. ‘days’(representing the required days) and ‘load’ (representing the loaded weights in the ship). As we are on the first day, ‘days’ should be initialized with 1 and ‘load’ should be initialized with 0.
+Next, we will use a loop(say i) to iterate over the weights. For each weight, weights[i], we will check the following:
+If load+weights[i] > cap: If upon adding current weight with load exceeds the ship capacity, we will move on to the next day(i.e. day = day+1) and then load the current weight(i.e. Set load to weights[i], load = weights[i]).
+Otherwise, We will just add the current weight to the load(i.e. load = load+weights[i]).
+Finally, we will return ‘days’ which represents the number of days required.
+
+ */
+public class ShippingPacks {
+    public int shipWithinDays(int[] wt, int d) {
+        int n=wt.length;
+        if(d>n) return -1; // not possible
+        // find max wt, min wt and sum of wts
+        int maxWt=wt[0]; int minWt=wt[0]; int wtSum=wt[0];
+        for(int i=1; i<n;i++){
+            maxWt=(maxWt<wt[i])? wt[i]:maxWt;
+            minWt=(minWt>wt[i])? wt[i]:minWt;
+            wtSum+=wt[i];
+        }
+        if(d==1) return wtSum; // to take all in 1 day
+        //if(d==n) return maxWt; // to take each item in 1 day-->wrong thinking [2,3,4,9] can be shipped in 2 days with cap=maxWt
+        if(d==n && minWt>(maxWt+1)/2) return maxWt; // correct for eg. [50, 50, 99]
+
+        //Ini. for Range of Binsrch
+        int l=maxWt;
+        int r=wtSum;
+        int cap=wtSum;
+        while(l<=r){
+            int m= l+(r-l)/2;
+            // to check if ship of 'm' cap can deliver in d days or not
+            // s1- calc days it gonna take for m cap ship to deliver
+            int days=1;
+            int load=0;
+            for(int weight:wt)
+            {
+                if(load+weight>m){
+                    days++; //go to next day
+                    load=weight;
+                    if(days>d) break; //optimization for large case checking, just directly move on to checking for a higher cap ship that might delivers within d days
+                } else load+=weight;
+            }
+            // s2- actually check if days taken by 'm' cap ship to deliver lies within d
+            if(days<=d){
+                cap=m;//might be the min. cap that delivers in d days
+                r=m-1;//try for a lower cap ship that still delivers within d days
+            }else{
+                //not gonna do
+                l=m+1;//try for a higher cap ship that might delivers within d days
+            }
+
+        }return cap; // could just return 'l' too
+    }
+    public static void main(String[] args) {
+        ShippingPacks sp = new ShippingPacks();
+
+        // Test case 1
+        int[] weights1 = {5, 4, 5, 2, 3, 4, 5, 6};
+        int days1 = 5;
+        System.out.println("Test Case 1:");
+        System.out.println("Input: weights = {5, 4, 5, 2, 3, 4, 5, 6}, days = 5");
+        System.out.println("Output: " + sp.shipWithinDays(weights1, days1)); // Expected output: 9
+
+        // Test case 2
+        int[] weights2 = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+        int days2 = 1;
+        System.out.println("\nTest Case 2:");
+        System.out.println("Input: weights = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, days = 1");
+        System.out.println("Output: " + sp.shipWithinDays(weights2, days2)); // Expected output: 55
+    }
+}
+
+package Binary_Search.BS_on_Answers;
+/*
+ * Q8
+ * Aggressive Cows : Detailed Solution
+
+Problem Statement: You are given an array 'arr' of size 'n' which denotes the position of stalls.
+You are also given an integer 'k' which denotes the number of aggressive cows.
+You are given the task of assigning stalls to 'k' cows such that the minimum distance between any two of them is the maximum possible.
+Find the maximum possible minimum distance.
+
+Examples
+Example 1:
+Input Format:
+ N = 6, k = 4, arr[] = {0,3,4,7,10,9}
+Result:
+ 3
+Explanation:
+ The maximum possible minimum distance between any two cows will be 3 when 4 cows are placed at positions {0, 3, 7, 10}. Here the distances between cows are 3, 4, and 3 respectively. We cannot make the minimum distance greater than 3 in any ways.
+
+Example 2:
+Input Format:
+ N = 5, k = 2, arr[] = {4,2,1,3,6}
+Result:
+ 5
+Explanation:
+ The maximum possible minimum distance between any two cows will be 5 when 2 cows are placed at positions {1, 6}. 
+
+Why do we need to sort the stalls?
+
+To arrange the cows in a consecutive manner while ensuring a certain distance between them, the initial step is to sort the stalls based on their positions. In a sorted array, the minimum distance will always be obtained from any two consecutive cows. Arranging the cows in a consecutive manner does not necessarily mean placing them in consecutive stalls.
+
+Assume the given stalls array is: {1,2,8,4,9} and after sorting it will be {1, 2, 4, 8, 9}. The given number of cows is 3.
+
+
+
+We have to fit three cows in these 5 stalls. Each stall can accommodate only one. Our task is to maximize the minimum distance between two stalls. Let’s look at some arrangements:
+
+
+
+
+
+
+
+In the first arrangement, the minimum distance between the cows is 1. Now, in the later cases, we have tried to place the cows in a manner so that the minimum distance can be increased. This is done in the second and third cases. It’s not possible to get a minimum distance of more than 3 in any arrangement, so we output 3. 
+
+Observation:
+
+Minimum possible distance between 2 cows: The minimum possible distance between two cows is 1 as the minimum distance between 2 consecutive stalls is 1.
+Maximum possible distance between 2 cows: The maximum possible distance between two cows is = max(stalls[])-min(stalls[]). This case occurs when we place 2 cows at two ends of the sorted stalls array.
+From the observations, we can conclude that our answer lies in the range 
+[1, max(stalls[])-min(stalls[])].
+
+How to place cows with maintaining a certain distance, ‘dist’, in the sorted stalls:
+
+To begin, we will position the first cow in the very first stall. Next, we will iterate through the array, starting from the second stall. If the distance between the current stall and the last stall where a cow was placed is greater than or equal to the value 'dist', we will proceed to place the next cow in the current stall. Thus we will try to place the cows and finally, we will check if we have placed all the cows maintaining the distance, ‘dist’.
+
+To serve this purpose, we will write a function canWePlace() that takes the distance, ‘dist’, as a parameter and returns true if we can place all the cows maintaining a minimum distance of ‘dist’. Otherwise, it returns false.
+
+canWePlace(stalls[], dist, k):
+
+We will declare two variables, ‘cntCows’ and ‘last’. ‘cntCows’ will store the number of cows placed, and ‘last’ will store the position of the last placed cow.
+First, we will place the first cow in the very first stall. So, we will set ‘cntCows’ to 1 and ‘last’ to stall[0].
+Then, using a loop we will start iterating the array from index 1. Inside the loop, we will do the following:
+If stalls[i] - ‘last’ >= dist: This means the current stall is at least ‘dist’ distance away from the last stall. So, we can place the next cow here. We will increase the value ‘cntCows’ by 1 and set ‘last’ to the current stall.
+If cntCows >= k: This means we have already placed k cows with maintaining the minimum distance ‘dist’. So, we will return true from this step.
+If we are outside the loop, we cannot place k cows with a minimum distance of ‘dist’. So, we will return false.
+ */
+import java.util.Arrays;
+
+public class AggressiveCowsMaxMinDist {
+    public static int aggressiveCows(int[] stalls, int k) {
+        int n = stalls.length; 
+        Arrays.sort(stalls);
+
+        int l = 1; int r = stalls[n - 1] - stalls[0];
+
+        while (l <= r) {
+            int m = (l + r) / 2;
+            if (canWePlace(stalls, m, k) == true) {
+                l = m + 1; //try for more min dist. b/w cows, all cows fit
+            } else r = m - 1;  //try for less min dist. b/w cows, as all cows not fit
+        }
+        return r;
+    }
+    public static boolean canWePlace(int[] stalls, int dist, int cows) {
+        int n = stalls.length; 
+        int cntCows = 1; //no. of cows placed at start is 1 (c1 at A[0] always)
+        int last = stalls[0]; //pos. of last placed cow, sart with c1 always
+        for (int i = 1; i < n; i++) {
+            if (stalls[i] - last >= dist) {
+                //below 2 lines interchageable seqn 
+                cntCows++; //place next cow
+                last = stalls[i]; //update the last loc to loc of (cntCows-1)th  cows loc
+            }
+            if (cntCows >= cows) return true;
+        }
+        return false;
+    }
+    public static void main(String[] args) {
+        int[] stalls = {0, 3, 4, 7, 10, 9};
+        int k = 4;
+        int ans = aggressiveCows(stalls, k);
+        System.out.println("The maximum possible minimum distance is: " + ans);
+    }
+}
+package Binary_Search.BS_on_Answers;
+/*
+ * Q9
+ * Allocate Minimum Number of Pages
+
+Problem Statement: Given an array ‘arr of integer numbers, ‘ar[i]’ represents the number of pages in the ‘i-th’ book. There are a ‘m’ number of students, and the task is to allocate all the books to the students.
+Allocate books in such a way that:
+
+Each student gets at least one book.
+Each book should be allocated to only one student.
+Book allocation should be in a contiguous manner.
+You have to allocate the book to ‘m’ students such that the maximum number of pages assigned to a student is minimum. If the allocation of books is not possible. return -1
+
+Examples
+Example 1:
+Input Format:
+ n = 4, m = 2, arr[] = {12, 34, 67, 90}
+Result:
+ 113
+Explanation:
+ The allocation of books will be 12, 34, 67 | 90. One student will get the first 3 books and the other will get the last one.
+
+Example 2:
+Input Format:
+ n = 5, m = 4, arr[] = {25, 46, 28, 49, 24}
+Result:
+ 71
+Explanation: The allocation of books will be 25, 46 | 28 | 49 | 24.
+
+We can allocate books in several ways but it is clearly said in the question that we have to allocate the books in such a way that the maximum number of pages received by a student should be minimum.
+
+Assume the given array is {25 46 28 49 24} and number of students, M = 4. Now, we can allocate these books in different ways. Some of them are the following:
+
+25 | 46 | 28 | 49, 24  → Maximum no. of pages a student receive = 73
+25 | 46 | 28, 49 | 24  → Maximum no. of pages a student receive = 77
+25 | 46, 28 | 49 | 24  → Maximum no. of pages a student receive = 74
+25, 46 | 28 | 49 | 24  → Maximum no. of pages a student receive = 71
+From the above allocations, we can clearly observe that the minimum possible maximum number of pages is 71.
+
+When it is impossible to allocate books:
+
+When the number of books is lesser than the number of students, we cannot allocate books to all the students even if we give only a single book to each student. So, if m > n, we should return -1.
+
+Observations:
+
+Minimum possible answer: We will get the minimum answer when we give n books of the array to n students(i.e. Each student will receive 1 book). Now, in this case, the maximum number of pages will be the maximum element in the array. So, the minimum possible answer is max(arr[]).
+Maximum possible answer: We will get the maximum answer when we give all n books to a single student. The maximum no. of pages he/she will receive is the summation of array elements i.e. sum(arr[]). So, the maximum possible answer is sum(arr[]).
+From the observations, it is clear that our answer lies in the range [max(arr[]), sum(arr[])].
+
+How to calculate the number of students to whom we can allocate the books if one can receive at most ‘pages’ number of pages:
+
+In order to calculate the number of students we will write a function, countStudents(). This function will take the array and ‘pages’ as parameters and return the number of students to whom we can allocate the books.
+
+countStudents(arr[], pages):
+
+We will first declare two variables i.e. ‘students’(stores the no. of students), and pagesStudent(stores the number of pages of a student). As we are starting with the first student, ‘students’ should be initialized with 1.
+We will start traversing the given array.
+If pagesStudent + arr[i] <= pages: If upon adding the pages with the existing number of pages does not exceed the limit, we can allocate this i-th book to the current student.
+Otherwise, we will move to the next student(i.e. students += 1 ) and allocate the book.
+Finally, we will return the value of ‘students’.
+ */
+import java.util.ArrayList;
+import java.util.List;
+
+public class PageBookAllocation {
+    public static int findMaxMinPages(ArrayList<Integer> a, int n, int m) {
+        if (m > n) return -1; // Can't go below 1 book per student
+        // Find max, min, and sum of elems
+        int max = findMax(a);
+        if (m==n) return max; // Just go at 1 book per student
+        //int min = findMin(a); //not required here, just wrote for practice
+        int sum = findSum(a);
+        if(m==1) return sum; // Gib all book to 1 and only student
+        //Ini. range for BinSrch
+        int l=max; int r=sum;
+        while(l<=r){
+            int maxPg=l+(r-l)/2;
+            int StdntCnt=CountStudents(a,maxPg,n,m);
+            if(StdntCnt<=m) r=maxPg-1; // possible ans, try for lower valid maxPg 
+            else if(StdntCnt>m) l=maxPg+1; // not ans, try for higher valid maxPg
+        } return l; // l convrges to correct ans, while r converges to just a little wrong ans
+        
+    }
+    private static int CountStudents(ArrayList<Integer> a, int maxPg, int n, int m) {
+        int StdntCnt = 1; 
+        long pgAlloc = 0;//a.get(0);
+        for (int i = 0; i < n; i++) {
+            if (pgAlloc + a.get(i) <= maxPg) {
+                // add pages to current student
+                pgAlloc += a.get(i);
+            } else {
+                // add pages to next student
+                StdntCnt++;
+                pgAlloc = a.get(i);
+                if(StdntCnt>m) return StdntCnt; // No need to check further if more students are required than max allowed
+            }
+        }
+        return StdntCnt;
+    }
+    
+    // Mwthods designed for Arraylists
+    // Method to find the max value
+    public static int findMax(List<Integer> list) {
+        int max = list.get(0); // Assume the first elem is the max
+        for (int num : list) {
+            if (num > max) {
+                max = num;
+            }
+        }
+        return max;
+    }
+    //Below method not required here, just wrote for practice
+    // Method to find the min value
+    public static int findMin(List<Integer> list) {
+        int min = list.get(0); // Assume the first elem is the min
+        for (int num : list) {
+            if (num < min) {
+                min = num;
+            }
+        }
+        return min;
+    }
+
+    // Method to find the sum of elems
+    public static int findSum(List<Integer> list) {
+        int sum = 0;
+        for (int num : list) {
+            sum += num;
+        }
+        return sum;
+    }
+
+    public static void main(String[] args) {
+        // Test cases
+        ArrayList<Integer> books1 = new ArrayList<>(List.of(12, 34, 67, 90));
+        int students1 = 2;
+        System.out.println("Test Case 1:");
+        System.out.println("Input: books = {12, 34, 67, 90}, students = 2");
+        System.out.println("Output: " + findMaxMinPages(books1, books1.size(), students1)); // Expected output: 113
+
+        ArrayList<Integer> books2 = new ArrayList<>(List.of(25, 46, 28, 49, 24));
+        int students2 = 4;
+        System.out.println("\nTest Case 2:");
+        System.out.println("Input: books = {25, 46, 28, 49, 24}, students = 4");
+        System.out.println("Output: " + findMaxMinPages(books2, books2.size(), students2)); // Expected output: 71
+    }
+}
+
+// //CODE360 submission
+// import java.util.*;
+// public class Solution {
+//     public static int findPages(ArrayList<Integer> a, int n, int m) {
+//        if (m > n) return -1; // Can't go below 1 book per student
+//         // Find max, min, and sum of elems
+//         int max = findMax(a);
+//         if (m==n) return max; // Just go at 1 book per student
+//         //int min = findMin(a); //not required here, just wrote for practice
+//         int sum = findSum(a);
+//         if(m==1) return sum; // Gib all book to 1 and only student
+//         //Ini. range for BinSrch
+//         int l=max; int r=sum;
+//         while(l<=r){
+//             int maxPg=l+(r-l)/2;
+//             int StdntCnt=CountStudents(a,maxPg,n,m);
+//             if(StdntCnt<=m) r=maxPg-1; // possible ans, try for lower valid maxPg 
+//             else if(StdntCnt>m) l=maxPg+1; // not ans, try for higher valid maxPg
+//         } return l; // l convrges to correct ans, while r converges to just a little wrong ans
+//     }
+//     private static int CountStudents(ArrayList<Integer> a, int maxPg, int n, int m) {
+//         int StdntCnt = 1; 
+//         long pgAlloc = 0;//a.get(0);
+//         for (int i = 0; i < n; i++) {
+//             if (pgAlloc + a.get(i) <= maxPg) {
+//                 // add pages to current student
+//                 pgAlloc += a.get(i);
+//             } else {
+//                 // add pages to next student
+//                 StdntCnt++;
+//                 pgAlloc = a.get(i);
+//                 if(StdntCnt>m) return StdntCnt; // No need to check further if more students are required than max allowed
+//             }
+//         }
+//         return StdntCnt;
+//     }
+//     // Mwthods designed for Arraylists
+//     // Method to find the max value
+//     public static int findMax(List<Integer> list) {
+//         int max = list.get(0); // Assume the first elem is the max
+//         for (int num : list) {
+//             if (num > max) {
+//                 max = num;
+//             }
+//         }
+//         return max;
+//     }
+    
+
+//     // Method to find the sum of elems
+//     public static int findSum(List<Integer> list) {
+//         int sum = 0;
+//         for (int num : list) {
+//             sum += num;
+//         }
+//         return sum;
+//     }
+// }
+
+package Binary_Search.BS_on_Answers;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/*
+ * Q10
+ * Painter's Partition Problem
+Problem Statement: Given an array/list of length ‘N’, where the array/list represents the boards and each element of the given array/list represents the length of each board. Some ‘K’ numbers of painters are available to paint these boards. Consider that each unit of a board takes 1 unit of time to paint. You are supposed to return the area of the minimum time to get this job done of painting all the ‘N’ boards under the constraint that any painter will only paint the continuous sections of boards.
+
+Pre-requisite: BS-18. Allocate Books or Book Allocation | Hard Binary Search
+
+Examples
+Example 1:
+Input Format:
+ N = 4, boards[] = {5, 5, 5, 5}, k = 2
+Result:
+ 10
+Explanation:
+ We can divide the boards into 2 equal-sized partitions, so each painter gets 10 units of the board and the total time taken is 10.
+
+Example 2:
+Input Format:
+ N = 4, boards[] = {10, 20, 30, 40}, k = 2
+Result:
+ 60
+Explanation:
+ We can divide the first 3 boards for one painter and the last board for the second painter.
+
+We can allocate the boards to the painters in several ways but it is clearly said in the question that we have to allocate the boards in such a way that the painters can paint all the boards in the minimum possible time. The painters will work simultaneously.
+
+Note: Upon close observation, we can understand that this problem is similar to the previous problem: BS-18. Allocate Books or Book Allocation | Hard Binary Search. There we had to allocate books to the students and here we need to allocate walls to the painters.
+
+Assume the given array is {10, 20, 30, 40} and number of painters, k = 2. Now, we can allocate these boards in different ways. Some of them are the following:
+
+10 | 20, 30, 40  → Minimum time required to paint all the boards  = 90
+10, 20 | 30, 40  → Minimum time required to paint all the boards = 70
+10, 20, 30 | 40  → Minimum time required to paint all the boards = 60
+From the above allocations, we can clearly observe that in the last case, the first painter will paint the first 3 walls in 60 units of time and the second painter will take 40 units of time. So, the minimum time required to paint all the boards is 60.
+
+Observations:
+
+Minimum possible answer: We will get the minimum answer when we give n boards of the array to n painters(i.e. Each painter will be allocated 1 board). Now, in this case, the minimum time required to paint all the boards will be the maximum element in the array. So, the minimum possible answer is max(arr[]).
+Maximum possible answer: We will get the maximum answer when we give all n boards to a single painter. The total time required is the summation of array elements i.e. sum(arr[]). So, the maximum possible answer is sum(arr[]).
+From the observations, it is clear that our answer lies in the range [max(arr[]), sum(arr[])].
+
+How to calculate the number of painters we need if we have to paint all the walls within ‘time’ units of time:
+
+In order to calculate the number of painters we will write a function, countPainters(). This function will take the array and ‘time’ as parameters and return the number of painters to whom we can allocate the boards.
+
+countPainters(arr[], time):
+
+We will first declare two variables i.e. ‘painters’(stores the no. of painters), and ‘boardsPainter’(stores the unit of boards, a painter will paint). As we are starting with the first painter, ‘painters’ should be initialized with 1.
+We will start traversing the given array.
+If boardsPainter + arr[i] <= time: If upon adding the current board with ‘boardsPainter’ does not exceed the time limit, we can allocate this i-th board to the current painter.
+Otherwise, we will move to the next painter(i.e. painters += 1 ) and allocate the i-th board.
+Finally, we will return the value of ‘painters’.
+ */
+public class PaintersProblem {
+    public static int MinTimeToPaint(ArrayList<Integer> boards, int k)
+    {
+        int n=boards.size();
+        if (k>n) return -1;
+        int max = findMax(boards);
+        if(k==n) return max;
+        int sum = findSum(boards);
+        if(k==n) return sum;
+        int l=max; int r=sum;
+        while(r>=l){
+            int m=l+(r-l)/2;
+            
+            if (PaintersNeeded(boards,m,k)<=k) r=m-1;
+            else l=m+1;
+        } return l;
+    }
+        private static int PaintersNeeded(ArrayList<Integer> boards, int maxTime, int k) {
+        int PntrCnt=1;
+        int BrdAlloc=0;
+        for(int board:boards){
+            if(board+BrdAlloc<=maxTime) BrdAlloc+=board;
+            else{
+                PntrCnt++;
+                if(PntrCnt>k) return PntrCnt;
+                BrdAlloc=board;
+                
+            }
+        } return PntrCnt;
+    }
+    // Methods designed for Arraylists
+    // Method to find the max value
+    public static int findMax(List<Integer> list) {
+        int max = list.get(0); // Assume the first elem is the max
+        for (int num : list) {
+            if (num > max) {
+                max = num;
+            }
+        }
+        return max;
+    }
+    
+
+    // Method to find the sum of elems
+    public static int findSum(List<Integer> list) {
+        int sum = 0;
+        for (int num : list) {
+            sum += num;
+        }
+        return sum;
+    }
+
+    public static void main(String[] args) {
+        // Test cases
+        ArrayList<Integer> boards1 = new ArrayList<>(List.of(5, 5, 5, 5));
+        int painters1 = 2;
+        System.out.println("Test Case 1:");
+        System.out.println("Input: boards = {5, 5, 5, 5}, painters = 2");
+        System.out.println("Output: " + MinTimeToPaint(boards1, painters1)); // Expected output: 10
+
+        ArrayList<Integer> boards2 = new ArrayList<>(List.of(10, 20, 30, 40));
+        int painters2 = 2;
+        System.out.println("\nTest Case 2:");
+        System.out.println("Input: boards = {10, 20, 30, 40}, painters = 2");
+        System.out.println("Output: " + MinTimeToPaint(boards2, painters2)); // Expected output: 60
+    }
+}
+// CODE 360 subm
+// import java.util.*;
+
+// public class Solution 
+// {
+//     public static int findLargestMinDistance(ArrayList<Integer> boards, int k)
+//     {
+//         int n=boards.size();
+//         if (k>n) return -1;
+//         int max = findMax(boards);
+//         if(k==n) return max;
+//         int sum = findSum(boards);
+//         if(k==n) return sum;
+//         int l=max; int r=sum;
+//         while(r>=l){
+//             int m=l+(r-l)/2;
+            
+//             if (PaintersNeeded(boards,m,k)<=k) r=m-1;
+//             else l=m+1;
+//         } return l;
+
+//     }
+
+//     private static int PaintersNeeded(ArrayList<Integer> boards, int maxTime, int k) {
+//         int PntrCnt=1;
+//         int BrdAlloc=0;
+//         for(int board:boards){
+//             if(board+BrdAlloc<=maxTime) BrdAlloc+=board;
+//             else{
+//                 PntrCnt++;
+//                 if(PntrCnt>k) return PntrCnt;
+//                 BrdAlloc=board;
+                
+//             }
+//         } return PntrCnt;
+//     }
+//     // Methods designed for Arraylists
+//     // Method to find the max value
+//     public static int findMax(List<Integer> list) {
+//         int max = list.get(0); // Assume the first elem is the max
+//         for (int num : list) {
+//             if (num > max) {
+//                 max = num;
+//             }
+//         }
+//         return max;
+//     }
+    
+
+//     // Method to find the sum of elems
+//     public static int findSum(List<Integer> list) {
+//         int sum = 0;
+//         for (int num : list) {
+//             sum += num;
+//         }
+//         return sum;
+//     }
+// }
+
+package Binary_Search.BS_on_Answers;
+/*
+ * Q11
+ * Split Array - Largest Sum
+Problem Statement: Given an integer array ‘A’ of size ‘N’ and an integer ‘K'. Split the array ‘A’ into ‘K’ non-empty subarrays such that the largest sum of any subarray is minimized. Your task is to return the minimized largest sum of the split.
+A subarray is a contiguous part of the array.
+
+Pre-requisite: BS-18. Allocate Books or Book Allocation | Hard Binary Search
+
+Examples
+Example 1:
+Input Format:
+ N = 5, a[] = {1,2,3,4,5}, k = 3
+Result:
+ 6
+Explanation:
+ There are many ways to split the array a[] into k consecutive subarrays. The best way to do this is to split the array a[] into [1, 2, 3], [4], and [5], where the largest sum among the three subarrays is only 6.
+
+Example 2:
+Input Format:
+ N = 3, a[] = {3,5,1}, k = 3
+Result:
+ 5
+Explanation:
+ There is only one way to split the array a[] into 3 subarrays, i.e., [3], [5], and [1]. The largest sum among these subarrays is 5.
+Upon close observation, we can understand that this problem is similar to the problem: BS-18. Allocate Books or Book Allocation | Hard Binary Search. In that case, we had to allocate books to the students. But actually, we were dividing that given array based on the subarray sum. We will do the same in this case.
+
+Assume the given array is {10, 20, 30, 40} and k = 2. Now, we can split the array in the following ways:
+
+10 | 20, 30, 40  → Maximum subarray sum  = 90
+10, 20 | 30, 40  → Maximum subarray sum = 70
+10, 20, 30 | 40  → Maximum subarray sum = 60
+From the above allocations, we can clearly observe that in the last case, the maximum subarray sum is the minimum possible. So, 60 will be the answer.
+
+Observations:
+
+Minimum possible answer: We will get the minimum answer when we split the array into n subarrays(i.e. Each subarray will have a single element). Now, in this case, the maximum subarray sum will be the maximum element in the array. So, the minimum possible answer is max(arr[]).
+Maximum possible answer: We will get the maximum answer when we put all n elements into a single subarray. The maximum subarray sum will be the summation of array elements i.e. sum(arr[]). So, the maximum possible answer is sum(arr[]).
+From the observations, it is clear that our answer lies in the range [max(arr[]), sum(arr[])].
+
+How to calculate the number of subarrays we need to make if the maximum subarray sum can be at most ‘maxSum’:
+
+In order to calculate the number of subarrays we will write a function, countPartitions(). This function will take the array and ‘maxSum’ as parameters and return the number of partitions.
+
+countPartitions(arr[], maxSum):
+
+We will first declare two variables i.e. ‘partitions’(stores the no. of partitions), and ‘subarraySum’(stores the sum of the current subarray). As we are starting with the first subarray, ‘partitions’ should be initialized with 1.
+We will start traversing the given array.
+If subarraySum + arr[i] <= maxSum: If upon adding the current element with ‘subarraySum’ does not exceed ‘maxSum’, we can insert this i-th element to the current subarray.
+Otherwise, we will move to the next subarray(i.e. partitions += 1 ) and insert the i-th element into that.
+Finally, we will return the value of ‘partitions’.
+ */
+public class SplitArr {
+    public int splitArray(int[] a, int k) {
+        int n=a.length;
+        if(n<k) return -1;
+        int sum=a[0]; int max=a[0];
+        for(int i=1; i<n;i++){
+            sum+=a[i];
+            max=(a[i]>max)? a[i]:max;
+        }
+        if(n==k) return max;
+        if(n==1) return sum;
+        int l=max; int r=sum;
+        while(l<=r){
+            int m=l+(r-l)/2; // m=maxSumAllowed
+            if(NumberOfSubarrays(a,n,m,k) <= k ) r=m-1;
+            else l=m+1;
+        } return l;
+    }
+
+    private int NumberOfSubarrays(int[] a, int n, int maxSumAllowed, int k) {
+        int SubArrCnt=1;
+        int SubArrSum=a[0];
+        for(int j=1;j<n;j++){
+            if(a[j]+SubArrSum<=maxSumAllowed) SubArrSum+=a[j];
+            else {
+                SubArrCnt++;
+                if(SubArrCnt>k) return SubArrCnt;
+                SubArrSum=a[j];    
+            }
+        }return SubArrCnt;
+    }
+
+    public static void main(String[] args) {
+        SplitArr splitArr = new SplitArr();
+
+        // Test cases
+        int[] arr1 = {1, 2, 3, 4, 5};
+        int k1 = 3;
+        System.out.println("Test Case 1:");
+        System.out.println("Input: arr = {1, 2, 3, 4, 5}, k = 3");
+        System.out.println("Output: " + splitArr.splitArray(arr1, k1)); // Expected output: 6
+
+        int[] arr2 = {3, 5, 1};
+        int k2 = 3;
+        System.out.println("\nTest Case 2:");
+        System.out.println("Input: arr = {3, 5, 1}, k = 3");
+        System.out.println("Output: " + splitArr.splitArray(arr2, k2)); // Expected output: 5
+    }
+}
+
+package Binary_Search.BS_on_Answers;
+/*
+ * Q11
+ * Minimise Maximum Distance between Gas Stations
+
+
+24
+
+1
+Problem Statement: You are given a sorted array ‘arr’ of length ‘n’, which contains positive integer positions of ‘n’ gas stations on the X-axis. You are also given an integer ‘k’. You have to place 'k' new gas stations on the X-axis. You can place them anywhere on the non-negative side of the X-axis, even on non-integer positions. Let 'dist' be the maximum value of the distance between adjacent gas stations after adding k new gas stations.
+Find the minimum value of ‘dist’.
+
+Note: Answers within 10^-6 of the actual answer will be accepted. For example, if the actual answer is 0.65421678124, it is okay to return 0.654216. Our answer will be accepted if that is the same as the actual answer up to the 6th decimal place.
+
+Examples
+Example 1:
+Input Format:
+ N = 5, arr[] = {1,2,3,4,5}, k = 4
+Result:
+ 0.5
+Explanation:
+ One of the possible ways to place 4 gas stations is {1,1.5,2,2.5,3,3.5,4,4.5,5}. Thus the maximum difference between adjacent gas stations is 0.5. Hence, the value of ‘dist’ is 0.5. It can be shown that there is no possible way to add 4 gas stations in such a way that the value of ‘dist’ is lower than this. 
+Example 2:
+Input Format:
+ N = 10, arr[] = {1,2,3,4,5,6,7,8,9,10}, k = 1
+Result:
+ 1
+Explanation:
+ One of the possible ways to place 1 gas station is {1,1.5,2,3,4,5,6,7,8,9,10}. Thus the maximum difference between adjacent gas stations is still 1. Hence, the value of ‘dist’ is 1. It can be shown that there is no possible way to add 1 gas station in such a way that the value of ‘dist’ is lower than this. 
+
+Let’s understand how to place the new gas stations so that the maximum distance between two consecutive gas stations is reduced. 
+
+Let’s consider a small example like this: given gas stations = {1, 7} and k = 2. 
+
+Observation: A possible arrangement for placing 2 gas stations is as follows: {1, 7, 8, 9}. In this arrangement, the new gas stations are positioned after the last existing one. Prior to adding the new stations, the maximum distance between stations was 6 (i.e. the distance between 1 and 7). Even after placing the 2 new stations, the maximum distance remains unchanged at 6.
+
+Conclusions:
+
+From the above observation, we can conclude that placing new gas stations before the first existing station or after the last existing station will make no difference to the maximum distance between two consecutive stations.
+So, in order to minimize the maximum distance we have to place the new gas stations in between the existing stations.
+How to place the gas stations in between so that the maximum distance is minimized:
+
+Until now we have figured out that we have to place the gas stations in between the existing ones. But we have to place them in such a way that the maximum distance between two consecutive stations is the minimum possible. 
+Let’s understand this considering the previous example. Given gas stations = {1, 7} and k = 2.
+If we place the gas stations as follows: {1, 2, 6, 7}, the maximum distance will be 4(i.e. 6-2 = 4). But if we place them like this: {1, 3, 5, 7}, the maximum distance boils down to 2. It can be proved that we cannot make the maximum distance lesser than 2.
+To minimize the maximum distance between gas stations, we need to insert new stations with equal spacing. If we have to add 'k' gas stations within a section of length 'section_length', each station should be placed at a distance of
+(section_length / (k + 1)) from one another.
+This way, we maintain a uniform spacing between consecutive gas stations.
+
+For example, the gas stations are = {1, 7} and k = 2. Here, the ‘dist’ is = (7-1) = 6. So, the space between two gas stations will be dis / (k+1) = 6 / (2+1) = 2. The placements will be as follows: {1, 3, 5, 7}.
+ */
+public class NewGasStation {
+    public double minimizeMaxDist(int[]a, int k){
+        int n=a.length;
+        /* Find max section size among OG GS */
+        int max=a[1]-a[0];
+        for(int i=2; i<n;i++){
+            int OGsectSize=a[i]-a[i-1];
+            max=(OGsectSize>max)? OGsectSize:max;
+        }
+
+        //Ini. BinSearch Range
+        double l=0; double r=max; double errorMargin=1e-6;
+        while((r-l)>errorMargin){
+            double m=l+(r-l)/2.0; // m has gapSize, which helps give possible new GS insertions to try
+            int cntNGS=NGSneeded(a,n,m,k);
+            if(cntNGS>k) l=m; //too small gap, not have that may new GS for insertion, so try higher
+            else r=m;//possible ans, try to minimize gap size, so try lower
+        } return r; //not cross over unlike int, where updates to l and r being m-1 or m+1, here last answer stays with r
+    }
+
+    private int NGSneeded(int[] a,int n, double gapSize, int k) {
+        int cntNGSneeded=0;
+        for(int i=0; i<n-1; i++){
+            double OGsectSize=a[i+1]-a[i];
+            int currNewInsertsToOGsect=(int)(OGsectSize/gapSize);
+            cntNGSneeded+=currNewInsertsToOGsect;
+            if(currNewInsertsToOGsect*gapSize==OGsectSize) cntNGSneeded--;
+            if(cntNGSneeded>k) return cntNGSneeded;
+        } return cntNGSneeded;
+    }
+
+    public static void main(String[] args) {
+        NewGasStation gasStation = new NewGasStation();
+
+        // Test cases
+        int[] arr1 = {1, 2, 3, 4, 5};
+        int k1 = 4;
+        System.out.println("Test Case 1:");
+        System.out.println("Input: arr = {1, 2, 3, 4, 5}, k = 4");
+        System.out.println("Output: " + gasStation.minimizeMaxDist(arr1, k1)); // Expected output: 0.5
+
+        int[] arr2 = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+        int k2 = 1;
+        System.out.println("\nTest Case 2:");
+        System.out.println("Input: arr = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, k = 1");
+        System.out.println("Output: " + gasStation.minimizeMaxDist(arr2, k2)); // Expected output: 1.0
+    }
+}
+package Binary_Search.BS_on_Answers;
+/*Q12
+ * Median of Two Sorted Arrays of different sizes
+
+Problem Statement: Given two sorted arrays arr1 and arr2 of size m and n respectively, return the median of the two sorted arrays. The median is defined as the middle value of a sorted list of numbers. In case the length of the list is even, the median is the average of the two middle elements.
+
+Examples
+Example 1:
+Input Format:
+ n1 = 3, arr1[] = {2,4,6}, n2 = 3, arr2[] = {1,3,5}
+Result:
+ 3.5
+Explanation:
+ The array after merging 'a' and 'b' will be { 1, 2, 3, 4, 5, 6 }. As the length of the merged list is even, the median is the average of the two middle elements. Here two medians are 3 and 4. So the median will be the average of 3 and 4, which is 3.5.
+
+Example 2:
+Input Format:
+ n1 = 3, arr1[] = {2,4,6}, n2 = 2, arr2[] = {1,3}
+Result:
+ 3
+Explanation:
+ The array after merging 'a' and 'b' will be { 1, 2, 3, 4, 6 }. The median is simply 3.
+
+
+ * 
+ */
+public class MedianOf2SortedArrs {
+    public double findMedianSortedArrays(int[] a, int[] b) {
+
+        int n=a.length; int m=b.length;
+        if(n>m) return findMedianSortedArrays(b, a); // apply algo on shorter array to reduce search space in BinSrch and TC
+        int nn=n+m;// total length of merged array
+        int lhl=(nn+1)/2; // left half length
+        /* Ini Range for BinSrch */
+        int l=0; int r=n;
+        
+        while(r>=l){
+            int m1=l+(r-l)/2; // left cut for array1
+            int m2=lhl-m1; // left cut for array2
+            /* Calc elems for cross check */ 
+            double l1,l2,r1,r2;
+            l1=(m1>0)?a[m1-1]:Integer.MIN_VALUE;
+            l2=(m2>0)?b[m2-1]:Integer.MIN_VALUE;
+            r1=(m1<n)?a[m1]:Integer.MAX_VALUE;
+            r2=(m2<m)?b[m2]:Integer.MAX_VALUE;
+            /*Cross Check */
+            if((l1<=r2)&&(l2<=r1)){
+                if(nn%2==0) {
+                    return (Math.max(l1,l2)+Math.min(r1,r2))/2.0;
+                } else return Math.max(l1,l2)/1.0;
+            }
+            else if(l1>r2) r=m1-1; // took too many elems from a1 in left half
+            else if(l2>r1) l=m1+1; // took too many elems from a1 in right half
+        } return 0; 
+    }
+    public static void main(String[] args) {
+        MedianOf2SortedArrs medianFinder = new MedianOf2SortedArrs();
+        
+        // Test cases
+        int[] arr1 = {2, 4, 6};
+        int[] arr2 = {1, 3, 5};
+        System.out.println("Test Case 1:");
+        System.out.println("Input: arr1 = {2, 4, 6}, arr2 = {1, 3, 5}");
+        System.out.println("Output: " + medianFinder.findMedianSortedArrays(arr1, arr2)); // Expected output: 3.5
+
+        int[] arr3 = {2, 4, 6};
+        int[] arr4 = {1, 3};
+        System.out.println("\nTest Case 2:");
+        System.out.println("Input: arr1 = {2, 4, 6}, arr2 = {1, 3}");
+        System.out.println("Output: " + medianFinder.findMedianSortedArrays(arr3, arr4)); // Expected output: 3.0
+
+        // Large inputs test
+        int size = 1000000;
+        int[] largeArr1 = new int[size];
+        int[] largeArr2 = new int[size];
+        for (int i = 0; i < size; i++) {
+            largeArr1[i] = 2 * i;
+            largeArr2[i] = 2 * i + 1;
+        }
+        System.out.println("\nLarge Input Test Case:");
+        System.out.println("Output: " + medianFinder.findMedianSortedArrays(largeArr1, largeArr2)); // Expected output will be size - 0.5
+    }
+}
+
+/*
+ * LC Optimized code submisiion
+ * class Solution {
+    public double findMedianSortedArrays(int[] a, int[] b) {
+        int n=a.length; int m=b.length;
+        if(n>m) return findMedianSortedArrays(b, a); // apply algo on shorter array to reduce search space in BinSrch and TC
+        int nn=n+m;// total length of merged array
+        int lhl=(nn+1)/2; // left half length
+        int l=0; int r=n;
+        
+        while(r>=l){
+            int m1=l+(r-l)/2; // left cut for array1
+            int m2=lhl-m1; // left cut for array2
+            double l1,l2,r1,r2;
+            l1=(m1>0)?a[m1-1]:Integer.MIN_VALUE;
+            l2=(m2>0)?b[m2-1]:Integer.MIN_VALUE;
+            r1=(m1<n)?a[m1]:Integer.MAX_VALUE;
+            r2=(m2<m)?b[m2]:Integer.MAX_VALUE;
+            //Cross Check 
+            if((l1<=r2)&&(l2<=r1)){
+                double max = (l1>l2)? l1:l2;
+                double min = (r1<r2)? r1:r2;
+                if(nn%2==0) {
+                    return (max+min)/2.0;
+                } else return max;
+            }
+            else if(l1>r2) r=m1-1; // took too many elems from a1 in left half
+            else if(l2>r1) l=m1+1; // took too many elems from a1 in right half
+        } return 0; 
+    }
+}
+ * 
+ */
+
+ package Binary_Search.BS_on_Answers;
+/*
+ * Q13
+ * K-th Element of two sorted arrays
+
+
+12
+
+2
+Pre-requisite: Median of 2 sorted arrays
+
+Problem Statement: Given two sorted arrays of size m and n respectively, 
+you are tasked with finding the element that would be at the kth position of the final sorted array.
+ */
+public class KthElementOf2SortedArrs {
+    public int findKthElement(int[] a, int[] b, int k) {
+        int n = a.length;
+        int m = b.length;
+        if (n > m) return findKthElement(b, a, k); // ensure that a is the smaller array
+
+        int l = Math.max(0, k - m), r = Math.min(k, n); // binary search range for the smaller array
+
+        while (l <= r) {
+            int m1 = l + (r - l) / 2; // cut point for array1
+            int m2 = k - m1; // cut point for array2
+
+            // Calc. elems for cross-check
+            int l1 = (m1 > 0) ? a[m1 - 1] : Integer.MIN_VALUE;
+            int l2 = (m2 > 0) ? b[m2 - 1] : Integer.MIN_VALUE;
+            int r1 = (m1 < n) ? a[m1] : Integer.MAX_VALUE;
+            int r2 = (m2 < m) ? b[m2] : Integer.MAX_VALUE;
+
+            // Cross check
+            if (l1 <= r2 && l2 <= r1) {
+                return Math.max(l1, l2);
+            } else if (l1 > r2) {
+                r = m1 - 1; // too many elems from a in left half
+            } else {
+                l = m1 + 1; // too many elems from a in right half
+            }
+        }
+        return 0;
+    }
+
+    public static void main(String[] args) {
+        KthElementOf2SortedArrs kthElementFinder = new KthElementOf2SortedArrs();
+        
+        // Test cases
+        int[] arr1 = {2, 4, 6};
+        int[] arr2 = {1, 3, 5};
+        int k = 4;
+        System.out.println("Test Case 1:");
+        System.out.println("Input: arr1 = {2, 4, 6}, arr2 = {1, 3, 5}, k = " + k);
+        System.out.println("Output: " + kthElementFinder.findKthElement(arr1, arr2, k)); // Expected output: 4
+
+        int[] arr3 = {2, 4, 6};
+        int[] arr4 = {1, 3};
+        k = 5;
+        System.out.println("\nTest Case 2:");
+        System.out.println("Input: arr1 = {2, 4, 6}, arr2 = {1, 3}, k = " + k);
+        System.out.println("Output: " + kthElementFinder.findKthElement(arr3, arr4, k)); // Expected output: 6
+
+        // Large inputs test
+        int size = 1000000;
+        int[] largeArr1 = new int[size];
+        int[] largeArr2 = new int[size];
+        for (int i = 0; i < size; i++) {
+            largeArr1[i] = 2 * i;
+            largeArr2[i] = 2 * i + 1;
+        }
+        k = 1500000;
+        System.out.println("\nLarge Input Test Case:");
+        System.out.println("Output: " + kthElementFinder.findKthElement(largeArr1, largeArr2, k)); // Expected output will be 2 * (k-1)
+    }
+}
+
+/*
+ * //GFG submission, just change to long for large inputs
+ * class Solution {
+    public long kthElement( int a[], int b[], int n, int m, int k) {
+        
+        if (n > m) return kthElement(b, a, m, n, k); // ensure that a is the smaller array
+
+        int l = Math.max(0, k - m), r = Math.min(k, n); // binary search range for the smaller array
+
+        while (l <= r) {
+            int m1 = l + (r - l) / 2; // cut point for array1
+            int m2 = k - m1; // cut point for array2
+
+            // Calculate elements for cross-check
+            long l1 = (m1 > 0) ? a[m1 - 1] : Long.MIN_VALUE;
+            long l2 = (m2 > 0) ? b[m2 - 1] : Long.MIN_VALUE;
+            long r1 = (m1 < n) ? a[m1] : Long.MAX_VALUE;
+            long r2 = (m2 < m) ? b[m2] : Long.MAX_VALUE;
+
+            // Cross check
+            if (l1 <= r2 && l2 <= r1) {
+                return Math.max(l1, l2);
+            } else if (l1 > r2) {
+                r = m1 - 1; // too many elements from a in left half
+            } else {
+                l = m1 + 1; // too many elements from a in right half
+            }
+        }
+        return 0;
+    }
+} 
+ */

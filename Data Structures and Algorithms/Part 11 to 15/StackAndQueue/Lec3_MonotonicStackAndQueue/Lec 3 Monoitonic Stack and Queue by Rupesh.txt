@@ -1,0 +1,1636 @@
+package StackAndQueue.Lec3_MonotonicStackAndQueue;
+
+import java.util.HashMap;
+import java.util.Stack;
+
+/*Q1 496. Next Greater Element I
+Easy
+Topics
+Companies
+The next greater element of some element x in an array is the first greater element that is to the right of x in the same array.
+
+You are given two distinct 0-indexed integer arrays nums1 and nums2, where nums1 is a subset of nums2.
+
+For each 0 <= i < nums1.length, find the index j such that nums1[i] == nums2[j] and determine the next greater element of nums2[j] in nums2. If there is no next greater element, then the answer for this query is -1.
+
+Return an array ans of length nums1.length such that ans[i] is the next greater element as described above.
+
+ 
+
+Example 1:
+
+Input: nums1 = [4,1,2], nums2 = [1,3,4,2]
+Output: [-1,3,-1]
+Explanation: The next greater element for each value of nums1 is as follows:
+- 4 is underlined in nums2 = [1,3,4,2]. There is no next greater element, so the answer is -1.
+- 1 is underlined in nums2 = [1,3,4,2]. The next greater element is 3.
+- 2 is underlined in nums2 = [1,3,4,2]. There is no next greater element, so the answer is -1.
+Example 2:
+
+Input: nums1 = [2,4], nums2 = [1,2,3,4]
+Output: [3,-1]
+Explanation: The next greater element for each value of nums1 is as follows:
+- 2 is underlined in nums2 = [1,2,3,4]. The next greater element is 3.
+- 4 is underlined in nums2 = [1,2,3,4]. There is no next greater element, so the answer is -1.
+ 
+
+Constraints:
+
+1 <= nums1.length <= nums2.length <= 1000
+0 <= nums1[i], nums2[i] <= 104
+All integers in nums1 and nums2 are unique.
+All the integers of nums1 also appear in nums2.
+ 
+
+Follow up: Could you find an O(nums1.length + nums2.length) solution?
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+738.8K
+Submissions
+1M
+Acceptance Rate
+72.4% */
+public class NextGreaterElem1 {
+    // O(a.len + b. len) TC, O(2*b. len) SC
+    public int[] nextGreaterElement(int[] a, int[] b) {
+	int[] nextGreaterElement = new int[a.length];
+
+	Stack<Integer> stack = new Stack<>();
+	HashMap<Integer, Integer> hm = new HashMap<>();
+
+	//1. find out all the next greater elems. in b[]
+	for(int num: b) {
+		//2. if num > top elem in stack then it is the next greater element in b[]
+		while(!stack.isEmpty() && num > stack.peek()) hm.put(stack.pop(), num);
+		//3. then add num to stack
+		stack.add(num);
+	}
+    //4. for each elem. in a[], get it's next greater from b[], as stored in HM
+    // if not present in HM, means has no next greater in b[], so, mark as -1
+	for(int i=0; i < a.length; i++) nextGreaterElement[i] = hm.getOrDefault(a[i], -1);
+
+	return nextGreaterElement;
+}
+}
+/*
+ //backward (R to L) traversal soln. found on LC
+ public class Solution {
+    public int[] nextGreaterElement(int[] findNums, int[] nums) {
+        Map<Integer, Integer> map = new HashMap<>();
+        Stack<Integer> stack = new Stack<>();
+        for(int i = nums.length-1; i>=0; i--){
+            while(!stack.empty() && nums[i]>stack.peek()) stack.pop();
+            map.put(nums[i], (stack.empty())? -1 : stack.peek());
+            stack.push(nums[i]);
+        }
+        for(int i = 0; i<findNums.length; i++){
+            findNums[i] = map.get(findNums[i]);
+        }
+        return findNums;        
+    }
+}
+ */
+package StackAndQueue.Lec3_MonotonicStackAndQueue;
+
+import java.util.Stack;
+
+/*Q2 503. Next Greater Element II
+Medium
+Topics
+Companies
+Given a circular integer array nums (i.e., the next element of nums[nums.length - 1] is nums[0]), return the next greater number for every element in nums.
+
+The next greater number of a number x is the first greater number to its traversing-order next in the array, which means you could search circularly to find its next greater number. If it doesn't exist, return -1 for this number.
+
+ 
+
+Example 1:
+
+Input: nums = [1,2,1]
+Output: [2,-1,2]
+Explanation: The first 1's next greater number is 2; 
+The number 2 can't find next greater number. 
+The second 1's next greater number needs to search circularly, which is also 2.
+Example 2:
+
+Input: nums = [1,2,3,4,3]
+Output: [2,3,4,-1,4]
+ 
+
+Constraints:
+
+1 <= nums.length <= 104
+-109 <= nums[i] <= 109
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+408.7K
+Submissions
+638.2K
+Acceptance Rate
+64.0% */
+public class NextGreaterElem2 {
+    public int[] nextGreaterElements(int[] a) {
+        int n = a.length;
+        int [] nextGreaterElements = new int[n];
+        Stack<Integer> st = new Stack<>();
+        for(int i = 0; i<(2*n); i++){
+            // use % to cycle back to a[n-1] at end and onwards
+            // curr elem. from back
+            int ind = (n-1-i%n);//)%n;
+            int curr = a[ind];
+            // pop till get nearest(to right) greater elem., all righter to it already in stack
+            while(!st.isEmpty() && st.peek()<=curr) st.pop();
+            if(st.isEmpty()) nextGreaterElements[ind] = -1; //is greatest elem. or when i=0
+            else nextGreaterElements[ind] = st.peek();
+            st.push(curr);
+        } return nextGreaterElements;
+    }
+    //1st attempt, mistake in for loop end pt.
+    // public int[] nextGreaterElements(int[] a) {
+    //     int n = a.length;
+    //     int [] nextGreaterElements = new int[n];
+    //     Stack<Integer> st = new Stack<>();
+    //     for(int i = 0; i<(n+1); i++){
+    //         // use % to cycle back to i=0 at end
+    //         // curr elem. from back
+    //         int ind = (n-1-i)%n;
+    //         int curr = a[ind];
+    //         // pop till get nearest(to right) greater elem., all righter to it already in stack
+    //         while(!st.isEmpty() && st.peek()<=curr) st.pop();
+    //         if(st.isEmpty()) nextGreaterElements[ind] = -1; //is greatest elem. or when i=0
+    //         else nextGreaterElements[ind] = st.peek();
+    //         st.push(curr);
+    //     } return nextGreaterElements;
+    // }
+}
+/*//SLightly faster code on LC forum
+public class Solution {
+    public int[] nextGreaterElements(int[] A) {
+        int n = A.length;
+        int[] res = new int[n]; 
+        Arrays.fill(res, -1); // Initialize result array with -1    
+        Stack<Integer> stack = new Stack<>(); // Stack to store indices
+
+        // Iterate through the array twice to handle circular nature
+        for (int i = 0; i < n * 2; i++) {       
+            // Use modulo to wrap around the array
+            while (!stack.isEmpty() && A[stack.peek()] < A[i % n]) {     
+                
+                res[stack.pop()] = A[i % n];
+            }
+            stack.push(i % n); // Push current index (mod n) onto the stack
+        }
+        return res; // Return the result array
+    }
+}
+    //https://leetcode.com/problems/next-greater-element-ii/solutions/5201809/brute-intuitive-solution-beats-98-monotonic-pattern/ 
+*/
+package StackAndQueue.Lec3_MonotonicStackAndQueue;
+
+import java.util.ArrayList;
+import java.util.Stack;
+
+/*Q3  Nearest Smaller Element
+Programming
+Stacks And Queues
+Easy
+51.3% Success
+
+539
+
+16
+
+Bookmark
+Asked In:
+Given an array, find the nearest smaller element G[i] for every element A[i] in the array such that the element has an index smaller than i.
+
+More formally,
+
+    G[i] for an element A[i] = an element A[j] such that 
+    j is maximum possible AND 
+    j < i AND
+    A[j] < A[i]
+Elements for which no smaller element exist, consider next smaller element as -1.
+
+Input Format
+
+The only argument given is integer array A.
+Output Format
+
+Return the integar array G such that G[i] contains nearest smaller number than A[i].If no such element occurs G[i] should be -1.
+For Example
+
+Input 1:
+    A = [4, 5, 2, 10, 8]
+Output 1:
+    G = [-1, 4, -1, 2, 2]
+Explaination 1:
+    index 1: No element less than 4 in left of 4, G[1] = -1
+    index 2: A[1] is only element less than A[2], G[2] = A[1]
+    index 3: No element less than 2 in left of 2, G[3] = -1
+    index 4: A[3] is nearest element which is less than A[4], G[4] = A[3]
+    index 4: A[3] is nearest element which is less than A[5], G[5] = A[3]
+    
+Input 2:
+    A = [3, 2, 1]
+Output 2:
+    [-1, -1, -1]
+Explaination 2:
+    index 1: No element less than 3 in left of 3, G[1] = -1
+    index 2: No element less than 2 in left of 2, G[2] = -1
+    index 3: No element less than 1 in left of 1, G[3] = -1
+Show similar questions
+MAXSPPROD
+88 Minutes Medium
+Asked in:
+Balanced Parantheses!
+15 Minutes Easy
+Asked in:
+Hotel Service
+48 Minutes Medium
+Asked in:
+Note:You only need to implement the given function. Do not read input, instead use the arguments to the function. Do not print the output, instead return values as specified. Still have a question? Checkout Sample Codes for more details.
+submission-count
+90350
+successful submissions.
+See Expected Output*/
+public class NextSmallerElem {
+    public ArrayList<Integer> prevSmaller(ArrayList<Integer> A) {
+        ArrayList<Integer> prevSmallerElem = new ArrayList<>();
+        Stack<Integer> st = new Stack<>();
+        for(int num: A){
+            while(!st.isEmpty() && st.peek() >= num) st.pop();
+            if(st.isEmpty()) prevSmallerElem.add(-1);
+            else prevSmallerElem.add(st.peek());
+            st.push(num);
+        } return prevSmallerElem;
+    }
+}
+package StackAndQueue.Lec3_MonotonicStackAndQueue;
+
+import StackAndQueue.Lec1_Learning.Stack;
+
+/*Q4 Number of NGEs to the right
+Difficulty: MediumAccuracy: 60.69%Submissions: 10K+Points: 4
+Given an array of N integers and Q queries of indices, print the number of next greater elements(NGEs) to the right of the given index element. 
+Example:
+
+Input:  arr     = [3, 4, 2, 7, 5, 8, 10, 6]
+        queries = 2
+        indices = [0, 5]
+Output:  6, 1
+Explanation:  
+The next greater elements to the right of 3(index 0)
+are 4,7,5,8,10,6.  
+The next greater elements to the right of 8(index 5)
+is only 10.
+
+Your Task:
+You don't need to read or print anything. Your task is to complete the function count_NGEs() which takes N, arr, queries and indices as the input parameter and returns a list NGEs[] where NGEs[i] stores the count of elements strictly greater than the current element (arr[indices[i]]) to the right of indices[i].
+
+
+Expected Time Complexity: O(N * queries).
+Expected Auxiliary Space: O(queries).
+
+
+Constraints:
+1 <= N <= 104
+1 <= arr[i] <= 105
+1 <= queries <= 100
+
+0 <= indices[i] <= N - 1 */
+import java.util.Stack;
+
+public class NumberOfNGEsToRight {
+    public static int[] count_NGEs(int n, int a[], int queries, int indices[]) {
+        int [] ans = new int[queries];
+        for(int i = 0 ; i< queries ; i++) ans[i] = cntNGE(n,a,indices[i]);
+        return ans;
+    }
+    // Stack SOln.
+    // private static int cntNGE(int n, int[] a, int start) {
+    //     int  cnt = 0;
+    //     Stack <Integer> st = new Stack<>();
+    //     for(int i=n-1 ;i>=start; i-- ){
+    //         int curr = a[i];
+    //         if(i==start){
+    //             while(!st.isEmpty()){
+    //                 if(st.peek() > curr) cnt++;
+    //                 st.pop();
+    //             }
+    //         }
+    //         st.push(curr);
+    //     } return cnt;
+    // }
+    //just iterating soln., more efficicent here actually
+    private static int cntNGE(int n, int[] a, int start) {
+        int  cnt = 0;
+        for(int i=start+1; i<n; i++ ){
+            int curr = a[i];
+            if(curr > a[start]) cnt++;
+        } return cnt;
+    }
+}
+package StackAndQueue.Lec3_MonotonicStackAndQueue;
+
+import java.util.Stack;
+
+/*Q5 907. Sum of Subarray Minimums
+Medium
+Topics
+Companies
+Given an array of integers arr, find the sum of min(b), where b ranges over every (contiguous) subarray of arr. Since the answer may be large, return the answer modulo 109 + 7.
+
+ 
+
+Example 1:
+
+Input: arr = [3,1,2,4]
+Output: 17
+Explanation: 
+Subarrays are [3], [1], [2], [4], [3,1], [1,2], [2,4], [3,1,2], [1,2,4], [3,1,2,4]. 
+Minimums are 3, 1, 2, 4, 1, 1, 2, 1, 1, 1.
+Sum is 17.
+Example 2:
+
+Input: arr = [11,81,94,43,3]
+Output: 444
+ 
+
+Constraints:
+
+1 <= arr.length <= 3 * 104
+1 <= arr[i] <= 3 * 104
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+260K
+Submissions
+696.6K
+Acceptance Rate
+37.3% */
+public class SumOfSubArrayMinimums {
+    //Optimal way - o(n)
+    public int sumSubarrayMins(int[] A) {
+        int n = A.length;
+
+        int[] NSL = getNSL(A, n);
+        int[] NSR = getNSR(A, n);
+
+        //Use long to avoid overflow due to multiplication
+
+        long sum = 0;
+        int M = 1000000007;
+
+        for (int i = 0; i < n; i++) {
+            long L = i - NSL[i];
+            long R = NSR[i] - i;
+            
+            long SubArraysWhereIisMin = L * R;
+            long contributionToSum = A[i] * SubArraysWhereIisMin;
+
+            sum = (sum + contributionToSum) % M;
+        }
+
+        return (int) sum;
+    }
+
+    public int[] getNSL(int[] A, int n) {
+        int[] NSL = new int[n];
+        Stack<Integer> st = new Stack<>();
+
+        for (int i = 0; i < n; i++) {
+            while (!st.isEmpty() && A[st.peek()] > A[i]) st.pop();
+
+            NSL[i] = st.isEmpty() ? -1 : st.peek();
+            st.push(i);
+        }
+
+        return NSL;
+    }
+
+    public int[] getNSR(int[] A, int n) {
+        int[] NSR = new int[n];
+        Stack<Integer> st = new Stack<>();
+
+        for (int i = n - 1; i >= 0; i--) {
+            while (!st.isEmpty() && A[st.peek()] >= A[i]) st.pop();
+
+            NSR[i] = st.isEmpty() ? n : st.peek();
+            st.push(i);
+        }
+
+        return NSR;
+    }
+    // Brute FOrce, 1st attempt
+    // // Time Limit Exceeded 79 / 88 testcases passed
+    // public int sumSubarrayMins(int[] a) {
+    //     int sum=0; 
+    //     for(int i= 0; i< a.length; i++){
+    //         int min = a[i]%1000000007;
+    //         sum+=a[i]%1000000007;
+    //         for(int j=i+1; j<a.length; j++){
+    //             if(a[j]<min) min = a[j]%1000000007;
+    //             sum+=min%1000000007;
+    //         }
+    //     } return sum%1000000007;
+    // }
+}
+package StackAndQueue.Lec3_MonotonicStackAndQueue;
+
+import java.util.Stack;
+
+/*Q5 42. Trapping Rain Water
+Hard
+Topics
+Companies
+Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it can trap after raining.
+
+ 
+
+Example 1:
+
+
+Input: height = [0,1,0,2,1,0,1,3,2,1,2,1]
+Output: 6
+Explanation: The above elevation map (black section) is represented by array [0,1,0,2,1,0,1,3,2,1,2,1]. In this case, 6 units of rain water (blue section) are being trapped.
+Example 2:
+
+Input: height = [4,2,0,3,2,5]
+Output: 9
+ 
+
+Constraints:
+
+n == height.length
+1 <= n <= 2 * 104
+0 <= height[i] <= 105
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+2.2M
+Submissions
+3.5M
+Acceptance Rate
+62.3% */
+public class Trapping_RainWater {
+    // Optimal way 1 - 2 ptr. approach
+    public int trap(int[] ht) {
+        int n = ht.length;
+        int L = 0; int R = n - 1;
+        int Trapped = 0; //Total Trapped
+        int MxL = 0, MxR = 0;
+        // KEy idea is - only relative dips cause water trap
+        // water trapped depends on the depth of dip(lower the more)
+        // and ht. of min. relative peak on either side of dip(min(ht[L],ht[R])), the higher the more trapping
+        while (L <= R) { //Can move any ptr when ht[L] == ht[R], actually
+            if (ht[L] <= ht[R]) { //there exists a peak on R > curr L -> Potential for water trapping at Lth pos
+                if (ht[L] >= MxL) MxL = ht[L]; //Peak not cause water trapping
+                else Trapped += MxL - ht[L]; //==Trapped at curr Lth pos.
+                L++;
+            } 
+            else { //there exists a peak on L > curr R -> Potential for water trapping at Rth pos
+                if (ht[R] >= MxR) MxR = ht[R]; //Peak not cause water trapping
+                else Trapped += MxR - ht[R]; //==Trapped at curr Rth pos.
+                R--;
+            }
+        }
+        return Trapped;
+    }
+
+    // //optimal way - 2 - using stack
+    // public int trap(int[] ht) {
+    //     Stack<Integer> st = new Stack<>();
+    //     int curr = 0, rw=0;
+    //     while(curr<ht.length){
+    //         while(!st.isEmpty() && ht[curr]>ht[st.peek()]){
+    //             int top = st.pop();
+    //             if(st.isEmpty()) break; // no lft bound
+    //             int d = curr - st.peek() -1;
+    //             int fill = d*(Math.min(ht[curr], ht[st.peek()])-ht[top]);
+    //             rw+=fill;
+    //         } st.push(curr);
+    //         curr++;
+    //     } return rw;
+    // }
+}
+package StackAndQueue.Lec3_MonotonicStackAndQueue;
+
+import java.util.Stack;
+
+/*Q7 735. Asteroid Collision
+Medium
+Topics
+Companies
+Hint
+We are given an array asteroids of integers representing asteroids in a row.
+
+For each asteroid, the absolute value represents its size, and the sign represents its direction (positive meaning right, negative meaning left). Each asteroid moves at the same speed.
+
+Find out the state of the asteroids after all collisions. If two asteroids meet, the smaller one will explode. If both are the same size, both will explode. Two asteroids moving in the same direction will never meet.
+
+ 
+
+Example 1:
+
+Input: asteroids = [5,10,-5]
+Output: [5,10]
+Explanation: The 10 and -5 collide resulting in 10. The 5 and 10 never collide.
+Example 2:
+
+Input: asteroids = [8,-8]
+Output: []
+Explanation: The 8 and -8 collide exploding each other.
+Example 3:
+
+Input: asteroids = [10,2,-5]
+Output: [10]
+Explanation: The 2 and -5 collide resulting in -5. The 10 and -5 collide resulting in 10.
+ 
+
+Constraints:
+
+2 <= asteroids.length <= 104
+-1000 <= asteroids[i] <= 1000
+asteroids[i] != 0
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+523.6K
+Submissions
+1.2M
+Acceptance Rate
+44.5% */
+public class Asteroid_Collision {
+    public int[] asteroidCollision(int[] asteroids) {
+        Stack<Integer> st = new Stack<>();
+        int n = asteroids.length;
+        for(int i = n-1; i>=0; i--){
+            int curr = asteroids[i];
+            //int currIndx= i;
+            //when curr +ve and top -ve
+            while(!st.isEmpty() && curr > 0 && st.peek() <0){
+                //collision occurs
+                int sum = curr + st.peek();
+                if(sum < 0) { 
+                    //top dominates curr
+                    curr = 0; // nullify curr
+                }
+                else if(sum>0) {
+                    //curr dominates top
+                    st.pop();// destroy top
+                }
+                else if(sum==0){
+                    //both destroy each other
+                    st.pop();
+                    curr = 0;
+                } 
+            }
+            //otherwise, stack empty || curr -ve || top +ve
+            if(curr !=0) st.push(curr);
+        }
+        //puta all that's remaining in stack, as survivors
+        int s = st.size();
+        int[] survivors = new int[s];
+        for (int i = 0; i < s; i++) {
+            survivors[i] = st.pop();
+        }
+
+        return survivors;
+    }
+}
+/*//LC submission, using arraylist in a stack like manner(LIFO)
+class Solution {
+    public int[] asteroidCollision(int[] asteroids) {
+        List<Integer> st = new ArrayList<>();
+        int n = asteroids.length;
+        for(int i = n-1; i>=0; i--){
+            //int curr = asteroids[i];
+            //int currIndx= i;
+            //when curr +ve and top -ve
+            while(!st.isEmpty() && asteroids[i] > 0 && st.get(st.size() - 1) <0){
+                //collision occurs
+                int sum = asteroids[i] + st.get(st.size() - 1);
+                if(sum < 0) { 
+                    //top dominates curr
+                    asteroids[i] = 0; // nullify curr
+                }
+                else if(sum>0) {
+                    //curr dominates top
+                    //st.pop();// destroy top
+                    st.remove(st.size() - 1);
+                }
+                else if(sum==0){
+                    //both destroy each other
+                    //st.pop();
+                    st.remove(st.size() - 1);
+                    asteroids[i] = 0;
+                } 
+            }
+            //otherwise, stack empty || curr -ve || top +ve
+            if(asteroids[i] !=0) st.add(asteroids[i]);
+        }
+        //puta all that's remaining in stack, as survivors
+        int s = st.size();
+        int[] survivors = new int[s];
+        for (int i = 0; i < s; i++) {
+            survivors[s-1-i] = st.get(i);
+        }
+
+        return survivors;
+    }
+}
+*/
+
+/*//Fastest LC soln., clever
+/*
+++ offer into stack
+-- offer into stack
+-+ offer into stack
++- compare
+
+array with index as stack(top as top of stack, inclusive):
+top  = -1    : empty
+top >= 0     : not empty
+array[++top] : offer new guy onto top of stack
+top--        : pop
+array[top]   : peek
+*/
+// class Solution {
+//     public int[] asteroidCollision(int[] a) {
+//         int top = -1;
+//         for (int x : a) {
+//             boolean stillAlive = true; // new guys is still alive
+//             while (stillAlive && x < 0 && top >= 0 && a[top] > 0) {
+//                 stillAlive = a[top] + x < 0;
+//                 if (a[top] + x <= 0) top--; // die young or die together
+//             }
+//             if (stillAlive) a[++top] = x; // if new guys is still alive, put it on top of stack
+//         }
+        
+//         return Arrays.copyOf(a, top+1); // return whats in stack as array
+//     }
+// }
+// */
+
+package StackAndQueue.Lec3_MonotonicStackAndQueue;
+
+import java.util.Stack;
+
+/*Q8 2104. Sum of Subarray Ranges
+Medium
+Topics
+Companies
+Hint
+You are given an integer array nums. The range of a subarray of nums is the difference between the largest and smallest element in the subarray.
+
+Return the sum of all subarray ranges of nums.
+
+A subarray is a contiguous non-empty sequence of elements within an array.
+
+ 
+
+Example 1:
+
+Input: nums = [1,2,3]
+Output: 4
+Explanation: The 6 subarrays of nums are the following:
+[1], range = largest - smallest = 1 - 1 = 0 
+[2], range = 2 - 2 = 0
+[3], range = 3 - 3 = 0
+[1,2], range = 2 - 1 = 1
+[2,3], range = 3 - 2 = 1
+[1,2,3], range = 3 - 1 = 2
+So the sum of all ranges is 0 + 0 + 0 + 1 + 1 + 2 = 4.
+Example 2:
+
+Input: nums = [1,3,3]
+Output: 4
+Explanation: The 6 subarrays of nums are the following:
+[1], range = largest - smallest = 1 - 1 = 0
+[3], range = 3 - 3 = 0
+[3], range = 3 - 3 = 0
+[1,3], range = 3 - 1 = 2
+[3,3], range = 3 - 3 = 0
+[1,3,3], range = 3 - 1 = 2
+So the sum of all ranges is 0 + 0 + 0 + 2 + 0 + 2 = 4.
+Example 3:
+
+Input: nums = [4,-2,-3,4,1]
+Output: 59
+Explanation: The sum of all subarray ranges of nums is 59.
+ 
+
+Constraints:
+
+1 <= nums.length <= 1000
+-109 <= nums[i] <= 109
+ 
+
+Follow-up: Could you find a solution with O(n) time complexity?
+
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+97.4K
+Submissions
+159.2K
+Acceptance Rate
+61.2% */
+public class Sum_Of_SubArray_Ranges {
+    public long subArrayRanges(int[] A) {
+        int n = A.length, j, k;
+        long R = 0;
+        
+        Stack<Integer> st = new Stack<>();
+        for (int i = 0; i <= n; i++) {
+            while (!st.isEmpty() && A[st.peek()] > (i == n ? Integer.MIN_VALUE : A[i])) {
+                j = st.pop();
+                k = st.isEmpty() ? -1 : st.peek();
+                R -= (long)A[j] * (i - j) * (j - k);
+
+            }
+            st.push(i);
+        }
+        
+        st.pop();// or st.clear()
+
+        for (int i = 0; i <= n; i++) {
+            while (!st.isEmpty() && A[st.peek()] < (i == n ? Integer.MAX_VALUE : A[i])) {
+                j = st.pop();
+                k = st.isEmpty() ? -1 : st.peek();
+                R += (long)A[j] * (i - j) * (j - k);
+
+            }
+            st.push(i);
+        }
+        return R;
+    }
+}
+//Reference soln & discussion - https://leetcode.com/problems/sum-of-subarray-ranges/solutions/1624222/java-c-python-o-n-solution-detailed-explanation/
+/*//A recursive soln. found on LC forum, fastest
+class Solution {
+    public long subArrayRanges(int[] arr) {
+        return calculateMaxSum(arr,0,arr.length-1) - calculateMinSum(arr,0,arr.length-1);
+    }
+    public long calculateMinSum(int[] arr, int i, int j) {
+        int n = j-i+1;
+        if(n == 1) return arr[i];
+        int minIndex = i;
+        for(int k=i+1;k<=j;k++) {
+            if(arr[k]<arr[minIndex]) {
+                minIndex = k;
+            }
+        }
+        long sum = 1l*(n-(minIndex-i))*(minIndex-i+1)*arr[minIndex];
+        if (minIndex == i) {
+            return sum+calculateMinSum(arr, minIndex+1, j);
+        } else if(minIndex == j) {
+            return sum + calculateMinSum(arr, i, minIndex-1);
+        }
+        return sum + calculateMinSum(arr, i, minIndex-1) + calculateMinSum(arr, minIndex+1,j);
+    }
+    public long calculateMaxSum(int[] arr, int i, int j) {
+        int n = j-i+1;
+        if(n == 1) return arr[i];
+        int maxIndex = i;
+        for(int k=i+1;k<=j;k++) {
+            if(arr[k]>arr[maxIndex]) {
+                maxIndex = k;
+            }
+        }
+        long sum = 1l*(n-(maxIndex-i))*(maxIndex-i+1)*arr[maxIndex];
+        if (maxIndex == i) {
+            return sum+calculateMaxSum(arr, maxIndex+1, j);
+        } else if(maxIndex == j) {
+            return sum + calculateMaxSum(arr, i, maxIndex-1);
+        }
+        return sum + calculateMaxSum(arr, i, maxIndex-1) + calculateMaxSum(arr, maxIndex+1,j);
+    }
+        public long subArrayRanges1(int[] A) {
+        int n = A.length, j, k;
+        long res = 0;
+        
+        Stack<Integer> s = new Stack<>();
+        for (int i = 0; i <= n; i++) {
+            while (!s.isEmpty() && A[s.peek()] > (i == n ? Integer.MIN_VALUE : A[i])) {
+                j = s.pop();
+                k = s.isEmpty() ? -1 : s.peek();
+                res -= (long)A[j] * (i - j) * (j - k);
+
+            }
+            s.push(i);
+        }
+        
+        s.pop();
+        for (int i = 0; i <= n; i++) {
+            while (!s.isEmpty() && A[s.peek()] < (i == n ? Integer.MAX_VALUE : A[i])) {
+                j = s.pop();
+                k = s.isEmpty() ? -1 : s.peek();
+                res += (long)A[j] * (i - j) * (j - k);
+
+            }
+            s.push(i);
+        }
+        return res;
+    }
+}
+*/
+/*
+class Solution {
+    public long subArrayRanges(int[] nums) {
+        int n = nums.length;
+        long answer = 0;
+        Stack<Integer> stack = new Stack<>();    
+
+        // Find the sum of all the minimum.
+        for (int right = 0; right <= n; ++right) {
+            while (!stack.isEmpty() && (right == n || nums[stack.peek()] >= nums[right])) {
+                int mid = stack.peek();
+                stack.pop();
+                int left = stack.isEmpty() ? -1 : stack.peek();
+                answer -= (long)nums[mid] * (right - mid) * (mid - left);   
+            }
+            stack.add(right);
+        }
+        
+        // Find the sum of all the maximum.
+        stack.clear();
+        for (int right = 0; right <= n; ++right) {
+            while (!stack.isEmpty() && (right == n || nums[stack.peek()] <= nums[right])) {
+                int mid = stack.peek();
+                stack.pop();
+                int left = stack.isEmpty() ? -1 : stack.peek();
+                answer += (long)nums[mid] * (right - mid) * (mid - left);   
+            }
+            stack.add(right);
+        }
+        return answer;
+    }
+}
+ */
+/* LC editorial
+Solution
+Overview
+Define the range of a subarray as the difference between the largest and smallest element in the subarray:
+
+img
+
+The task is to find the sum of all subarray ranges of the given array nums.
+
+Approach 1: Two Loops
+Intuition
+Let's start with a brute force solution, that is, to find and iterate over all subarrays of nums, and get the sum of their ranges.
+
+Set answer = 0.
+Iterate over every left index of subarrays left.
+With every fixed left, iterate over every right index right of subarrays.
+For each subarray [left, right], iterate over it to find its minimum value minVal and maximum value maxVal.
+Increment answer by maxVal - minVal.
+This approach contains three nested loops which make the time complexity quite high, so it may not pass all test cases. But we can consider this as a prompt for better approaches!
+
+Note that for a fixed left index, two adjacent arrays only differ by one element. Suppose the previous array is [left, right] and the new array is [left, right + 1], we can get the minVal, maxVal for the new subarray, by updating minVal, maxVal of the previous array using nums[right + 1].
+
+minVal = min(minVal, nums[right + 1])
+maxVal = max(maxVal, nums[right + 1])
+Therefore, the average time for finding the range of one subarray is reduced to O(1)O(1)O(1). Please refer to the following picture.
+
+img
+
+
+Algorithm
+Set answer = 0.
+Iterate over every left index of subarrays left.
+With every fixed left, initialize minVal = maxVal = nums[left], iterate over every right index right of subarrays.
+For each right index right, update minVal and maxVal by nums[right]. Then update answer += maxVal - minVal.
+Implementation
+
+Complexity Analysis
+Let nnn be the size of the input array nums.
+
+Time complexity: O(n2)O(n^2)O(n 
+2
+ )
+
+We have two nested iterations over nums.
+In each step, we update minVal, maxVal and answer, it takes constant time.
+To sum up, the overall time complexity is O(n2)O(n^2)O(n 
+2
+ ).
+Space complexity: O(1)O(1)O(1)
+
+We only need to update three variables minVal, maxVal and answer.
+
+Approach 2: Monotonic Stack
+Intuition
+From the definition of the sum of all subarray ranges:
+
+∑krangek=∑k(maxValk−minValk)=∑kmaxValk−∑kminValk\sum\limits_{k} range_{k} = \sum\limits_{k} (maxVal_{k} - minVal_{k}) = \sum\limits_{k} maxVal_{k} - \sum\limits_{k} minVal_{k} 
+k
+∑
+​
+ range 
+k
+​
+ = 
+k
+∑
+​
+ (maxVal 
+k
+​
+ −minVal 
+k
+​
+ )= 
+k
+∑
+​
+ maxVal 
+k
+​
+ − 
+k
+∑
+​
+ minVal 
+k
+​
+ 
+
+It implies that we can calculate these two partial sums separately.
+
+Let's think of this problem differently, instead of finding each subarray and getting its minVal and maxVal, we focus on each number. If we can find that, for each number nums[i], the number of subarrays having nums[i] as its minimum value is minTime[i]. Then the sum of minVal can be rewritten as:
+
+∑kminValk=∑i=1nminTime[i] ⋅ nums[i]\sum\limits_{k} minVal_{k} = \sum\limits_{i = 1}^{n} minTime[i]\ \cdot\ nums[i] 
+k
+∑
+​
+ minVal 
+k
+​
+ = 
+i=1
+∑
+n
+​
+ minTime[i] ⋅ nums[i]
+
+For example, we have found minTime = [1, 4, 1] for the array [X, Y, Z] by some means (which will be explained in detail soon), then the sum of minVal is 1 * X + 4 * Y + 1 * Z. We don't need to know exactly which array holds which value as the minimum, but only the number of times each number is taken as the minimum!
+
+Now the task becomes finding minTime[i] for each index i.
+
+Notice that minTime[i] depends on:
+
+How many consecutive elements are larger than or equal to nums[i] on its left side, in other word, to find the index left which value is less than nums[i].
+
+How many consecutive elements are smaller than nums[i] on its right side, in other word, to find the index right which value is larger than or equal to nums[i].
+
+Now we have (i - left) positions to put the starting position of the subarray, and (right - i) positions to put the ending position of the subarray. Therefore, we have (i - left) * (right - i) valid subarrays in total, so we can calculate minTime[i] as follows:
+
+minTime[i]=(right−i)⋅(i−left)minTime[i] = (right - i) \cdot (i - left)minTime[i]=(right−i)⋅(i−left)
+rangei=minTime[i]⋅nums[i]range_i = minTime[i] \cdot nums[i]range 
+i
+​
+ =minTime[i]⋅nums[i]
+
+In the array shown below, nums[3] = 4 has left = 0 and right = 6, thus the number of subarrays having nums[3] as the minimum is minTime[3] = (6 - 3) * (3 - 0) = 9, meaning that there are 9 subarays having nums[3] as the minimum.
+
+img
+
+To calculate minTime[i] for every index, we can use a stack to maintain a monotonically increasing sequence during the iteration over nums:
+
+What is the left index left? The element on nums[i]'s left in the stack.
+
+What is the right index right? The element we are using to pop nums[i] from the stack.
+
+In other words, minTime[i] is not calculated when we add nums[i] to the stack, but when we pop nums[i] from the stack, because only then are the left and right indexes clear to us. Then we can calculate minTime[i] using: minTime[i]=(right−i)⋅(i−left)minTime[i] = (right - i) \cdot (i - left)minTime[i]=(right−i)⋅(i−left). As shown in the picture below, when we encounter nums[6] = 1, we should pop nums[3] = 4 from the stack, which is the time to calculate minTime[3].
+
+img
+
+How to handle the edge cases?
+
+If the stack is empty after we pop nums[i] from it, we can't find the any index as the left boundary, so we set the left index as -1, which means that all the numbers on nums[i]'s left are within the range [left, i].
+
+In order to pop the remaining elements from the stack after the iteration over nums stops, we set the right boundaries of all the remaining elements as n, which means that all the numbers on nums[i]'s right are within the range [i, right]. That's why we iterate from i = 0 to i = n: to use i = n as the right boundary index to pop all the remaining elements from the stack.
+
+Will there by any duplicated calculation?
+
+One might think, what if there are identical values that are close or adjacent, do we double count any subarray? The answer is NO! Although several identical values A may be adjacent to each other, the subarrays of the previous A will never take the following A as their minimum. As shown in the picture below, subarrays using the first 4 as the minimum don't cross the second 4, thus we won't double count any subarray!
+
+img
+
+With each subproblem solved, we can move on to the results!
+
+Please take the following slides as an example of getting the total sum of minVal.
+
+Current
+
+Note that this iteration is to get the sum of minVal. We also need to find the sum of maxVal in a similar way, by reversing the comparison condition, then get the sum of ranges using the first equation in this chapter. The job is done!
+
+If you are not much familiar with stack, we suggest you read our Leetcode Explore Card and have some knowledge of it beforehand.
+
+
+Algorithm
+Initialize an empty stack stack, get the size of nums as n.
+
+Iterate over every index from 0 to n (inclusive). For each index right, if either of the following two condition is met:
+
+index = n
+stack is not empty and nums[mid] >= nums[right], where mid is its top value:
+go to step 3.
+Otherwise, repeat step 2.
+
+Calculate the number of subarrays with nums[mid] as its minimum value:
+
+Pop mid from stack.
+If stack is empty, set left = -1, otherwise, left equals the top element from stack.
+Increment answer by (right - mid) * (mid - left).
+Repeat step 2.
+Implementation
+
+Complexity Analysis
+Let nnn be the size of the input array nums.
+
+Time complexity: O(n)O(n)O(n)
+
+To find the total sum of minVal, we only need one iteration over nums, and each number will be added to and popped from stack once, these also apply for finding maxVal.
+Therefore the overall time complexity is O(n)O(n)O(n).
+Space complexity: O(n)O(n)O(n)
+
+We use a (monotonic) stack to keep the increasing (decreasing) sequence, in the worst-case scenario, there may be O(n)O(n)O(n) numbers in the stack, which takes O(n)O(n)O(n) space.
+ */
+
+ package StackAndQueue.Lec3_MonotonicStackAndQueue;
+
+import java.util.ArrayDeque;
+import java.util.Deque;
+
+/*Q9 402. Remove K Digits
+Medium
+Topics
+Companies
+Given string num representing a non-negative integer num, and an integer k, return the smallest possible integer after removing k digits from num.
+
+ 
+
+Example 1:
+
+Input: num = "1432219", k = 3
+Output: "1219"
+Explanation: Remove the three digits 4, 3, and 2 to form the new number 1219 which is the smallest.
+Example 2:
+
+Input: num = "10200", k = 1
+Output: "200"
+Explanation: Remove the leading 1 and the number is 200. Note that the output must not contain leading zeroes.
+Example 3:
+
+Input: num = "10", k = 2
+Output: "0"
+Explanation: Remove all the digits from the number and it is left with nothing which is 0.
+ 
+
+Constraints:
+
+1 <= k <= num.length <= 105
+num consists of only digits.
+num does not have any leading zeros except for the zero itself.
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+489.9K
+Submissions
+1.5M
+Acceptance Rate
+33.6% */
+public class Remove_K_digits {
+    public String removeKdigits(String str, int k) {        
+        if(k >= str.length()) return "0";// remove all
+
+        Deque<Character> st = new ArrayDeque<>();
+        for(char c : str.toCharArray()) {
+            while(k > 0 && !st.isEmpty() && st.peekLast() > c) {
+                st.removeLast(); // using deque like stack, as pop == removeFirst() == remove from last put, LIFO
+                k--;
+            }
+            st.addLast(c);
+        }
+        
+        while(k>0) {
+            st.removeLast(); // like pop()
+            k--;
+        }
+        
+        // Remove all 0s from the front of the st and then chk. if st is empty, if yes, return "0"
+        while(!st.isEmpty() && st.peekFirst()== '0') st.removeFirst();
+        if(st.isEmpty()) return "0";
+
+        // build no. from st contents of (n - k -#leading 0s)
+        StringBuilder sb = new StringBuilder();
+        while(!st.isEmpty()) {
+            sb.append(st.removeFirst());// Using deque like in Queue, as removeFirst() == Dequeue == remove from front, FIFO
+        }
+        return sb.toString();
+    }
+}
+/* very good thread -
+ * https://stackoverflow.com/questions/12524826/why-should-i-use-deque-over-stack
+ */
+/*
+// a stack soln.
+public String removeKdigits(String num, int k) {
+        int len = num.length();
+        //corner case
+        if(k==len)        
+            return "0";
+            
+        Stack<Character> stack = new Stack<>();
+        int i =0;
+        while(i<num.length()){
+            //whenever meet a digit which is less than the previous digit, discard the previous one
+            while(k>0 && !stack.isEmpty() && stack.peek()>num.charAt(i)){
+                stack.pop();
+                k--;
+            }
+            stack.push(num.charAt(i));
+            i++;
+        }
+        
+        // corner case like "1111"
+        while(k>0){
+            stack.pop();
+            k--;            
+        }
+        
+        //construct the number from the stack
+        StringBuilder sb = new StringBuilder();
+        while(!stack.isEmpty())
+            sb.append(stack.pop());
+        sb.reverse();
+        
+        //remove all the 0 at the head
+        while(sb.length()>1 && sb.charAt(0)=='0')
+            sb.deleteCharAt(0);
+        return sb.toString();
+    }
+ */
+/*// a string soln.
+public class Solution {
+    public String removeKdigits(String num, int k) {
+        StringBuilder result = new StringBuilder(); // it will act like a stack
+        int n = num.length();
+        
+        for(int i = 0; i < n; i++) {
+            while(result.length() > 0 && result.charAt(result.length() - 1) > num.charAt(i) && k > 0) {
+                result.deleteCharAt(result.length() - 1);
+                k--;
+            }
+            
+            if(result.length() > 0 || num.charAt(i) != '0') {
+                result.append(num.charAt(i)); // to avoid the case when we have preceding zeros
+            }
+        }
+        
+        while(result.length() > 0 && k > 0) {
+            result.deleteCharAt(result.length() - 1);
+            k--;
+        }
+
+        if(result.length() == 0) {
+            return "0";
+        }
+        
+        return result.toString();
+    }
+}
+ */
+
+/*//Queue soln. on LC forum, very long
+class Solution {
+    public String removeKdigits(String nums, int k) {
+        
+        //look for longest zeros before k get removed
+        int index = 0, count = 0, removed=0;
+        for(int i=0; i<nums.length(); i++){
+            int num = nums.charAt(i)-'0';
+            if(num > 0)count++;
+            if(count > k)break;
+            if(num == 0){
+                index = i+1;
+                removed = count;
+            }
+        }
+        //exit if remaining digits less than remaining k
+        k -= removed;
+        if(nums.length() - index <= k)return "0";
+        
+        //store the next remaining k elements in a priority queue
+        StringBuilder sb = new StringBuilder();
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a,b)->a[1]==b[1]?a[0]-b[0]:a[1]-b[1]);
+        for(int i=0; i<k; i++){
+            pq.offer(new int[]{i+index,nums.charAt(i+index)-'0'});
+        }
+        //start comparing the remaining with priority queu
+        //1. when current is less than priority queue, clear everything in the priority queue
+        //2. else, poll from priority queue and replace the current. then remove all digits
+        //   in the priorityqueue before the polled one
+        for(int i=k+index; i<nums.length(); i++){
+            int nn = nums.charAt(i)-'0';
+            if(pq.isEmpty()){
+                sb.append(nn);
+                continue;
+            }
+            if( nn < pq.peek()[1]){
+                sb.append(nn);
+                pq.clear();
+                continue;
+            }
+            int[] cur = pq.poll();
+            sb.append(cur[1]);
+            PriorityQueue<int[]> temp = new PriorityQueue<>((a,b)->a[1]==b[1]?a[0]-b[0]:a[1]-b[1]);
+            while(!pq.isEmpty()){
+                if(pq.peek()[0] > cur[0])
+                    temp.offer(pq.poll());
+                else
+                    pq.poll();
+            }
+            temp.offer(new int[]{i,nn});
+            pq = temp;
+            
+        }
+        return sb.length()==0?"0":sb.toString();        
+    }
+}
+    //https://leetcode.com/problems/remove-k-digits/solutions/1780891/java-solution-priorityqueue-faster-than-official-solution/
+*/
+
+package StackAndQueue.Lec3_MonotonicStackAndQueue;
+/*Q10 84. Largest Rectangle in Histogram
+Solved
+Hard
+Topics
+Companies
+Given an array of integers heights representing the histogram's bar height where the width of each bar is 1, return the area of the largest rectangle in the histogram.
+
+ 
+
+Example 1:
+
+
+Input: heights = [2,1,5,6,2,3]
+Output: 10
+Explanation: The above is a histogram where width of each bar is 1.
+The largest rectangle is shown in the red area, which has an area = 10 units.
+Example 2:
+
+
+Input: heights = [2,4]
+Output: 4
+ 
+
+Constraints:
+
+1 <= heights.length <= 105
+0 <= heights[i] <= 104
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+919.1K
+Submissions
+2.1M
+Acceptance Rate
+44.8% */
+import java.util.Stack;
+
+public class Largest_Rectangle_in_Histogram {
+    public int largestRectangleArea(int[] h) {
+        int n = h.length, j, k;
+        int Area = 0;
+        int MaxArea = 0;
+        
+        Stack<Integer> st = new Stack<>();
+        for (int i = 0; i <= n; i++) {
+            while (!st.isEmpty() && h[st.peek()] > (i == n ? Integer.MIN_VALUE : h[i])) {
+                j = st.pop();
+                k = st.isEmpty() ? -1 : st.peek();
+                Area = h[j] * ((i - k - 1)); //== (i - j ) - (j - k) - 1 == width from right + width from left - exclude itself cuz include itself twice
+                MaxArea = (Area>MaxArea)? Area : MaxArea;
+            }
+            st.push(i);
+        }
+        return MaxArea;
+    }
+}
+// Striver Soln, does very similar
+// import java.util.*;
+// public class TUF {
+//     static int largestRectangleArea(int histo[]) {
+//         Stack < Integer > st = new Stack < > ();
+//         int maxA = 0;
+//         int n = histo.length;
+//         for (int i = 0; i <= n; i++) {
+//             while (!st.empty() && (i == n || histo[st.peek()] >= histo[i])) {
+//                 int height = histo[st.peek()];
+//                 st.pop();
+//                 int width;
+//                 if (st.empty())
+//                     width = i;
+//                 else
+//                     width = i - st.peek() - 1;
+//                 maxA = Math.max(maxA, width * height);
+//             }
+//             st.push(i);
+//         }
+//         return maxA;
+//     }
+
+//     public static void main(String args[]) {
+//         int histo[] = {3, 1, 5, 6, 2, 3};
+//         System.out.println("The largest area in the histogram is " + largestRectangleArea(histo));
+//     }
+// }
+// Output: The largest area in the histogram is 10
+
+// Time Complexity: O( N ) + O (N)
+
+// Space Complexity: O(N)
+
+
+// //Recommended soln, as above soln is hard to explain in limited time in an interview
+// public int largestRectangleArea(int[] heights) {
+//     int n = heights.length;
+//     Stack < Integer > st = new Stack < > ();
+//     int leftSmall[] = new int[n];
+//     int rightSmall[] = new int[n];
+//     for (int i = 0; i < n; i++) {
+//         while (!st.isEmpty() && heights[st.peek()] >= heights[i]) {
+//             st.pop();
+//         }
+
+//         if (st.isEmpty()) leftSmall[i] = 0;
+//         else leftSmall[i] = st.peek() + 1;
+//         st.push(i);
+//     }
+
+//     // clear the stack to be re-used
+//     while (!st.isEmpty()) st.pop();
+
+//     for (int i = n - 1; i >= 0; i--) {
+//         while (!st.isEmpty() && heights[st.peek()] >= heights[i]) {
+//             st.pop();
+//         }
+
+//         if (st.isEmpty()) rightSmall[i] = n - 1;
+//         else rightSmall[i] = st.peek() - 1;
+
+//         st.push(i);
+//     }
+
+//     int maxA = 0;
+//     for (int i = 0; i < n; i++) {
+//         maxA = Math.max(maxA, heights[i] * (rightSmall[i] - leftSmall[i] + 1));
+//     }
+//     return maxA;
+
+// }
+
+
+// //Array used as a stack soln, faster(est) as the using collections is slow in java
+// public class Solution {
+//     public int largestRectangleArea(int[] h) {
+//         int n = h.length;
+//         int max = 0;
+//         int[] stack = new int[n + 1];
+//         int is = -1;
+//         for (int i = 0; i <= n; i++) {
+//             int height = (i == n) ? 0 : h[i];
+//             while (is != -1 && height < h[stack[is]]) {
+//                 int hh = h[stack[is--]];
+//                 int width = (is == -1) ? i : i - 1 - stack[is];
+//                 max = Math.max(max, hh * width);
+//             }
+//             stack[++is] = i;
+//         }
+//         return max;
+//     }
+// }
+
+// //a DP soln., pretty fast
+// https://leetcode.com/problems/largest-rectangle-in-histogram/solutions/28902/5ms-o-n-java-solution-explained-beats-96/
+// public class Solution {
+//     public static int largestRectangleArea(int[] height) {
+//     if (height == null || height.length == 0) {
+//         return 0;
+//     }
+//     int[] lessFromLeft = new int[height.length]; // idx of the first bar the left that is lower than current
+//     int[] lessFromRight = new int[height.length]; // idx of the first bar the right that is lower than current
+//     lessFromRight[height.length - 1] = height.length;
+//     lessFromLeft[0] = -1;
+
+//     for (int i = 1; i < height.length; i++) {
+//         int p = i - 1;
+
+//         while (p >= 0 && height[p] >= height[i]) {
+//             p = lessFromLeft[p];
+//         }
+//         lessFromLeft[i] = p;
+//     }
+
+//     for (int i = height.length - 2; i >= 0; i--) {
+//         int p = i + 1;
+
+//         while (p < height.length && height[p] >= height[i]) {
+//             p = lessFromRight[p];
+//         }
+//         lessFromRight[i] = p;
+//     }
+
+//     int maxArea = 0;
+//     for (int i = 0; i < height.length; i++) {
+//         maxArea = Math.max(maxArea, height[i] * (lessFromRight[i] - lessFromLeft[i] - 1));
+//     }
+
+//     return maxArea;
+// }
+// }
+/*The main trick is how to effectively calculate lessFromRight and lessFromLeft arrays. 
+The trivial solution is to use O(n^2) solution and for each i element first find his left/right heighbour 
+in the second inner loop just iterating back or forward:
+
+for (int i = 1; i < height.length; i++) {              
+    int p = i - 1;
+    while (p >= 0 && height[p] >= height[i]) {
+        p--;
+    }
+    lessFromLeft[i] = p;              
+}
+The only line change shifts this algorithm from O(n^2) to O(n) complexity: 
+we don't need to rescan each item to the left - 
+we can reuse results of previous calculations and "jump" through indices in quick manner:
+
+while (p >= 0 && height[p] >= height[i]) {
+      p = lessFromLeft[p];
+} 
+*/
+
+package StackAndQueue.Lec3_MonotonicStackAndQueue;
+
+import java.util.Stack;
+
+/*Q11 85. Maximal Rectangle
+Solved
+Hard
+Topics
+Companies
+Given a rows x cols binary matrix filled with 0's and 1's, find the largest rectangle containing only 1's and return its area.
+
+ 
+
+Example 1:
+
+
+Input: matrix = [["1","0","1","0","0"],["1","0","1","1","1"],["1","1","1","1","1"],["1","0","0","1","0"]]
+Output: 6
+Explanation: The maximal rectangle is shown in the above picture.
+Example 2:
+
+Input: matrix = [["0"]]
+Output: 0
+Example 3:
+
+Input: matrix = [["1"]]
+Output: 1
+ 
+
+Constraints:
+
+rows == matrix.length
+cols == matrix[i].length
+1 <= row, cols <= 200
+matrix[i][j] is '0' or '1'.
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+495.7K
+Submissions
+975.1K
+Acceptance Rate
+50.8%*/
+public class Maximal_Rectangle {
+    public int maximalRectangle(char[][] matrix) {
+        if(matrix.length == 0)  return 0;
+        int maxArea = 0;
+        int row = matrix.length;
+        int col = matrix[0].length;
+        int[] ht = new int[col];
+        for(int i=0;i<row;i++){
+            for(int j=0;j<col;j++){
+                ht[j] = matrix[i][j] == '1' ? ht[j]+1 : 0;
+            }
+            //ht[j] is containing hts. of histogram(till i-th row), finding area of max rectagle there
+            int currLargestRectangleArea = largestRectangleArea(ht);
+            //update maxArea if curr Area bigger
+            maxArea = (maxArea > currLargestRectangleArea)? maxArea : currLargestRectangleArea;
+        }
+        return maxArea;
+    }
+    public int largestRectangleArea(int[] h) {
+        int n = h.length, j, k;
+        int Area = 0;
+        int MaxArea = 0;
+        
+        Stack<Integer> st = new Stack<>();
+        for (int i = 0; i <= n; i++) {
+            while (!st.isEmpty() && h[st.peek()] > (i == n ? Integer.MIN_VALUE : h[i])) {
+                j = st.pop();
+                k = st.isEmpty() ? -1 : st.peek();
+                Area = h[j] * ((i - k - 1)); //== (i - j ) - (j - k) - 1 == width from right + width from left - exclude itself cuz include itself twice
+                MaxArea = (Area > MaxArea)? Area : MaxArea;
+            }
+            st.push(i);
+        }
+        return MaxArea;
+    }
+}
+// // Faster LC submission, by using array as stack instead of collections framework
+// class Solution {
+//     public int maximalRectangle(char[][] matrix) {
+//         if(matrix.length == 0)  return 0;
+//         int maxArea = 0;
+//         int row = matrix.length;
+//         int col = matrix[0].length;
+//         int[] ht = new int[col];
+//         for(int i=0;i<row;i++){
+//             for(int j=0;j<col;j++){
+//                 ht[j] = matrix[i][j] == '1' ? ht[j]+1 : 0;
+//             }
+//             //ht[j] is containing hts. of histogram(till i-th row), finding area of max rectagle there
+//             int currLargestRectangleArea = largestRectangleArea(ht);
+//             //update maxArea if curr Area bigger
+//             maxArea = (maxArea > currLargestRectangleArea)? maxArea : currLargestRectangleArea;
+//         }
+//         return maxArea;
+//     }
+//     public int largestRectangleArea(int[] h) {
+//         int n = h.length;
+//         int max = 0;
+//         int[] stack = new int[n + 1];
+//         int sind = -1; //sind keeps track of top indx of stack
+//         for (int i = 0; i <= n; i++) {
+//             int height = (i == n) ? 0 : h[i];
+//             //when stack is not empty == sind != -1
+//             while (sind != -1 && height < h[stack[sind]]) {
+//                 int ht = h[stack[sind--]]; //assign top indx elem as ht, and pop the top
+//                 int width = (sind == -1) ? i : i - stack[sind] - 1 ; //== rb - lb - 1
+//                 int area = ht * width;
+//                 max = (max > area)? max : area;
+//             }
+//             stack[++sind] = i; // push curr indx i
+//         }
+//         return max;
+//     }
+// }
+/*Intuition :
+1) Pick one row
+2) Do summation of each index till that row
+		i) if any index value is 0 then put 0 else previous summation + 1 
+3) Pass this array to get max area (84. Largest Rectangle in Historgram)
+4) Update max area
+
+84. Largest Rectangle in Histogram
+Intuition :
+1) Max area will always have atleast one full bar height on any index
+2) Find largest rectangle including each bar one by one.
+	a) For each bar, We have to find it's left limit & right limit (to know the maximum width)
+	b) Find it's left limit (where we find any index's value is smaller than current index in left side array of curr index)
+	c) Find it's right limit (where we find any index's value is smaller than current index in right side array of curr index
+3) Take the maximum of all the max area found by each bar.
+4) calculate area
+		width * height
+where width = right limit - left limit + 1
+height = curr index's value
+5) Update max area & return it 
+// found on - https://leetcode.com/problems/maximal-rectangle/solutions/1603593/java-detailed-explanation-easy-approach-o-row-col/
+*/
+

@@ -1,0 +1,745 @@
+/* 
+P1:
+*****
+*****
+*****
+*****
+*****
+
+ */
+package DsaQuestionpractice;
+import java.util.Scanner;
+public class Basics_lec2_pattern1 {
+          public static void main(String[] args) {
+            Scanner in=new Scanner(System.in);
+            int n=in.nextInt();
+            for(int r=1;r<=n;r++)
+            {
+                for(int c=1;c<=n;c++)
+                {
+                    System.out.print("*");
+                }
+                System.out.println();
+            }
+          }
+}
+
+
+/*P2:
+* 
+* * 
+* * *
+* * * *
+* * * * *
+ */
+package DsaQuestionpractice;
+import java.util.Scanner;
+public class Basics_lec2_pattern2 {
+        public static void main(String[] args) {
+            Scanner in=new Scanner(System.in);
+            int n=in.nextInt();
+            for(int r=1;r<=n;r++)
+            {
+                for(int c=1;c<=r;c++)
+                {
+                    System.out.print("* ");
+                }
+                System.out.println();
+            }
+        }
+}
+
+
+/* P3:
+1 
+1 2 
+1 2 3
+1 2 3 4
+1 2 3 4 5
+ */
+package DsaQuestionpractice;
+import java.util.Scanner;
+public class Basics_lec2_pattern3 {
+        public static void main(String[] args) {
+            Scanner in=new Scanner(System.in);
+            int n=in.nextInt();
+            for(int r=1;r<=n;r++)
+            {
+                for(int c=1;c<=r;c++)
+                {
+                    System.out.print(c+ " ");
+                }
+                System.out.println();
+            }
+            
+        }
+}
+
+/* P4:
+1 
+2 2 
+3 3 3
+4 4 4 4
+5 5 5 5 5
+ */
+package DsaQuestionpractice;
+import java.util.Scanner;
+public class Basics_lec2_pattern4 {
+        public static void main(String[] args) {
+            Scanner in= new Scanner(System.in);
+            int n=in.nextInt();
+            for(int r=1;r<=n;r++)
+            {
+                for(int c=1;c<=r;c++)
+                {
+                    System.out.print(r+ " ");
+                }
+                System.out.println();
+            }
+        }
+}
+
+
+/* P5:
+* * * * * 
+* * * * 
+* * *
+* *
+*
+ */
+package DsaQuestionpractice;
+import java.util.Scanner;
+public class Basics_lec2_pattern5 {
+        public static void main(String[] args) {
+            Scanner in= new Scanner(System.in);
+            int n=in.nextInt();
+            for(int r=1;r<=n;r++)
+            {
+                for(int c=r;c<=n;c++)
+                {
+                    System.out.print("* ");
+                }
+                System.out.println();
+            }
+        }
+}
+
+
+/* P6:
+1 2 3 4 5 
+1 2 3 4 
+1 2 3
+1 2
+1
+ */
+package DsaQuestionpractice;
+import java.util.Scanner;
+public class Basics_lec2_pattern6 {
+            public static void main(String[] args) {
+                Scanner in= new Scanner(System.in);
+                int n=in.nextInt();
+                for(int r=n;r>=1;r--)
+                {
+                    for(int c=1;c<=r;c++)
+                    {
+                        System.out.print(c+ " ");
+                    }
+                    System.out.println();
+                }
+            }
+
+}
+
+
+/* P7:
+    *
+   ***
+  *****
+ *******
+*********
+ */
+package DsaQuestionpractice;
+import java.util.Scanner;
+public class Basics_lec2_pattern7 {
+        public static void main(String[] args) {
+            Scanner in= new Scanner(System.in);
+                int n=in.nextInt();
+                int b;
+                for(int r=1;r<=n;r++)
+                {
+                    for(b=1;b<=n-r;b++)
+                    {
+                        System.out.print(" ");
+                    }
+                    for(int c=1;c<=2*r-1;c++)
+                    {
+                        System.out.print("*");
+                    }
+                    System.out.println();
+                }
+        }
+}
+
+
+/* P8:
+*********
+ *******
+  *****
+   ***
+    * 
+ */
+package DsaQuestionpractice;
+import java.util.Scanner;
+public class Basics_lec2_pattern8 {
+            public static void main(String[] args) {
+                Scanner in=new Scanner(System.in);
+                int n=in.nextInt();
+                for(int r=n;r>=1;r--)
+                {
+                    for(int b=1;b<=n-r;b++)
+                    {
+                          System.out.print(" ");
+                    }
+                    //no of star printing.
+                    for(int c=1;c<=2*r-1;c++)
+                    {
+                        System.out.print("*");
+                    }
+                    System.out.println();
+                }
+            }
+}
+
+
+/* P9:
+  *  
+ ***
+***** 
+*****  
+ ***
+  *
+*/  
+package DsaQuestionpractice;
+import java.util.Scanner;
+public class Basics_lec2_pattern9 {
+          public static void main(String[] args) {
+            Scanner in=new Scanner(System.in);
+                int n=in.nextInt();
+                //printing stars fpr first half
+                for(int r=1;r<=n;r++)
+                {
+                    for(int b=1;b<=n-r;b++)
+                    {
+                        System.out.print("  ");
+                    }
+                    for(int c=1;c<=2*r-1;c++)
+                    {
+                        System.out.print("* ");
+                    }
+                   
+                    System.out.println();
+                }
+
+                //printing stars for second half
+                for(int r=n;r>=1;r--)
+                {
+                    for(int b=n-r;b>=1;b--)
+                    {
+                        System.out.print("  ");
+                    }
+                    for(int c=2*r-1;c>=1;c--)
+                    {
+                        System.out.print("* ");
+                    }
+                    
+                    System.out.println();
+                }
+                
+
+          }
+}
+
+
+
+/* P10:
+*
+**
+***
+*****
+****
+***
+**
+*
+ */
+package DsaQuestionpractice;
+import java.util.Scanner;
+public class Basics_lec2_pattern10 {
+            public static void main(String[] args) {
+                Scanner in= new Scanner(System.in);
+                int n=in.nextInt();
+                //when the total no of rows are given.
+                //printing stars for one less than half of the rows
+                for(int r=1;r<n/2;r++)
+                {
+                    for(int c=1;c<=r;c++)
+                    {
+                        System.out.print("*");
+                    }
+                    System.out.println();
+                }
+
+                //printing stars for remaining portion
+                int rem_n=(n/2)+1;
+                for(int r=rem_n;r<=n;r++)
+                {
+                    for(int c=1;c<=n-r+1;c++)
+                    {
+                        System.out.print("*");
+                    }
+                    System.out.println();
+                }
+
+                //solution when no of rows given and we have to have a 2*r-1 i.e its shadow.
+                for(int r=1;r<n;r++)
+                {
+                    for(int c=1;c<=r;c++)
+                    {
+                        System.out.print("*");
+                    }
+                    System.out.println();
+                }
+
+                
+                
+                for(int r=n;r>=1;r--)
+                {
+                    for(int c=1;c<=r;c++)
+                    {
+                        System.out.print("*");
+                    }
+                    System.out.println();
+                }
+            }
+}
+
+
+/* P11:
+1
+0 1
+1 0 1
+0 1 0 1
+1 0 1 0 1
+ */
+package DsaQuestionpractice;
+import java.util.Scanner;
+public class Basics_lec2_pattern11 {
+            public static void main(String[] args) {
+                Scanner in= new Scanner(System.in);
+                int n=in.nextInt();
+                for(int r=1;r<=n;r++)
+                {
+                    for( int c=r;c>=1;c--)
+                    {
+                        int p=c%2;
+                        System.out.print(p+ " ");
+                    }
+                    System.out.println();
+                }
+            }
+}
+
+
+/* P12:
+1        1
+12      21
+123    321
+1234  4321
+1234554321
+ */
+package DsaQuestionpractice;
+import java.util.Scanner;
+public class Basics_lec2_pattern12 {
+        public static void main(String[] args) {
+            Scanner in=new Scanner(System.in);
+            int n=in.nextInt();
+            for(int r=1;r<=n;r++)
+            {
+                for(int c=1;c<=r;c++)
+                {
+                    System.out.print(c+ " ");
+                }
+                for(int b=1;b<=2*(n-r);b++)
+                {
+                    System.out.print("  ");
+                }
+
+                for(int c1=r;c1>=1;c1--)
+                 {
+                   System.out.print(c1+ " ");
+                 }
+                System.out.println();
+                }
+            
+
+
+
+
+
+
+          
+        }
+}
+
+
+/* P13:
+1
+2  3
+4  5  6
+7  8  9  10
+11  12  13  14  15
+ */
+package DsaQuestionpractice;
+import java.util.Scanner;
+public class Basics_lec2_pattern13 {
+                public static void main(String[] args) {
+                    Scanner in=new Scanner(System.in);
+                    int n=in.nextInt();
+                    int p=0;
+                    for(int r=1;r<=n;r++)
+                    {
+                        for(int c=1;c<=r;c++)
+                        {
+                            ++p; //counter variable to record last digit of each variable
+                            System.out.print(p+ " ");
+                        }
+                        System.out.println();
+                    }
+                }
+}
+
+
+/*P14:
+A
+A B
+A B C
+A B C D
+A B C D E
+ */
+package DsaQuestionpractice;
+import java.util.Scanner;
+public class Basics_lec2_pattern14 {
+            public static void main(String[] args) {
+                Scanner in=new Scanner(System.in);
+                    int n=in.nextInt();
+                    for(int r=1;r<=n;r++)
+                    {
+                        for(int c=1;c<=r;c++)
+                        {
+                            char ch=(char) (64+c);
+                            System.out.print(ch+ " ");
+                        }
+                        System.out.println();
+                    }
+            }
+}
+
+
+/*P15:
+A B C D E 
+A B C D
+A B C 
+A B
+A
+ */
+package DsaQuestionpractice;
+import java.util.Scanner;
+public class Basics_lec2_pattern15 {
+            public static void main(String[] args) {
+                Scanner in=new Scanner(System.in);
+                int n=in.nextInt();
+                for(int r=1;r<=n;r++)
+                    {
+                        for(int c=1;c<=(n-r+1);c++)
+                        {
+                            char ch=(char)(64+c);
+                            System.out.print(ch+ " ");
+                        }
+                        System.out.println();
+                    }
+            }
+}
+
+
+/* P16:
+A 
+B B
+C C C
+D D D D
+E E E E E
+ */
+package DsaQuestionpractice;
+import java.util.Scanner;
+public class Basics_lec2_pattern16 {
+    public static void main(String[] args) {
+        Scanner in=new Scanner(System.in);
+            int n=in.nextInt();
+            for(int r=1;r<=n;r++)
+            {
+                for(int c=1;c<=r;c++)
+                {
+                    char ch=(char)(64+r);
+                    System.out.print(ch+ " ");
+
+                }
+                System.out.println();
+            }
+    }
+}
+
+
+/* P17:
+    A    
+   ABA   
+  ABCBA  
+ ABCDCBA 
+ABCDEDCBA
+ */
+package DsaQuestionpractice;
+import java.util.Scanner;
+public class Basics_lec2_pattern17 {
+    public static void main(String[] args) {
+        Scanner in=new Scanner(System.in);
+            int n=in.nextInt();
+            for(int r=1;r<=n;r++)
+            {
+                 //blank spaces
+                 for(int b=1;b<=n-r;b++)
+                 {
+                    System.out.print(" ");
+                 }
+                //printing first half
+                for(int c=1;c<=r;c++)
+                {
+                    char ch=(char)(64+c);
+                    System.out.print(ch);
+                }
+                //printing second half
+                for(int c=r-1;c>=1;c--)
+                {
+                    char ch=(char)(64+c);
+                    System.out.print(ch);
+                }
+                System.out.println();
+
+            }
+
+    }
+}
+
+
+
+/* P18:
+E
+D E
+C D E
+B C D E
+A B C D E
+ */
+package DsaQuestionpractice;
+
+import java.util.Scanner;
+
+public class Basics_lec2_pattern18 {
+   public static void main(String[] args) {
+        Scanner in=new Scanner(System.in);
+            int n=in.nextInt();
+           for(int r=1;r<=n;r++)
+           {
+            for(int c=r;c>=1;c--)
+            {
+                char ch=(char)((64+n)-(c-1));
+                //or char ch=(char)((65+n-1)-(c-1));
+                System.out.print(ch+ " ");
+            }
+            System.out.println();
+           }
+    }
+}
+
+
+/* P19:
+**********
+****  ****
+***    ***
+**      **
+*        *
+*        *
+**      **
+***    ***
+****  ****
+**********
+ */
+package DsaQuestionpractice;
+import java.util.Scanner;
+public class Basics_lec2_pattern19 {
+            public static void main(String[] args) {
+                Scanner in=new Scanner(System.in);
+                int n=in.nextInt();
+                //printing stars for rows upto no of rows.
+                for(int r=0;r<n;r++)
+                {
+                    //printing half columns
+                    for(int c=1;c<=n-r;c++)
+                    {
+
+                        System.out.print("* ");
+                    }
+                    //printing blank space
+                    for(int b=1;b<=2*r;b++)
+                    {
+                        System.out.print("  ");
+                    }
+                    //printing next half cols
+                    for(int c=1;c<=(n-r);c++)
+                    {
+                        System.out.print("* ");
+                    }
+                    System.out.println();
+                }
+
+                //printing stars for next half(i.e shadow of first half)
+                for(int r=1;r<=n;r++)
+                {
+                    for(int c=1;c<=r;c++)
+                    {
+                        System.out.print("* ");
+                    }
+                    for(int b=1;b<=2*(n-r);b++)
+                    {
+                        System.out.print("  ");
+                    }
+                    for(int c=1;c<=r;c++)
+                    {
+                        System.out.print("* ");
+                    }
+                    System.out.println();
+                }
+                
+            }
+}
+
+
+/* P20:
+*        *
+**      **
+***    ***
+****  ****
+**********
+****  ****
+***    ***
+**      **
+*        *
+ */
+package DsaQuestionpractice;
+import java.util.Scanner;
+public class Basics_lec2_pattern20 {
+    public static void main(String[] args) {
+      Scanner in=new Scanner(System.in);
+      int n=in.nextInt();
+      //printing stars for first half(i.e shadow of first half)
+      for(int r=1;r<=n;r++)
+      {
+          for(int c=1;c<=r;c++)
+          {
+              System.out.print("* ");
+          }
+          for(int b=1;b<=2*(n-r);b++)
+          {
+              System.out.print("  ");
+          }
+          for(int c=1;c<=r;c++)
+          {
+              System.out.print("* ");
+          }
+          System.out.println();
+      }
+
+      // //printing stars for next half(i.e shadow of first half)
+      for(int r=1;r<n;r++)
+      {
+        for(int c=1;c<=n-r;c++)
+        {
+            System.out.print("* ");
+        }
+        for(int b=1;b<=2*r;b++)
+        {
+            System.out.print("  ");
+        }
+        for(int c=1;c<=n-r;c++)
+        {
+            System.out.print("* ");
+        }
+        System.out.println();
+      }
+}
+}
+
+
+/* P21:
+*****
+*   *
+*   *
+*   *
+*****
+ */
+package DsaQuestionpractice;
+import java.util.Scanner;
+public class Basics_lec2_pattern21 {
+    public static void main(String[] args) {
+        Scanner in=new Scanner(System.in);
+        int n=in.nextInt();
+        //printing first row
+        for(int r=1;r<2;r++)
+        {
+          for(int c=1;c<=n;c++)
+          {
+            System.out.print("*");
+          }
+          System.out.println();
+          //no blank space for first and last
+        }
+
+        //printing rows from 2 to n-1
+        for(int r=2;r<=n-1;r++)
+        {
+           int c=1;//
+           System.out.print("*");//print one star as c=1
+           for(int b=1;b<=n-2;b++) //printing blank space
+           {
+               System.out.print(" ");
+           }
+           c=1;
+           System.out.print("*");
+           System.out.println();
+        }
+
+        //printing last row
+        if(n!=1)
+        {
+        for(int r=1;r<2;r++)
+        {
+          for(int c=1;c<=n;c++)
+          {
+            System.out.print("*");
+          }
+          System.out.println();
+        
+        }
+       }
+    }
+}
+
+
+
+
+

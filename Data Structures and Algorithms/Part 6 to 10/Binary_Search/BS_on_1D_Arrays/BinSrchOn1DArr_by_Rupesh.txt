@@ -1,0 +1,976 @@
+package Binary Search.BS_on_1D_Arrays;
+/*Q1
+ * Implement Binary Search
+ */
+public class BinarySearch {
+    class Solution {
+
+        public int BinarySearch(int[]a, int k){
+
+            int l=0;
+            int r=a.length-1;
+            int m=0;// any random ini.
+            while(l<=r){
+                m=l+(r-l)/2;
+                if(a[m]==k) return m;//if elem k found, it's here only
+                else if(a[m]<k) l=m+1;
+                else if(a[m]>k) r=m-1;
+            }
+            return -1;// if elem k never found
+        }
+
+        public int InterpolationSearch(int[] a, int k) {
+            // any interpolation search that passes all TCs
+             int l=0;
+            int r=a.length-1;
+            if(l==r) {
+                if (a[l]==k) return l;
+                else return -1;
+            }
+            while (l<=r) 
+            {
+                if(l==r) {
+                if (a[l]==k) return l;
+                else return -1;
+            }
+                int m=l+((k-a[l])/(a[r]-a[l]))*(r-l);
+                
+                if(a[m]==k) return m;
+                if(a[m]<k) l=m+1;
+                else r=m-1;
+            }
+            return -1;
+        }
+    }
+    
+}
+
+// // Interpolation search in Made Easy Book, LC submission 4, 0ms
+// class Solution {
+//     public int search(int[] arr, int x) {
+//         int low = 0, high = arr.length - 1;
+
+//         while (low <= high && x >= arr[low] && x <= arr[high]) {
+//             // Check if the array has all the same elements in the current range
+//             if (arr[high] == arr[low]) {
+//                 if (arr[low] == x) {
+//                     return low;
+//                 } else {
+//                     return -1;
+//                 }
+//             }
+
+//             // Calculate the position using the interpolation formula
+//             int pos = low + ((x - arr[low]) * (high - low) / (arr[high] - arr[low]));
+
+//             // Check if the position is within the array bounds
+//             if (pos < low || pos > high) {
+//                 return -1;
+//             }
+
+//             // Check if we have found the element
+//             if (arr[pos] == x) {
+//                 return pos;
+//             }
+
+//             // If x is larger, x is in the upper part
+//             if (arr[pos] < x) {
+//                 low = pos + 1;
+//             }
+//             // If x is smaller, x is in the lower part
+//             else {
+//                 high = pos - 1;
+//             }
+//         }
+
+//         return -1; // Element not found
+//     }
+// }
+
+// //LC submission 5, 4ms despite being almost same as above
+// class Solution {
+//     public int search(int[] a, int k) {
+//          int l=0;
+//         int r=a.length-1;
+        
+//         while (l<=r) 
+//         {
+//             if (a[r] == a[l]) {
+//                 if (a[l] == k) {
+//                     return l;
+//                 } else {
+//                     return -1;
+//                 }
+//             }
+//             int m=l+((k-a[l])/(a[r]-a[l]))*(r-l);
+//             if(m<l||m>r) return -1;
+//             if(a[m]==k) return m;
+//             if(a[m]<k) l=m+1;
+//             else r=m-1;
+//         }
+//         return -1;
+//     }
+// }
+
+package Binary_Search.BS_on_1D_Arrays;
+/*
+ * Q2
+ * Implement Lower Bound
+
+Problem Statement: Given a sorted array of N integers and an integer x, 
+write a program to find the lower bound of x.
+
+Pre-requisite: Binary Search algorithm
+
+Examples
+Example 1:
+Input Format:
+ N = 4, arr[] = {1,2,2,3}, x = 2
+Result:
+ 1
+Explanation:
+ Index 1 is the smallest index such that arr[1] >= x.
+
+Example 2:
+Input Format:
+ N = 5, arr[] = {3,5,8,15,19}, x = 9
+Result:
+ 3
+Explanation:
+ Index 3 is the smallest index such that arr[3] >= x.
+ */
+public class LowerBound {
+    //== finding floor/LUB
+    public static int lowerBound(int[]a, int n, int k)
+    {
+        int l=0; int r=n-1; int LUB=n; // Random Ini.
+        while(l<=r)
+        {
+            int m = l+(r-l)/2;
+            if(a[m]<k) l=m+1;
+            else if(a[m]>=k) 
+            {
+                LUB=m;
+                r=m-1;
+            }
+        }
+        return LUB;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {3, 5, 8, 15, 19};
+        int n = 5, x = 9;
+        int ind = lowerBound(arr, n, x);
+        System.out.println("The lower bound is the index: " + ind);
+    }
+    
+}
+
+package Binary_Search.BS_on_1D_Arrays;
+
+public class LeastUpperBound {
+    // == finding ceil
+    public static int LUB_Finder(int[]a, int n, int k)
+    {
+        int l=0; int r=n-1; int LUB=n; // Random Ini.
+        while(l<=r)
+        {
+            int m = l+(r-l)/2;
+            if(a[m]<k) l=m+1;
+            else if(a[m]>=k) 
+            {
+                LUB=m;
+                r=m-1;
+            }
+        }
+        return LUB;
+    }
+}
+
+package Binary_Search.BS_on_1D_Arrays;
+
+public class GreatestLowerBound {
+    //== finding floor
+    static int GLB_Finder(long a[], int n, long k)
+    {
+        int l=0; int r=n-1; int GLB=-1; // Random Ini.
+        while(l<=r)
+        {
+            int m = l+(r-l)/2;
+            if(a[m]<=k) {GLB=m; l=m+1;}
+            else if(a[m]>k)  r=m-1;
+            
+            //else if(a[m]==k) return m;// can also do this
+        }
+        return GLB;
+    }
+    
+}
+// //gfg floor Q submission
+// class Solution{
+    
+//     // Function to find floor of x
+//     // arr: input array
+//     // n is the size of array
+//     static int findFloor(long a[], int n, long k)
+//     {
+//         int l = 0, r = n - 1, GLB = -1; // Initialize variables
+
+//     while (l <= r) {
+//         int m = l + (r - l) / 2;
+
+//         if (a[m] <= k) {
+//             GLB = m; // Update GLB to the current mid index
+//             l = m + 1; // Move right to find a potentially closer floor value
+//         } else {
+//             r = m - 1; // Move left
+//         }
+//     }
+
+//     return GLB; // Return the index of the greatest lower bound, or -1 if no floor exists
+//     }
+    
+// }
+
+package Binary_Search.BS_on_1D_Arrays;
+/*
+ * Q3
+ * Implement Upper Bound
+
+Problem Statement: Given a sorted array of N integers and an integer x, 
+write a program to find the upper bound of x.
+
+Pre-requisite: Binary Search algorithm
+
+Examples
+Example 1:
+Input Format:
+ N = 4, arr[] = {1,2,2,3}, x = 2
+Result:
+ 3
+Explanation:
+ Index 3 is the smallest index such that arr[3] > x.
+
+Example 2:
+Input Format:
+ N = 6, arr[] = {3,5,8,9,15,19}, x = 9
+Result:
+ 4
+Explanation:
+ Index 4 is the smallest index such that arr[4] > x.
+ */
+public class UpperBound {
+
+    public static int upperBound(int[] a, int x, int n) {
+        // Basically, to find a the Least Strictly Greater no. in a[] than x
+        int l=0; int r=n-1; int ub=-1;//Var. Ini.
+        while(l<=r){
+            int m=l+(r-l)/2;
+            if(a[m]<=x) l=m+1; // Narrow search range to left subspace
+            else if(a[m]>x)
+            {
+                ub=m;// m might be ub
+                r=m-1; // Try to find a new-ub < curr-ub, that is still >x
+            }
+        }
+        return ub;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {3, 5, 8, 9, 15, 19}; 
+        int n = 6, x = 9;
+        int ind = upperBound(arr, x, n);
+        System.out.println("The upper bound is the index: " + ind);
+    }
+    
+}
+package Binary_Search.BS_on_1D_Arrays;
+/*
+ * Q4
+ * Search Insert Position
+
+Problem Statement: You are given a sorted array arr of distinct values and a target value x. 
+You need to search for the index of the target value in the array.
+
+If the value is present in the array, then return its index. 
+Otherwise, determine the index where it would be inserted in the array while maintaining the sorted order.
+
+Pre-requisite: Lower Bound & Binary Search
+
+Example 1:
+Input Format: arr[] = {1,2,4,7}, x = 6
+Result: 3
+Explanation: 6 is not present in the array. 
+So, if we will insert 6 in the 3rd index(0-based indexing), the array will still be sorted. {1,2,4,6,7}.
+
+Example 2:
+Input Format: arr[] = {1,2,4,7}, x = 2
+Result: 1
+Explanation: 2 is present in the array and so we will return its index i.e. 1.
+ */
+public class SearchInsertPosition {
+    /* This problem is == to LUB/floor finding if there does not exist x in a[], else it is just searching */ 
+    public static int searchInsertPos(int [] a, int x) {
+        int n=a.length;
+        int l=0; int r=n-1; int sip=-1; //Ini. Vars.
+        while (l<=r) {
+            int m=l+(r-l)/2;
+
+            if(a[m]<x) l=m+1; // narrow srch space to right subspace
+
+            else if(a[m]==x) {
+                System.out.println(" Exact Match found at: "+m);
+                return m;
+            }
+
+            else if(a[m]>x){
+                sip=m; // might be the apt Insert pos index in a[]
+                r=m-1; // try to find least greater sip, by narrowing srch space to left subspace that still satisfy a[m]>x
+            }
+
+        }
+        System.out.println(" Elem must be inserted at: "+sip);
+        return sip;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 4, 7};
+        int x = 6;
+        int ind = searchInsertPos(arr, x);
+        System.out.println("The index is: " + ind);
+    }
+}
+package Binary_Search.BS_on_1D_Arrays;
+/*
+ * Q5
+ * Floor and Ceil in Sorted Array
+Problem Statement: You're given an sorted array arr of n integers and an integer x. Find the floor and ceiling of x in arr[0..n-1].
+The floor of x is the largest element in the array which is smaller than or equal to x.
+The ceiling of x is the smallest element in the array greater than or equal to x.
+
+Pre-requisite: Lower Bound & Binary Search
+
+Example 1:
+Input Format: n = 6, arr[] ={3, 4, 4, 7, 8, 10}, x= 5
+Result: 4 7
+Explanation: The floor of 5 in the array is 4, and the ceiling of 5 in the array is 7.
+
+Example 2:
+Input Format: n = 6, arr[] ={3, 4, 4, 7, 8, 10}, x= 8
+Result: 8 8
+Explanation: The floor of 8 in the array is 8, and the ceiling of 8 in the array is also 8.
+ */
+public class FloorXXCeil {
+    static int findFloor(int[] a, int n, int x) {
+        int l=0; int r=n-1; int GLB=-1; // Random Ini.
+        while(l<=r)
+        {
+            int m = l+(r-l)/2;
+            if(a[m]<=x) {GLB=m; l=m+1;}
+            else if(a[m]>x)  r=m-1;
+            
+        }
+        return GLB;
+    }
+
+    static int findCeil(int[] a, int n, int x) {
+        int l=0; int r=n-1; int LUB=n; // Random Ini.
+        while(l<=r)
+        {
+            int m = l+(r-l)/2;
+            if(a[m]<x) l=m+1;
+            else if(a[m]>=x) {LUB=m; r=m-1;}
+        }
+        return LUB;
+    }
+    public static int[] getFloorAndCeil(int[] a, int n, int x) {
+        int f = findFloor(a, n, x);
+        int c = findCeil(a, n, x);
+        return new int[] {f, c};
+    }
+    public static void main(String[] args) {
+        int[] arr = {3, 4, 4, 7, 8, 10};
+        int n = 6, x = 5;
+        int[] ans = getFloorAndCeil(arr, n, x);
+        System.out.println("The floor and ceil are: " + ans[0]
+                           + " " + ans[1]);
+
+                           int[] try1 = FloorAndCeil(arr, n, x);
+                           System.out.println("The floor and ceil are: " + try1[0]
+                                              + " " + try1[1]); // it worked in this TC
+    }
+
+    // Curious whether combined ceil  and floor srch will work or not
+    // Turns out it work for most cases, leaving edge cases, where it goes infinite loop, atleast in gfg
+    public static int[] FloorAndCeil(int []a , int n, int x){
+        int l=0; int r=n-1; int GLB=-1; int LUB=-1;// Random Ini.
+        while(l<=r)
+        {
+            int m = l+(r-l)/2;
+            if(a[m]<x) // left shift srch space
+            {GLB=m; l=m+1;}
+            else if(a[m]>x)  // right shift srch space
+            {LUB=m; r=m-1;}
+            else if(a[m]==x)
+            {GLB=m;LUB=m;}
+            
+        }
+        return new int[] {GLB, LUB};
+    }
+    
+}
+
+// //gfg submission 3, overlooked some details in 1 and 2
+// class Solve {
+//     // Actually, Linear Search will gib faster answer for this Q, as a[] is Unsorted
+//     // Used Binary Search anyway, as that is the chapter name
+//     Pair getFloorAndCeil(int[] a, int n, int x) {
+//         Arrays.sort(a);
+//         int f = findFloor(a, n, x);
+//         int c = findCeil(a, n, x);
+//         return  new Pair(f,c);
+//     }
+    
+//     static int findFloor(int[] a, int n, int x) {
+//         int l=0; int r=n-1; int GLB=-1; // Random Ini.
+//         while(l<=r)
+//         {
+//             int m = l+(r-l)/2;
+//             if(a[m]<=x) {GLB=m; l=m+1;}
+//             else if(a[m]>x)  r=m-1;
+            
+//         }
+//         if(GLB==-1) return -1;
+//         return a[GLB];
+//     }
+
+//     static int findCeil(int[] a, int n, int x) {
+//         int l=0; int r=n-1; int LUB=-1; // Random Ini.
+//         while(l<=r)
+//         {
+//             int m = l+(r-l)/2;
+//             if(a[m]<x) l=m+1;
+//             else if(a[m]>=x) {LUB=m; r=m-1;}
+//         }
+//         if(LUB==-1) return -1;
+//         return a[LUB];
+//     }
+    
+// }
+
+// //gfg submission 4, failed 19/360
+// class Solve {
+//     // Actually, Linear Search will gib faster answer for this Q, as a[] is Unsorted
+//     // Used Binary Search anyway, as that is the chapter name
+//     Pair getFloorAndCeil(int[] a, int n, int x) {.
+//         Arrays.sort(a);
+//         int [] fc = FloorAndCeil(a, n, x);
+        
+//         return  new Pair(fc[0],fc[1]);
+//     }
+    
+//     public static int[] FloorAndCeil(int []a , int n, int x){
+//         int l=0; int r=n-1; int GLB=-1; int LUB=-1;// Random Ini.
+//         while(l<=r)
+//         {
+//             int m = l+(r-l)/2;
+//             if(a[m]<x) // left shift srch space
+//             {GLB=m; l=m+1;}
+//             else if(a[m]>x)  // right shift srch space
+//             {LUB=m; r=m-1;}
+//             else if(a[m]==x)
+//             {GLB=m;LUB=m;}
+            
+//         }
+//         if(GLB==-1 && LUB==-1) return new int[] {-1,-1};
+//         //int f=-1; int c=-1;
+//         if(GLB==-1 && LUB!=-1) return new int[] {-1,a[LUB]};
+//         if(LUB==-1 && GLB!=-1) return new int[] {a[GLB],-1};
+        
+//         // if(GLB!=-1) f= a[GLB];
+//         // if(LUB!=-1) c= a[LUB];
+        
+//         return new int[] {a[GLB],a[LUB]};
+//     }
+// }
+
+// //code 360 submission
+// import java.util.* ;
+// import java.io.*; 
+
+// public class Solution {
+//     public static int[] getFloorAndCeil(int[] a, int n, int x) {
+//       // Wriute your code here.
+//       int f = findFloor(a, n, x);
+//         int c = findCeil(a, n, x);
+//         return new int[] {f, c};
+//     }
+//     static int findFloor(int[] a, int n, int x) {
+//         int l=0; int r=n-1; int GLB=-1; // Random Ini.
+//         while(l<=r)
+//         {
+//             int m = l+(r-l)/2;
+//             if(a[m]<=x) {GLB=m; l=m+1;}
+//             else if(a[m]>x)  r=m-1;
+            
+//         }
+//         return GLB == -1 ? -1 : a[GLB];
+//     }
+
+//     static int findCeil(int[] a, int n, int x) {
+//         int l=0; int r=n-1; int LUB=-1; // Random Ini.
+//         while(l<=r)
+//         {
+//             int m = l+(r-l)/2;
+//             if(a[m]<x) l=m+1;
+//             else if(a[m]>=x) {LUB=m; r=m-1;}
+//         }
+//         return LUB == -1 ? -1 : a[LUB];
+//     }
+   
+    
+// }
+
+package Binary_Search.BS_on_1D_Arrays;
+/*
+ * Q6
+ * 34. Find First and Last Position of Element in Sorted Array
+Solved
+Medium
+
+Given an array of integers nums sorted in non-decreasing order, 
+find the starting and ending position of a given target value.
+
+If target is not found in the array, return [-1, -1].
+
+You must write an algorithm with O(log n) runtime complexity.
+
+Example 1:
+
+Input: nums = [5,7,7,8,8,10], target = 8
+Output: [3,4]
+Example 2:
+
+Input: nums = [5,7,7,8,8,10], target = 6
+Output: [-1,-1]
+Example 3:
+
+Input: nums = [], target = 0
+Output: [-1,-1]
+ 
+
+Constraints:
+
+0 <= nums.length <= 105
+-109 <= nums[i] <= 109
+nums is a non-decreasing array.
+-109 <= target <= 109
+
+Accepted
+2M
+Submissions
+4.6M
+Acceptance Rate
+44.4%
+ */
+public class FirstXXLast {
+
+    public int[] searchRange(int[] a, int k) {
+        int fst= FirstOcc(a,a.length,k);
+        int lst= LastOcc(a,a.length,k);
+        return new int[]{fst,lst};
+    }
+
+    private int LastOcc(int[] a, int n, int k) {
+        int l=0; int r=n-1; int lst=-1;
+        while(l<=r){
+            int m=l+(r-l)/2;
+            if(a[m]<k) l=m+1;
+            else if(a[m]>k) r=m-1;
+            else if(a[m]==k){
+                lst=(m>lst)? m:lst; // this check is not needed
+                l=m+1;//try to find a elem = k, righter still
+            }
+        }
+        return lst;
+    }
+
+    private int FirstOcc(int[] a, int n, int k) {
+        int l=0; int r=n-1; int fst=n;
+        while(l<=r){
+            int m=l+(r-l)/2;
+            if(a[m]<k) l=m+1;
+            else if(a[m]>k) r=m-1;
+            else if(a[m]==k){
+                fst=(m<fst)? m:fst; //this check is not needed
+                r=m-1;//try to find a elem = k, lefter still
+            }
+        }if(fst==n) return -1;
+        return fst;
+    }
+    public static void main(String[] args) {
+        FirstXXLast solution = new FirstXXLast();
+        int[] arr = {5, 7, 7, 8, 8, 10};
+        int k = 8;
+        int[] result = solution.searchRange(arr, k);
+        System.out.println("First and last occurrence of " + k + " are at indices: " + result[0] + " and " + result[1]);
+    }
+}
+
+// //lc submission, bettered the code
+// class Solution {
+//     public int[] searchRange(int[] a, int k) {
+//         // int fst= FirstOcc(a,a.length,k);
+//         // int lst= LastOcc(a,a.length,k);
+//         return new int[]{FirstOcc(a,a.length,k),LastOcc(a,a.length,k)};
+//     }
+//     private int LastOcc(int[] a, int n, int k) {
+//         int l=0; int r=n-1; int lst=-1;
+//         while(l<=r){
+//             int m=l+(r-l)/2;
+//             if(a[m]<k) l=m+1;
+//             else if(a[m]>k) r=m-1;
+//             else if(a[m]==k){
+//                 lst=m;
+//                 l=m+1;//try to find a elem = k, righter still
+//             }
+//         }
+//         return lst;
+//     }
+
+//     private int FirstOcc(int[] a, int n, int k) {
+//         int l=0; int r=n-1; int fst=-1;
+//         while(l<=r){
+//             int m=l+(r-l)/2;
+//             if(a[m]<k) l=m+1;
+//             else if(a[m]>k) r=m-1;
+//             else if(a[m]==k){
+//                 fst=m;
+//                 r=m-1;//try to find a elem = k, lefter still
+//             }
+//         }
+//         return fst;
+//     }
+// }
+
+package Binary_Search.BS_on_1D_Arrays;
+/*
+ * Q7
+ * Count Occurrences in Sorted Array
+Problem Statement: You are given a sorted array containing N integers and a number X, 
+you have to find the occurrences of X in the given array.
+
+Examples
+Example 1:
+Input:
+ N = 7,  X = 3 , array[] = {2, 2 , 3 , 3 , 3 , 3 , 4}
+Output
+: 4
+Explanation:
+ 3 is occurring 4 times in 
+the given array so it is our answer.
+
+Example 2:
+Input:
+ N = 8,  X = 2 , array[] = {1, 1, 2, 2, 2, 2, 2, 3}
+Output
+: 5
+Explanation:
+ 2 is occurring 5 times in the given array so it is our answer.
+ */
+
+public class CountFreq {
+
+    public int count(int[] a, int n, int k) {
+        int fst= FirstOcc(a,a.length,k);
+        int lst= LastOcc(a,a.length,k);
+        int freq=(lst==-1||fst==-1)? 0:(lst-fst+1);
+        return freq;
+    }
+    
+    private int LastOcc(int[] a, int n, int k) {
+        int l=0; int r=n-1; int lst=-1;
+        while(l<=r){
+            int m=l+(r-l)/2;
+            if(a[m]<k) l=m+1;
+            else if(a[m]>k) r=m-1;
+            else if(a[m]==k){
+                lst=m;
+                l=m+1;//try to find a elem = k, righter still
+            }
+        }
+        return lst;
+    }
+
+    private int FirstOcc(int[] a, int n, int k) {
+        int l=0; int r=n-1; int fst=-1;
+        while(l<=r){
+            int m=l+(r-l)/2;
+            if(a[m]<k) l=m+1;
+            else if(a[m]>k) r=m-1;
+            else if(a[m]==k){
+                fst=m;
+                r=m-1;//try to find a elem = k, lefter still
+            }
+        }
+        return fst;
+    }
+
+    public static void main(String[] args) {
+        CountFreq countFreq = new CountFreq();
+        int[] arr = {2, 4, 4, 4, 6, 6, 7, 8, 8, 10};
+        int k = 4;
+        int count = countFreq.count(arr, arr.length, k);
+        System.out.println("Number of occurrences of " + k + " is: " + count);
+    }
+}
+
+// //gfg submission
+// class Solution {
+//     int count(int[] a, int n, int k) {
+//         int fst= FirstOcc(a,a.length,k);
+//         int lst= LastOcc(a,a.length,k);
+//         int freq=(lst==-1||fst==-1)? 0:(lst-fst+1);
+//         return freq;
+//     }
+//     private int LastOcc(int[] a, int n, int k) {
+//         int l=0; int r=n-1; int lst=-1;
+//         while(l<=r){
+//             int m=l+(r-l)/2;
+//             if(a[m]<k) l=m+1;
+//             else if(a[m]>k) r=m-1;
+//             else if(a[m]==k){
+//                 lst=m;
+//                 l=m+1;//try to find a elem = k, righter still
+//             }
+//         }
+//         return lst;
+//     }
+
+//     private int FirstOcc(int[] a, int n, int k) {
+//         int l=0; int r=n-1; int fst=-1;
+//         while(l<=r){
+//             int m=l+(r-l)/2;
+//             if(a[m]<k) l=m+1;
+//             else if(a[m]>k) r=m-1;
+//             else if(a[m]==k){
+//                 fst=m;
+//                 r=m-1;//try to find a elem = k, lefter still
+//             }
+//         }
+//         return fst;
+//     }
+// }
+
+package Binary_Search.BS_on_1D_Arrays;
+/*
+ * Q8
+ * Search Element in a Rotated Sorted Array with distinct values
+    Q9
+    Same but with duplicates
+
+21
+
+0
+Problem Statement: Given an integer array arr of size N, 
+sorted in ascending order (with distinct values) and a target value k. 
+Now the array is rotated at some pivot point unknown to you. 
+Find the index at which k is present and if k is not present return -1.
+
+Examples
+Example 1:
+Input Format: arr = [4,5,6,7,0,1,2,3], k = 0
+Result: 4
+Explanation: Here, the target is 0. We can see that 0 is present in the given rotated sorted array, nums. Thus, we get output as 4, which is the index at which 0 is present in the array.
+
+Example 2:
+Input Format: arr = [4,5,6,7,0,1,2], k = 3
+Result: -1
+Explanation: Here, the target is 3. Since 3 is not present in the given rotated sorted array. Thus, we get the output as -1.
+ */
+public class SearchRotatedArray {
+    public int search(int[] a, int k) {
+    int l=0; int r=a.length-1;
+    while(l<=r){
+        int m=l+(r-l)/2;
+        if(a[m]==k) return m;
+
+        //if duplicates exist
+        if (a[l]==a[r] && a[r]==a[m]){
+            //shift ptrs inward
+            l++;
+            r--;
+            continue; //(keep doing this) skip this itr L-R checking, recalc M, start again
+        }
+
+        //if L subarr sorted
+        if(a[l]<=a[m]){
+            if(a[l]<=k && k<=a[m]){
+                r=m-1; // eliminate R subarr
+            }
+            else{
+                l=m+1; // eliminate L subarr
+            }
+        }
+
+        //if R subarr sorted
+        if(a[m]<=a[r]){
+            if(a[m]<=k && k<=a[r]){
+                l=m+1; // eliminate L subarr
+            }
+            else{
+                r=m-1; // eliminate R subarr
+            }
+        }
+    }
+    return -1;    
+    }
+    
+}
+
+
+package Binary_Search.BS_on_1D_Arrays;
+/*
+ * Q10 Min. in Rotated Sorted A[]
+ * //Merged with Max. cuz why not
+ */
+public class MinRotArr {
+    public int[] MinXXMax(int[] a,int n){
+        int l=0; int r=n-1; int min=Integer.MAX_VALUE; int max=Integer.MIN_VALUE;
+        while(l<=r){
+            int m= l+(r-l)/2;
+
+            if(a[l]<=a[r]) // == (a[l]<=a[m]<=a[r]), when whole subarray is sorted
+            {
+                min=(a[l]<min)?a[l]:min;//account for min val from whole subarray 
+                max=(a[r]>max)?a[r]:max;//account for max val from whole subarray 
+                break;
+            }
+
+            // if R half sorted
+            if(a[m]<=a[r]){
+                min=(a[m]<min)?a[m]:min; //account for min val from R half 
+                max=(a[r]>max)?a[r]:max; //account for max val from R half 
+                r=m-1;//restrict search space to L half only, from now
+            }
+            else if(a[l]<=a[m]){
+                min=(a[l]<min)?a[l]:min; //account for min val from L half 
+                max=(a[m]>max)?a[m]:max; //account for max val from L half 
+                l=m+1;//restrict search space to R half only, from now
+            }
+        }
+        return new int[]{min,max};
+    }
+}
+
+package Binary_Search.BS_on_1D_Arrays;
+/*
+ * Q11
+ * No. of Rotations in a[]
+ */
+
+public class CountRot {
+
+    public int countRotations(int[]a, int n){
+        //== finding min. elem. index
+        int l=0; int r=n-1; int min=Integer.MAX_VALUE; int minI=n;
+        while(l<=r){
+            int m= l+(r-l)/2;
+            if(a[l]<=a[r]) // == (a[l]<=a[m]<=a[r]), when whole subarray is sorted
+            {
+                if(a[l]<min)//account for min val from whole subarray
+                    {
+                        min=a[l];
+                        minI=l; 
+                        return l;
+                    }
+            }
+
+            // if R half sorted
+            if(a[m]<=a[r]){
+                if(a[m]<min) //account for min val from R half
+                {
+                    min=a[m];
+                    minI=m;
+                } 
+                r=m-1;//restrict search space to L half only, from now
+            }
+            else if(a[l]<=a[m]){
+                if(a[l]<min) //account for min val from L half
+                {
+                    min=a[l];
+                    minI=l;
+                } 
+                l=m+1;//restrict search space to R half only, from now
+            }
+        }
+        return minI;
+
+    }
+    
+}
+package Binary_Search.BS_on_1D_Arrays;
+/*
+ * Q12
+ * Search single elem. in sorted A[] with all others occurring twice.
+ */
+public class Single {
+    public int SingleElem(int[]a, int n){
+        if(n==1) return 0;
+        if(a[0]!=a[1]) return 0;
+        if(a[n-1]!=a[n-2]) return n-1;
+        int l=0; int r=n-1;
+        while(l<=r){
+            int m=l+(r-l)/2;
+            if(a[m]!=a[m+1]&&a[m]!=a[m-1]){
+                // mth is single elem
+                return m;
+            }
+            if (((m%2==0)&&(a[m]==a[m+1]))&&((m%2!=0)&&(a[m]==a[m-1]))) //(E,O) pair --> L to single elem
+            {   
+                l=m+1;// Shift srch space to R, where single elem exist
+            }
+            else if(((m%2!=0)&&(a[m]==a[m+1]))&&((m%2==0)&&(a[m]==a[m-1]))) //(O,E) pair --> R to single elem
+            {
+                r=m-1;// Shift srch space to L, where single elem exist
+            }
+        } return -1;//never executed, given the Q specs.
+    }
+}
+package Binary_Search.BS_on_1D_Arrays;
+/*
+ * Q13 Peak
+ */
+public class Peak {
+    //== Finding global maxima in unsorted A[] -->O(n) at best cuz Linear Search only option
+    //== Finding Discontinuity in Montonicity in Bitonic A[] -->O(log n) cuz can apply Binary Technique
+    // Can find Through/Dip too in Bitonic A[], in similar fashion
+    int PeakOfBitonic(int[]a, int n){
+        if(n==1) return a[0];
+        if(a[0]>a[1]) return a[0];
+        if(a[n-1]>a[n-2]) return a[n-1];
+        int l=0; int r=n-1;
+        while(l<=r){
+        int m=l+(r-l)/2;
+        // a[m] > adjacent elems --> a[m]==peak
+        if(a[m]>a[m+1]&&a[m]>a[m-1]) return a[m];    
+        else if(a[m]>=a[m-1]) l=m+1; // Restrict srch space to R
+        else if(a[m]<=a[m-1]) r=m-1; // Restrict srch space to L
+        } return -1;// never executed given Q specs.
+    }
+    int DipOfBitonic(int[]a, int n){
+        if(n==1) return a[0];
+        if(a[0]<a[1]) return a[0];
+        if(a[n-1]<a[n-2]) return a[n-1];
+        int l=0; int r=n-1;
+        while(l<=r){
+        int m=l+(r-l)/2;
+        // a[m] > adjacent elems --> a[m]==peak
+        if(a[m]<a[m+1]&&a[m]<a[m-1]) return a[m];    
+        else if(a[m]>=a[m-1]) r=m-1; // Restrict srch space to L
+        else if(a[m]<=a[m-1]) l=m+1; // Restrict srch space to R
+        } return -1;// never executed given Q specs.
+    }
+
+    
+}

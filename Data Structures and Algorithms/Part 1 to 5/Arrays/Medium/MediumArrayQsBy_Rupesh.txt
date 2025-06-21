@@ -1,0 +1,1904 @@
+package Arrays.Medium;
+//import  Arrays.Easy;
+//q1
+// 1. Two Sum
+// Easy
+// Topics
+// Companies
+// Hint
+// Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
+
+// You may assume that each input would have exactly one solution, and you may not use the same element twice.
+
+// You can return the answer in any order.
+
+ 
+
+// Example 1:
+
+// Input: nums = [2,7,11,15], target = 9
+// Output: [0,1]
+// Explanation: Because nums[0] + nums[1] == 9, we return [0, 1].
+// Example 2:
+
+// Input: nums = [3,2,4], target = 6
+// Output: [1,2]
+// Example 3:
+
+// Input: nums = [3,3], target = 6
+// Output: [0,1]
+ 
+
+// Constraints:
+
+// 2 <= nums.length <= 104
+// -109 <= nums[i] <= 109
+// -109 <= target <= 109
+// Only one valid answer exists.
+ 
+
+// Follow-up: Can you come up with an algorithm that is less than O(n2) time complexity?
+// Seen this question in a real interview before?
+// 1/5
+// Yes
+// No
+// Accepted
+// 13.1M
+// Submissions
+// 25M
+// Acceptance Rate
+// 52.6%
+import Arrays.Easy.Search;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
+public class twoSum {
+
+    public static int[] twoSumI(int[] nums, int target) {
+        //way 3
+        // //correct soln. but works for positive nos. array only
+        // int n=nums.length;
+        // int c[]=Arrays.copyOf(nums,n);//arrayCopy = Arrays.copyOf(A, A.length);
+        // System.out.println("unsorted in method input array: "+Arrays.toString(c));
+
+        // Arrays.sort(nums);
+        // System.out.println("SOrted array: "+Arrays.toString(nums));
+        // int l=0;
+        // int r=n-1; int sum=0;
+        // int []b=new int[2];
+        // b[0]=Integer.MIN_VALUE;b[1]=Integer.MIN_VALUE;
+        // //b={0,0};
+        // while(l<r){
+        //     sum=nums[l]+nums[r];
+        //     if (sum>target)r--;
+        //     else if(sum<target)l--;
+        //     else {
+        //         int i;
+        //         for(i=0;i<n;i++){
+        //             if(b[0]==Integer.MIN_VALUE||b[1]==Integer.MIN_VALUE){
+        //             if(c[i]==nums[l] && b[0]==Integer.MIN_VALUE) b[0]=i;
+        //             else if(c[i]==nums[r] && b[1]==Integer.MIN_VALUE) b[1]=i;
+        //             }else return b;
+        //         }
+        //     }
+            
+        // }return b; //never execute
+
+        //way 2 using HYM, works for all cases
+        Map<Integer,Integer> HM=new HashMap<>();
+        int []b=new int[2];
+        int i=0;
+        int n=nums.length; int num=0; int moreNeed=0;
+        while(i<n){
+            num=nums[i];
+            moreNeed=target-num;
+            if(HM.containsKey(moreNeed)){
+                int ii=HM.get(moreNeed);
+                b[0]=(i>ii)?ii:i;
+                b[1]=(i<ii)?ii:i;
+                return b;
+            }
+            HM.put(nums[i],i);
+            i++;
+        }return b;//never executes
+
+
+    }
+
+        public static void main(String[] args) {
+        int[] arr = {-440,10,22,35,47,58,69,73,86,420,42069};
+        int k = 96;
+    
+        System.out.println("unsorted input array: "+Arrays.toString(arr));
+        int []srchI=twoSum.twoSumI(arr, k);
+        System.out.println("indices with sum "+k+" = "+ Arrays.toString(srchI));
+        System.out.println();
+    }
+    
+
+    
+}
+
+//lc submission 1
+// class Solution {
+//     public int[] twoSum(int[] nums, int target) {
+//                 Map<Integer,Integer> HM=new HashMap<>();
+//         int []b=new int[2];
+//         int i=0;
+//         int n=nums.length; int num=0; int moreNeed=0;
+//         while(i<n){
+//             num=nums[i];
+//             moreNeed=target-num;
+//             if(HM.containsKey(moreNeed)){
+//                 int ii=HM.get(moreNeed);
+//                 b[0]=(i>ii)?ii:i;
+//                 b[1]=(i<ii)?ii:i;
+//                 return b;
+//             }
+//             HM.put(nums[i],i);
+//             i++;
+//         }return b;//never executes
+
+//     }
+// }
+
+//lc submission 2
+// class Solution {
+//     public int[] twoSum(int[] nums, int target) {
+//                 Map<Integer,Integer> HM=new HashMap<>();
+//         int []b=new int[2];
+//         int i=0;
+//         int n=nums.length;  
+//         while(i<n){
+//             if(HM.containsKey(target-nums[i])){
+//                 b[0]=i;
+//                 b[1]=HM.get(target-nums[i]);
+//                 return b;
+//             }
+//             HM.put(nums[i],i);
+//             i++;
+//         }return b;
+
+//     }
+// }
+
+//lc clever way to reduce avg no. of comparisons
+//turns out to be faster than using HM std methods on java in posterior analysis
+// class Solution {
+//     public int[] twoSum(int[] nums, int target) {
+//     int n = nums.length-1;
+//     for (int i = 0; i <= n; i++) {
+//         for (int j = i+1; j <= n; j++) {
+//             if (nums[i] + nums[j] == target) {
+//                 return new int[]{i, j};
+//             }
+
+//             if(nums[n-i]+nums[j]==target){
+//                 return new int[]{n-i,j};
+//             }
+//         }
+//     }
+//     return new int[]{-1, -1};
+// }
+// }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+package Arrays.Medium;
+//q2
+// 75. Sort Colors
+// Solved
+// Medium
+// Topics
+// Companies
+// Hint
+// Given an array nums with n objects colored red, white, or blue, sort them in-place so that objects of the same color are adjacent, with the colors in the order red, white, and blue.
+
+// We will use the integers 0, 1, and 2 to represent the color red, white, and blue, respectively.
+
+// You must solve this problem without using the library's sort function.
+
+ 
+
+// Example 1:
+
+// Input: nums = [2,0,2,1,1,0]
+// Output: [0,0,1,1,2,2]
+// Example 2:
+
+// Input: nums = [2,0,1]
+// Output: [0,1,2]
+ 
+
+// Constraints:
+
+// n == nums.length
+// 1 <= n <= 300
+// nums[i] is either 0, 1, or 2.
+ 
+
+// Follow up: Could you come up with a one-pass algorithm using only constant extra space?
+
+// Seen this question in a real interview before?
+// 1/5
+// Yes
+// No
+// Accepted
+// 1.9M
+// Submissions
+// 3.1M
+// Acceptance Rate
+// 62.3%
+public class sortcolor {
+    public static int[] sortColors(int[] nums) {
+        int c0 =0;
+        int c1 =0;
+        int c2 =0;
+        int l = nums.length;
+
+        for(int i =0; i<l;i++){
+            switch(nums[i]){
+                case 0:
+                    c0++;
+                    break;
+                case 1:
+                    c1++;
+                    break;
+                case 2:
+                    c2++;
+                    break;
+                default:
+                    break;
+            }
+        }
+        System.out.println("c0 =" + c0);
+        System.out.println("c1 =" + c1);
+        System.out.println("c2 =" + c2);
+        System.out.println((c0+c1+c2)==l);
+
+        for(int i = 0; i<c0;i++){nums[i]=0;}
+        for(int i = c0; i<c0+c1;i++){nums[i]=1;}
+        for(int i = c0+c1; i<c0+c1+c2;i++){nums[i]=2;}
+
+        return nums;
+
+    }
+
+    static void printArr(int nums[]){
+
+        for(int i = 0; i< nums.length;i++){
+            System.out.print( nums[i] + " " );
+        }
+
+    }
+
+    public static void main(String[] args) {
+        int arr[]= {1,1,0,0,2,1,2,1,0};
+        System.out.print("Original array: ");
+        printArr(arr);
+        System.out.println();
+        arr=sortColors(arr);
+        System.out.print("New array: ");
+        printArr(arr);
+        System.out.println();
+
+
+    }
+}
+
+//lc submission 1
+// public static int[] sortColors(int[] nums) {
+//     int c0 =0;
+//     int c1 =0;
+//     int c2 =0;
+//     int l = nums.length;
+
+//     for(int i =0; i<l;i++){
+//         switch(nums[i]){
+//             case 0:
+//                 c0++;
+//                 break;
+//             case 1:
+//                 c1++;
+//                 break;
+//             case 2:
+//                 c2++;
+//                 break;
+//             default:
+//                 break;
+//         }
+//     }
+//     System.out.println("c0 =" + c0);
+//     System.out.println("c1 =" + c1);
+//     System.out.println("c2 =" + c2);
+//     System.out.println((c0+c1+c2)==l);
+
+//     for(int i = 0; i<c0;i++){nums[i]=0;}
+//     for(int i = c0; i<c0+c1;i++){nums[i]=1;}
+//     for(int i = c0+c1; i<c0+c1+c2;i++){nums[i]=2;}
+
+//     return nums;
+
+// }
+
+//lc submission 2
+// class Solution {
+//     public void sortColors(int[] nums) {
+//         int[] c= {0,0,0};
+//         int l = nums.length;
+
+//         for(int i =0; i<l;i++){
+//             c[nums[i]]++;
+//         }
+
+//         int k = -1;
+
+//         for(int i =0; i<=2;i++){
+//             for(int j = 0;j< c[i];j++)
+//                 nums[++k] = i;
+//         }
+
+// }}
+///////////////////////////////////////////
+package Arrays.Medium;
+// q3
+public class Majority {
+
+    //Applying Booth's Majority ALgo
+    public static int majorityElement(int[] nums) {
+    int n=nums.length;
+    int cnt=0; int elem=0;
+    for(int num:nums){
+        if(cnt==0) {
+            elem=num;
+            cnt++;
+        }else if(num==elem) cnt++;
+        else cnt--;
+    }
+    int f=0;
+    for(int num:nums){
+        if(num==elem) f++;
+    }
+    if(f>(n/2)) return elem;
+    return -1;//never executes if there exists Majority elem
+    }
+        
+    
+
+    static void printArr(int nums[]){
+
+        for(int i = 0; i< nums.length;i++){
+            System.out.print( nums[i] + " " );
+        }
+
+    }
+
+    public static void main(String[] args) {
+        int arr[]= {1,1,0,0,2,1,2,1,0,0,0,0,0,0,0,0};
+        System.out.print("Original array: ");
+        printArr(arr);
+        System.out.println();
+        System.out.println("majority elem: "+Majority.majorityElement(arr));
+}
+}
+//lc submission 1
+// class Solution {
+//     public int majorityElement(int[] nums) {
+//     int cnt=0; int elem=0;
+//     for(int num:nums){
+//         if(cnt==0) {
+//             elem=num;
+//             cnt++;
+//         }else if(num==elem) cnt++;
+//         else cnt--;
+    // }
+    // int f=0;
+    // for(int num:nums){
+    //     if(num==elem) f++;
+    // }
+    // if(f>(nums.length/2)) return elem;
+    // return -1;//never executes
+
+    // }
+//}
+//lc submission 2, least space
+// class Solution {
+//     public int majorityElement(int[] nums) {
+//     int cnt=0; int elem=0;
+//     for(int num:nums){
+//         if(cnt==0) {
+//             elem=num;
+//             cnt++;
+//         }else if(num==elem) cnt++;
+//         else cnt--;
+//     }
+//     int f=0;
+//     for(int num:nums){
+//         if(num==elem) f++;
+//     }
+//     if(f>(nums.length/2)) return elem;
+//     return -1;//never executes
+
+//     }
+// }
+
+//////////////////////////////////////////
+
+package Arrays.Medium;
+//q4
+import java.util.ArrayList;
+import java.util.Arrays;
+
+public class MaxSumSubarr {
+
+    //Kadane's Algo Applying
+    public static int maxSubArray(int[] nums) {
+        int L=0;
+        int R=0;
+        int max=Integer.MIN_VALUE;
+        int sum=0; 
+        int i=0;
+        int n=nums.length;
+        for(i=0;i<n;i++){
+            if(sum==0) L=i;//when sum =0, we are starting to explore a fresh, non-overlapping subarray
+
+            sum+=nums[i];
+
+            
+            if(sum>max){
+                max=sum;
+                R=i;
+            }
+
+            if(sum<0)sum=0;//reset sum if -ve sum for previous subarray
+        }
+        System.out.println("l="+L+", r="+R);
+        return max;
+        
+    }
+
+
+
+    
+     public static void main(String[] args) {
+        int[] a1 = {-1,-1,0,3,-3,4,-5,6,-7};
+        int[] a2 = {-1,-2,3};
+        
+        System.out.println("Original array: " + Arrays.toString(a1));
+        int max=MaxSumSubarr.maxSubArray(a1);
+        System.out.println("Sum of max subarr: "+max);
+        }
+}
+
+//lc submission
+// class Solution {
+//     public int maxSubArray(int[] nums) {
+//         int max=Integer.MIN_VALUE;
+//         int sum=0; 
+//         int n=nums.length;
+//         for(int i=0;i<n;i++){
+//             sum+=nums[i];
+
+            
+//             max=(sum>max)?sum:max;
+
+//             sum=(sum<0)?0:sum;
+//         }
+//         return max;
+
+//     }
+// }
+
+// gfg submission
+
+
+// DP solution & some thoughts
+
+// FujiwaranoSai
+// 2728
+// 395440
+// Dec 27, 2014
+// Analysis of this problem:
+// Apparently, this is a optimization problem, which can be usually solved by DP. So when it comes to DP, the first thing for us to figure out is the format of the sub problem(or the state of each sub problem). The format of the sub problem can be helpful when we are trying to come up with the recursive relation.
+
+// At first, I think the sub problem should look like: maxSubArray(int A[], int i, int j), which means the maxSubArray for A[i: j]. In this way, our goal is to figure out what maxSubArray(A, 0, A.length - 1) is. However, if we define the format of the sub problem in this way, it's hard to find the connection from the sub problem to the original problem(at least for me). In other words, I can't find a way to divided the original problem into the sub problems and use the solutions of the sub problems to somehow create the solution of the original one.
+
+// So I change the format of the sub problem into something like: maxSubArray(int A[], int i), which means the maxSubArray for A[0:i ] which must has A[i] as the end element. Note that now the sub problem's format is less flexible and less powerful than the previous one because there's a limitation that A[i] should be contained in that sequence and we have to keep track of each solution of the sub problem to update the global optimal value. However, now the connect between the sub problem & the original one becomes clearer:
+
+// maxSubArray(A, i) = maxSubArray(A, i - 1) > 0 ? maxSubArray(A, i - 1) : 0 + A[i]; 
+// And here's the code
+
+// public int maxSubArray(int[] A) {
+//         int n = A.length;
+//         int[] dp = new int[n];//dp[i] means the maximum subarray ending with A[i];
+//         dp[0] = A[0];
+//         int max = dp[0];
+        
+//         for(int i = 1; i < n; i++){
+//             dp[i] = A[i] + (dp[i - 1] > 0 ? dp[i - 1] : 0);
+//             max = Math.max(max, dp[i]);
+//         }
+        
+//         return max;
+// }
+// Previous
+// [C++] Easy O(n) with 5 lines of code | Use Greedy | Easy solution
+// Next
+// Easiest Solution with Dynamic Solution ||
+
+
+// hidro
+// Feb 16, 2016
+// My DP reasoning is as follows:
+
+// To calculate sum(0,i), you have 2 choices: either adding sum(0,i-1) to a[i], or not. If sum(0,i-1) is negative, adding it to a[i] will only make a smaller sum, so we add only if it's non-negative.
+
+// sum(0,i) = a[i] + (sum(0,i-1) < 0 ? 0 : sum(0,i-1))
+// We can then use O(1) space to keep track of the max sum(0, i) so far.
+
+// public int maxSubArray(int[] nums) {
+// 	if (nums == null || nums.length == 0) { return 0; }
+// 	int max = nums[0], sum = nums[0];
+// 	for (int i = 1; i < nums.length; i++) {
+// 		if (sum < 0) { sum = nums[i]; }
+// 		else {sum += nums[i]; }
+// 		max = Math.max(max, sum);
+// 	}
+// 	return max;
+// }
+// 399
+// Show 15 Replies
+// Reply
+// Share
+
+// using divide and conquer in o(nlogn), copy and learnt from gfg
+// A Divide and Conquer based Java 
+// program for maximum subarray sum 
+// problem 
+// import java.util.*; 
+
+// class GFG { 
+
+// 	// Find the maximum possible sum in arr[] 
+// 	// such that arr[m] is part of it 
+// 	static int maxCrossingSum(int arr[], int l, int m, 
+// 							int h) 
+// 	{ 
+// 		// Include elements on left of mid. 
+// 		int sum = 0; 
+// 		int left_sum = Integer.MIN_VALUE; 
+// 		for (int i = m; i >= l; i--) { 
+// 			sum = sum + arr[i]; 
+// 			if (sum > left_sum) 
+// 				left_sum = sum; 
+// 		} 
+
+// 		// Include elements on right of mid 
+// 		sum = 0; 
+// 		int right_sum = Integer.MIN_VALUE; 
+// 		for (int i = m; i <= h; i++) { 
+// 			sum = sum + arr[i]; 
+// 			if (sum > right_sum) 
+// 				right_sum = sum; 
+// 		} 
+
+// 		// Return sum of elements on left 
+// 		// and right of mid 
+// 		// returning only left_sum + right_sum will fail for 
+// 		// [-2, 1] 
+// 		return Math.max(left_sum + right_sum - arr[m], 
+// 						Math.max(left_sum, right_sum)); 
+// 	} 
+
+// 	// Returns sum of maximum sum subarray 
+// 	// in aa[l..h] 
+// 	static int maxSubArraySum(int arr[], int l, int h) 
+// 	{ 
+// 		//Invalid Range: low is greater than high 
+// 		if (l > h) 
+// 			return Integer.MIN_VALUE; 
+// 		// Base Case: Only one element 
+// 		if (l == h) 
+// 			return arr[l]; 
+
+// 		// Find middle point 
+// 		int m = (l + h) / 2; 
+
+// 		/* Return maximum of following three 
+// 		possible cases: 
+// 		a) Maximum subarray sum in left half 
+// 		b) Maximum subarray sum in right half 
+// 		c) Maximum subarray sum such that the 
+// 		subarray crosses the midpoint */
+// 		return Math.max( 
+// 			Math.max(maxSubArraySum(arr, l, m-1), 
+// 					maxSubArraySum(arr, m + 1, h)), 
+// 			maxCrossingSum(arr, l, m, h)); 
+// 	} 
+
+// 	/* Driver program to test maxSubArraySum */
+// 	public static void main(String[] args) 
+// 	{ 
+// 		int arr[] = { 2, 3, 4, 5, 7 }; 
+// 		int n = arr.length; 
+// 		int max_sum = maxSubArraySum(arr, 0, n - 1); 
+
+// 		System.out.println("Maximum contiguous sum is "
+// 						+ max_sum); 
+// 	} 
+// } 
+// 
+
+/*From gfg
+ * The following approach solves it using Divide and Conquer approach which takes the same time complexity of O(n).
+Divide and conquer algorithms generally involves dividing the problem into sub-problems and conquering them separately. 
+For this problem we maintain a structure (in cpp) or class(in java or python) which stores the following values: 
+ 
+
+Total sum for a sub-array.
+Maximum prefix sum for a sub-array.
+Maximum suffix sum for a sub-array.
+Overall maximum sum for a sub-array.(This contains the max sum for a sub-array).
+
+
+During the recursion(Divide part) the array is divided into 2 parts from the middle. 
+The left node structure contains all the above values for the left part of array and the right node structure contains all the above values. 
+Having both the nodes, now we can merge the two nodes by computing all the values for resulting node. 
+The max prefix sum for the resulting node will be maximum value 
+among the maximum prefix sum of left node or left node sum + max prefix sum of right node or total sum of both the nodes 
+(which is possible for an array with all positive values). 
+Similarly the max suffix sum for the resulting node will be maximum value 
+among the maximum suffix sum of right node or right node sum + max suffix sum of left node or total sum of both the nodes 
+(which is again possible for an array with all positive values). 
+The total sum for the resulting node is the sum of both left node and right node sum. 
+Now, the max subarray sum for the resulting node will be maximum among prefix sum of resulting node, 
+suffix sum of resulting node, total sum of resulting node, maximum sum of left node, maximum sum of right node, 
+sum of maximum suffix sum of left node and maximum prefix sum of right node. 
+Here the conquer part can be done in O(1) time by combining the result from the left and right node structures.
+Below is the implementation of the above approach:
+ 
+
+
+// Java implementation of the approach
+import java.util.*;
+class GFG
+{
+static class Node
+{
+     
+    // To store the maximum sum 
+    // for a sub-array
+    int _max;
+     
+    // To store the maximum prefix 
+    // sum for a sub-array
+    int _pre;
+     
+    // To store the maximum suffix 
+    // sum for a sub-array
+    int _suf;
+     
+    // To store the total sum 
+    // for a sub-array 
+    int _sum;
+ 
+};
+ 
+ 
+// Function to create a node
+static Node getNode(int x)
+{
+    Node a = new Node();
+    a._max = x;
+    a._pre = x;
+    a._suf = x;
+    a._sum = x;
+    return a;
+}
+ 
+// Function to merge the 2 nodes left and right
+static Node merg(Node l, Node r)
+{
+     
+    // Creating node ans
+    Node ans = new Node();
+ 
+    // Initializing all the variables:
+    ans._max = ans._pre = ans._suf = ans._sum = 0;
+     
+    // The max prefix sum of ans Node is maximum of
+    // a) max prefix sum of left Node
+    // b) sum of left Node + max prefix sum of right Node
+    // c) sum of left Node + sum of right Node
+    ans._pre = Arrays.stream(new int[]{l._pre, l._sum+r._pre,
+                                       l._sum+r._sum}).max().getAsInt();
+ 
+    // The max suffix sum of ans Node is maximum of
+    // a) max suffix sum of right Node
+    // b) sum of right Node + max suffix sum of left Node
+    // c) sum of left Node + sum of right Node
+    ans._suf = Arrays.stream(new int[]{r._suf, r._sum+l._suf,
+                                       l._sum+r._sum}).max().getAsInt();
+     
+    // Total sum of ans Node = total sum of 
+  // left Node + total sum of right Node 
+    ans._sum = l._sum + r._sum;
+     
+    // The max sum of ans Node stores 
+    // the answer which is the maximum value among:
+    // prefix sum of ans Node
+    // suffix sum of ans Node
+    // maximum value of left Node
+    // maximum value of right Node
+    // prefix value of right Node + suffix value of left Node
+    ans._max = Arrays.stream(new int[]{ans._pre, 
+                                       ans._suf,
+                                       ans._sum,
+                                       l._max, r._max, 
+                                       l._suf+r._pre}).max().getAsInt();
+ 
+    // Return the ans Node
+    return ans;
+}
+ 
+// Function for calculating the 
+// max_sum_subArray using divide and conquer
+static Node getMaxSumSubArray(int l, int r, int []ar)
+{
+ 
+    if (l == r) return getNode(ar[l]);
+    int mid = (l + r) >> 1;
+     
+    // Call method to return left Node:
+    Node left = getMaxSumSubArray(l, mid, ar);
+     
+    // Call method to return right Node:
+    Node right = getMaxSumSubArray(mid + 1, r, ar);
+     
+    // Return the merged Node:
+    return merg(left, right);
+ 
+}
+ 
+// Driver code
+public static void main(String[] args)
+{
+    int []ar = {-2, -5, 6, -2, -3, 1, 5, -6};
+    int n = ar.length;
+    Node ans = getMaxSumSubArray(0, n - 1, ar);
+    System.out.print("Answer is " +  ans._max + "\n");
+}
+}
+ 
+// This code is contributed by shikhasingrajput
+Output: 
+
+Answer is 7
+Time Complexity: The getMaxSumSubArray() recursive function generates the following recurrence relation. 
+T(n) = 2 * T(n / 2) + O(1) note that conquer part takes only O(1) time. 
+So on solving this recurrence using Master’s Theorem we get the time complexity of O(n).
+ */
+
+ -----------------------------------------------------------------
+ ////////////////////
+
+
+package Arrays.Medium;
+//q6
+// 121. Best Time to Buy and Sell Stock
+// Easy
+// Topics
+// Companies
+// You are given an array prices where prices[i] is the price of a given stock on the ith day.
+
+// You want to maximize your profit by choosing a single day to buy one stock and choosing a different day in the future to sell that stock.
+
+// Return the maximum profit you can achieve from this transaction. If you cannot achieve any profit, return 0.
+
+ 
+
+// Example 1:
+
+// Input: prices = [7,1,5,3,6,4]
+// Output: 5
+// Explanation: Buy on day 2 (price = 1) and sell on day 5 (price = 6), profit = 6-1 = 5.
+// Note that buying on day 2 and selling on day 1 is not allowed because you must buy before you sell.
+// Example 2:
+
+// Input: prices = [7,6,4,3,1]
+// Output: 0
+// Explanation: In this case, no transactions are done and the max profit = 0.
+ 
+
+// Constraints:
+
+// 1 <= prices.length <= 105
+// 0 <= prices[i] <= 104
+// Seen this question in a real interview before?
+// 1/5
+// Yes
+// No
+// Accepted
+// 4.6M
+// Submissions
+// 8.6M
+// Acceptance Rate
+// 53.7%
+
+import java.util.Arrays;
+
+public class BuySellStocksForMaxProfit {
+
+    public static int maxProfit(int[] prices) {
+        int currP=Integer.MIN_VALUE;
+        int maxP=currP;
+        int l=0;
+        int r=1;
+        while(r<prices.length){
+            if(prices[r]>prices[l]){
+                currP=prices[r]-prices[l];
+                maxP=(currP>maxP)? currP:maxP;
+            }else{
+                l=r;
+            }r++;
+        }return maxP;
+        
+    }
+
+        public static void main(String[] args) {
+        int[] a1 = {5,1,4,2,3,4,3,2};//{-1,-1,0,3,-3,4,-5,6,-7};
+        int [] a2 = {-1,-2,3};
+        
+        System.out.println("Original array of Prices of Stocks: " + Arrays.toString(a1));
+        int max=BuySellStocksForMaxProfit.maxProfit(a1);
+        System.out.println("Max Profit: "+max);
+        }
+
+    
+}
+//lc submission
+// class Solution {
+//     public int maxProfit(int[] prices) {
+//         int currP=0;
+//         int maxP=0;
+//         int l=0;
+//         int r=1;
+//         int n=prices.length;
+//         while(r<n){
+//             if(prices[r]>prices[l]){
+//                 currP=prices[r]-prices[l];
+//                 maxP=(currP>maxP)? currP:maxP;
+//             }else{
+//                 l=r;
+//             }r++;
+//         }return maxP;
+        
+
+//     }
+// }
+
+//lc submission 2
+// class Solution {
+//     public int maxProfit(int[] prices) {
+//     int maxPro = 0;
+//     int minPrice = Integer.MAX_VALUE;
+//     for (int i = 0; i < prices.length; i++) {
+//         minPrice = (minPrice > prices[i])? prices[i]:minPrice;
+//         maxPro = (maxPro < prices[i] - minPrice)?(prices[i] - minPrice):maxPro;
+//     }
+//     return maxPro;    
+        
+
+//     }
+// }
+
+//////////////////////////////////////////////////////
+
+package Arrays.Medium;
+//q7
+import java.util.Arrays;
+
+public class rearrangeElemsBySign {
+    public static int[] rearrangeArray(int[] nums) {
+        int n=nums.length;
+        int[] B= new int[n];
+        int pos=0; int neg=1;
+        for(int i=0; i<n; i++){
+            if(nums[i]<0){
+                B[neg]=nums[i];
+                neg=neg+2;
+            }else{
+                B[pos]=nums[i];
+                pos=pos+2;
+            }
+        }return B;
+        
+    }
+         public static void main(String[] args) {
+        int[] a1 = {-1,1,0,3,-3,4,-5,6,-7,-8};
+        int[] a2 = {-1,-2,3};
+        
+        System.out.println("Original array: " + Arrays.toString(a1));
+        int []rea=rearrangeElemsBySign.rearrangeArray(a1);
+        System.out.println(" new arr =  "+Arrays.toString(rea));
+        }
+
+}
+
+//lc submission
+//class Solution {
+//     public int[] rearrangeArray(int[] nums) {
+//                 int n=nums.length;
+//         int[] B= new int[n];
+//         int pos=0; int neg=1;
+//         for(int i=0; i<n; i++){
+//             if(nums[i]<0){
+//                 B[neg]=nums[i];
+//                 neg=neg+2;
+//             }else{
+//                 B[pos]=nums[i];
+//                 pos=pos+2;
+//             }
+//         }return B;
+
+//     }
+// }
+
+//Variety 2: where no. of +ves and -ves are unknown
+//copied from Striver, for now, know how to do it, will do again during revision
+// public static ArrayList<Integer> RearrangebySign(ArrayList<Integer> A, int n) {
+//     // Define 2 ArrayLists, one for storing positive 
+//     // and other for negative elements of the array.
+//     ArrayList<Integer> pos = new ArrayList<>();
+//     ArrayList<Integer> neg = new ArrayList<>();
+
+//     // Segregate the array into positives and negatives.
+//     for (int i = 0; i < n; i++) {
+//         if (A.get(i) > 0)
+//             pos.add(A.get(i));
+//         else
+//             neg.add(A.get(i));
+//     }
+
+//     // If positives are lesser than the negatives.
+//     if (pos.size() < neg.size()) {
+
+//         // First, fill array alternatively till the point 
+//         // where positives and negatives are equal in number.
+//         for (int i = 0; i < pos.size(); i++) {
+//             A.set(2 * i, pos.get(i));
+//             A.set(2 * i + 1, neg.get(i));
+//         }
+
+//         // Fill the remaining negatives at the end of the array.
+//         int index = pos.size() * 2;
+//         for (int i = pos.size(); i < neg.size(); i++) {
+//             A.set(index, neg.get(i));
+//             index++;
+//         }
+//     }
+
+//     // If negatives are lesser than the positives.
+//     else {
+//         // First, fill array alternatively till the point 
+//         // where positives and negatives are equal in number.
+//         for (int i = 0; i < neg.size(); i++) {
+//             A.set(2 * i, pos.get(i));
+//             A.set(2 * i + 1, neg.get(i));
+//         }
+
+//         // Fill the remaining positives at the end of the array.
+//         int index = neg.size() * 2;
+//         for (int i = neg.size(); i < pos.size(); i++) {
+//             A.set(index, pos.get(i));
+//             index++;
+//         }
+//     }
+//     return A;
+// }
+//////////////////
+
+package Arrays.Medium;
+//q8
+// 31. Next Permutation
+// Medium
+// Topics
+// Companies
+// A permutation of an array of integers is an arrangement of its members into a sequence or linear order.
+
+import java.util.Arrays;
+
+// For example, for arr = [1,2,3], the following are all the permutations of arr: [1,2,3], [1,3,2], [2, 1, 3], [2, 3, 1], [3,1,2], [3,2,1].
+// The next permutation of an array of integers is the next lexicographically greater permutation of its integer. More formally, if all the permutations of the array are sorted in one container according to their lexicographical order, then the next permutation of that array is the permutation that follows it in the sorted container. If such arrangement is not possible, the array must be rearranged as the lowest possible order (i.e., sorted in ascending order).
+
+// For example, the next permutation of arr = [1,2,3] is [1,3,2].
+// Similarly, the next permutation of arr = [2,3,1] is [3,1,2].
+// While the next permutation of arr = [3,2,1] is [1,2,3] because [3,2,1] does not have a lexicographical larger rearrangement.
+// Given an array of integers nums, find the next permutation of nums.
+
+// The replacement must be in place and use only constant extra memory.
+
+ 
+
+// Example 1:
+
+// Input: nums = [1,2,3]
+// Output: [1,3,2]
+// Example 2:
+
+// Input: nums = [3,2,1]
+// Output: [1,2,3]
+// Example 3:
+
+// Input: nums = [1,1,5]
+// Output: [1,5,1]
+ 
+
+// Constraints:
+
+// 1 <= nums.length <= 100
+// 0 <= nums[i] <= 100
+// Seen this question in a real interview before?
+// 1/5
+// Yes
+// No
+// Accepted
+// 1.3M
+// Submissions
+// 3.4M
+// Acceptance Rate
+// 40.0%
+public class NextPerm {
+
+    public static void nextPermutation(int[] A) {
+        int n=A.length;
+        int i;
+        //Find the breakpt.
+        int brkpt=-1;
+        //Traverse from R to L
+        for(i=n-2;i>=0;i--){
+            //CHeck if able to find a A[i]<A[i+1] --> the breakpt.
+            if(A[i]<A[i+1]){
+                brkpt=i;
+                break;
+            }
+        }
+        //if brkpt ain't changed, means it is at non decreasing order like 5,4,3,2,1,0,0
+        // in that case next perm is just reverse
+        if(brkpt==-1){
+        // Reverse the array in-place(here) OR just asc sort the array using Arrays.sort(A)
+        for (i = 0; i < n / 2; i++) {
+            int temp = A[i];
+            A[i] = A[n - 1 - i];
+            A[n - 1 - i] = temp;
+        }
+        return;
+        }
+
+        // else we find the no. A[smallestBig] that least greater than A[brkpt]
+        int smallestBig=i+1;
+        for(i=brkpt+1;i<n;i++){
+            // check 1st if no. > brkpt. elem. or not 1st
+            if(A[i]>A[brkpt]){
+                // uypdate smallestBig if ith elem smaller than smallestBig current val.
+                smallestBig=(A[smallestBig]>A[i])?i:smallestBig;
+            }
+        }
+        //it's impossible for smallestBig to not change
+        //Swap smallestBig and brkpt elem.
+        int temp = A[brkpt];
+        A[brkpt] = A[smallestBig];
+        A[smallestBig] = temp;
+
+        //sort brkpt+1 to end subarray
+        int start =brkpt+1; int end =n; // don't forget end is exclusive, start is inclusive
+        Arrays.sort(A, start, end);
+        
+    }
+    
+    public static void main(String[] args) {
+        int []a={4,3,2,1};
+        ////{3,4,1,2}; // ans is 3421
+        System.out.println("OG array: "+Arrays.toString(a));
+        NextPerm.nextPermutation(a);
+        System.out.println("Modified array: "+Arrays.toString(a));
+    }
+}
+
+//lc submission, as lesser runtime
+// class Solution {
+//     public static void nextPermutation(int[] A) {
+//     int n=A.length;
+//     int i;
+//     int brkpt=-1;
+//     for(i=n-2;i>=0;i--){
+//         if(A[i]<A[i+1]){
+//             brkpt=i;
+//             break;
+//         }
+//     }
+//     if(brkpt==-1){
+//     for (i = 0; i < n / 2; i++) {
+//         int temp = A[i];
+//         A[i] = A[n - 1 - i];
+//         A[n - 1 - i] = temp;
+//     }
+//     return;
+//     }
+
+//     int smallestBig=i+1;
+//     for(i=brkpt+1;i<n;i++){
+//         if(A[i]>A[brkpt]){
+//             smallestBig=(A[smallestBig]>=A[i])?i:smallestBig;
+//         }
+//     }
+//     int temp = A[brkpt];
+//     A[brkpt] = A[smallestBig];
+//     A[smallestBig] = temp;
+//     //Just reverse, O(n) instead of O(nlogn) to sort
+//     for (i = brkpt+1; i <= n / 2 + brkpt/2; i++) {
+//         temp = A[i];
+//         A[i] = A[n - i + brkpt];
+//         A[n - i +brkpt] = temp;
+//     }
+    
+// }
+
+// }
+
+
+//slightly more modular soln I found a lc forum
+// class Solution {
+//     public void nextPermutation(int[] nums) {
+//         int ind1=-1;
+//         int ind2=-1;
+//         // step 1 find breaking point 
+//         for(int i=nums.length-2;i>=0;i--){
+//             if(nums[i]<nums[i+1]){
+//                 ind1=i;
+//                 break;
+//             }
+//         }
+//         // if there is no breaking  point 
+//         if(ind1==-1){
+//             reverse(nums,0);
+//         }
+        
+//         else{
+//             // step 2 find next greater element and swap with ind2
+//             for(int i=nums.length-1;i>=0;i--){
+//                 if(nums[i]>nums[ind1]){
+//                     ind2=i;
+//                     break;
+//                 }
+//             }
+
+//             swap(nums,ind1,ind2);
+//             // step 3 reverse the rest right half
+//             reverse(nums,ind1+1);
+//         }
+//     }
+//     void swap(int[] nums,int i,int j){
+//         int temp=nums[i];
+//         nums[i]=nums[j];
+//         nums[j]=temp;
+//     }
+//     void reverse(int[] nums,int start){
+//         int i=start;
+//         int j=nums.length-1;
+//         while(i<j){
+//             swap(nums,i,j);
+//             i++;
+//             j--;
+//         }
+//     }
+// }
+
+/////////////////////////////////////////////
+
+package Arrays.Medium;
+//q9
+// Leaders in an array
+// EasyAccuracy: 29.94%Submissions: 629K+Points: 2
+// Find better job opportunities this summer via Job-A-Thon Hiring Challenge!
+
+// banner
+// Given an array A of positive integers. Your task is to find the leaders in the array. An element of array is a leader if it is greater than or equal to all the elements to its right side. The rightmost element is always a leader. 
+
+// Example 1:
+
+// Input:
+// n = 6
+// A[] = {16,17,4,3,5,2}
+// Output: 17 5 2
+// Explanation: The first leader is 17 
+// as it is greater than all the elements
+// to its right.  Similarly, the next 
+// leader is 5. The right most element 
+// is always a leader so it is also 
+// included.
+// Example 2:
+
+// Input:
+// n = 5
+// A[] = {1,2,3,4,0}
+// Output: 4 0
+// Explanation: 0 is the rightmost element
+// and 4 is the only element which is greater
+// than all the elements to its right.
+// Your Task:
+// You don't need to read input or print anything. The task is to complete the function leader() which takes array A and n as input parameters and returns an array of leaders in order of their appearance.
+
+// Expected Time Complexity: O(n)
+// Expected Auxiliary Space: O(n)
+
+// Constraints:
+// 1 <= n <= 107
+// 0 <= Ai <= 107
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+
+public class Leaders {
+        static ArrayList<Integer> leaders(int a[], int n){
+        // Your code here
+        ArrayList<Integer> B= new ArrayList<>();
+  
+        // Last element of an array is always a leader,
+        // push into ans array.
+        int max = a[n - 1];
+     
+         B.add(a[n-1]);
+         
+         // Start checking from the end whether a number is greater
+         // than max no. from right, hence leader.
+         for (int i = n - 2; i >= 0; i--)
+           if (a[i] > max) {
+             B.add(a[i]);
+             max = a[i];
+           }
+           
+           Collections.reverse(B);
+       return B;
+
+
+    }
+
+    public static void main(String[] args) {
+        int[] a1 = {5,1,4,2,3,4,3,2};//{-1,-1,0,3,-3,4,-5,6,-7};
+        
+        System.out.println("Original array: " + Arrays.toString(a1));
+        Object []max=(Leaders.leaders(a1,a1.length)).toArray();
+        System.out.println("leaders: "+Arrays.toString(max));
+        }
+}
+/////////////////////
+package Arrays.Medium;
+// //q10
+// 128. Longest Consecutive Sequence
+// Medium
+// Topics
+// Companies
+// Given an unsorted array of integers nums, return the length of the longest consecutive elements sequence.
+
+// You must write an algorithm that runs in O(n) time.
+
+ 
+
+// Example 1:
+
+// Input: nums = [100,4,200,1,3,2]
+// Output: 4
+// Explanation: The longest consecutive elements sequence is [1, 2, 3, 4]. Therefore its length is 4.
+// Example 2:
+
+// Input: nums = [0,3,7,2,5,8,4,6,0,1]
+// Output: 9
+ 
+
+// Constraints:
+
+// 0 <= nums.length <= 105
+// -109 <= nums[i] <= 109
+// Seen this question in a real interview before?
+// 1/5
+// Yes
+// No
+// Accepted
+// 1.8M
+// Submissions
+// 3.7M
+// Acceptance Rate
+// 47.3%
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
+public class longestConsecutiveSequence {
+ public static int longestSuccessiveElements(int[] A) {
+        int n = A.length;
+        // If empty array passed, max=0
+        if (n == 0)
+            return 0;
+
+        int max = 1;
+        Set<Integer> Eset = new HashSet<>();
+
+        // insert all the array elements into Eset
+        for (int i = 0; i < n; i++) {
+            Eset.add(A[i]);
+        }
+
+        // Find the longest sequence via
+        for (int E : Eset) {
+            // if 'E' is a starting no.
+            if (!Eset.contains(E - 1)) {
+                // find consecutive (next) nos.
+                int cnt = 1;
+                int x = E;
+                // check if E+1 exists, successively
+                while (Eset.contains(x + 1)) {
+                    x = x + 1;
+                    cnt = cnt + 1;
+                }
+                max = (max < cnt)? cnt : max;
+            }
+        }
+        return max;
+    }
+
+    public static void main(String[] args) {
+        int[] a = {5, 300, 100, 200, 1, 2, 3, 4};
+        int max = longestSuccessiveElements(a);
+        System.out.println("The longest consecutive sequence is " + max);
+    }
+}
+// //lc submission 1
+// class Solution {
+//     public int longestConsecutive(int[] A) {
+//                 int n = A.length;
+//         // If empty array passed, max=0
+//         if (n == 0)
+//             return 0;
+
+//         int max = 1;
+//         Set<Integer> Eset = new HashSet<>();
+
+//         // insert all the array elements into Eset
+//         for (int i = 0; i < n; i++) {
+//             Eset.add(A[i]);
+//         }
+
+//         // Find the longest sequence via
+//         for (int E : Eset) {
+//             // if 'E' is a starting no.
+//             if (!Eset.contains(E - 1)) {
+//                 // find consecutive (next) nos.
+//                 int cnt = 1;
+//                 int x = E;
+//                 // check if E+1 exists, successively
+//                 while (Eset.contains(x + 1)) {
+//                     x = x + 1;
+//                     cnt = cnt + 1;
+//                 }
+//                 max = (max < cnt)? cnt : max;
+//             }
+//         }
+//         return max;
+
+//     }
+// }
+package Arrays.Medium;
+// //q11
+// 73. Set Matrix Zeroes
+// Medium
+// Topics
+// Companies
+// Hint
+// Given an m x n integer matrix matrix, if an element is 0, set its entire row and column to 0's.
+
+import java.util.Arrays;
+
+// You must do it in place.
+
+ 
+
+// Example 1:
+
+
+// Input: matrix = [[1,1,1],[1,0,1],[1,1,1]]
+// Output: [[1,0,1],[0,0,0],[1,0,1]]
+// Example 2:
+
+
+// Input: matrix = [[0,1,2,0],[3,4,5,2],[1,3,1,5]]
+// Output: [[0,0,0,0],[0,4,5,0],[0,3,1,0]]
+ 
+
+// Constraints:
+
+// m == matrix.length
+// n == matrix[0].length
+// 1 <= m, n <= 200
+// -231 <= matrix[i][j] <= 231 - 1
+ 
+
+// Follow up:
+
+// A straightforward solution using O(mn) space is probably a bad idea.
+// A simple improvement uses O(m + n) space, but still not the best solution.
+// Could you devise a constant space solution?
+// Seen this question in a real interview before?
+// 1/5
+// Yes
+// No
+// Accepted
+// 1.4M
+// Submissions
+// 2.5M
+// Acceptance Rate
+// 55.7%
+public class zeroMatrix {
+    public static void setZeroes(int[][] A) {
+        int n=A.length; int m=A[0].length;
+        int c0=1;
+        int i,j;
+        for(i=0;i<n;i++){
+            for(j=0;j<m;j++){
+                if(A[i][j]==0){
+                    A[i][0]=0;
+                    if(j==0) c0=0;
+                    else A[0][j]=0;
+                }
+            }
+        }
+        for(i=1;i<n;i++){
+            for(j=1;j<m;j++){
+                if(A[i][0]==0||A[0][j]==0){
+                    A[i][j]=0;
+                }
+            }
+        }
+        if(A[0][0]==0){
+            for(j=0;j<m;j++){A[0][j]=0;}
+        }
+        if(c0==0){
+            for(i=0;i<n;i++){A[i][0]=0;}
+        }
+        //return A;
+    }
+    
+    public static void main(String[] args) {
+        int [][] A={{0,1,2,0},{3,4,5,2},{1,3,1,5}};
+        // Print the 2D array using Arrays.deepToString
+        System.out.println(Arrays.deepToString(A));
+        // System.out.println(Arrays.toString(A));
+         zeroMatrix.setZeroes(A);
+        // System.out.println(Arrays.toString(A));
+        // abpve not woprks
+        // Print the 2D array using Arrays.deepToString
+        System.out.println(Arrays.deepToString(A));
+    }
+}
+// //lc submission
+// class Solution {
+//     public void setZeroes(int[][] A) {
+//                 int n=A.length; int m=A[0].length;
+//         int c0=1;
+//         int i,j;
+//         for(i=0;i<n;i++){
+//             for(j=0;j<m;j++){
+//                 if(A[i][j]==0){
+//                     A[i][0]=0;
+//                     if(j==0) c0=0;
+//                     else A[0][j]=0;
+//                 }
+//             }
+//         }
+//         for(i=1;i<n;i++){
+//             for(j=1;j<m;j++){
+//                 if(A[i][0]==0||A[0][j]==0){
+//                     A[i][j]=0;
+//                 }
+//             }
+//         }
+//         if(A[0][0]==0){
+//             for(j=0;j<m;j++){A[0][j]=0;}
+//         }
+//         if(c0==0){
+//             for(i=0;i<n;i++){A[i][0]=0;}
+//         }
+
+//     }
+// }
+
+package Arrays.Medium;
+//q12
+// 48. Rotate Image
+// Medium
+// Topics
+// Companies
+// You are given an n x n 2D matrix representing an image, rotate the image by 90 degrees (clockwise).
+
+import java.util.Arrays;
+
+// You have to rotate the image in-place, which means you have to modify the input 2D matrix directly. DO NOT allocate another 2D matrix and do the rotation.
+
+ 
+
+// Example 1:
+
+
+// Input: matrix = [[1,2,3],[4,5,6],[7,8,9]]
+// Output: [[7,4,1],[8,5,2],[9,6,3]]
+// Example 2:
+
+
+// Input: matrix = [[5,1,9,11],[2,4,8,10],[13,3,6,7],[15,14,12,16]]
+// Output: [[15,13,2,5],[14,3,4,1],[12,6,8,9],[16,7,10,11]]
+ 
+
+// Constraints:
+
+// n == matrix.length == matrix[i].length
+// 1 <= n <= 20
+// -1000 <= matrix[i][j] <= 1000
+// Seen this question in a real interview before?
+// 1/5
+// Yes
+// No
+// Accepted
+// 1.7M
+// Submissions
+// 2.3M
+// Acceptance Rate
+// 74.4%
+
+public class rotateMatrix {
+    public static void rotate(int[][] A) {
+        int n=A.length; //int m=A[0].length;
+        int i,j;
+        //Transpose
+        for(i=0;i<n;i++){
+            for(j=i;j<n;j++){
+                int temp = 0;
+                temp = A[i][j];
+                A[i][j] = A[j][i];
+                A[j][i] = temp;
+            }
+        }
+        //Reverse each row
+        for(i=0;i<n;i++){
+            for(j=0;j<n/2;j++){
+                int temp = 0;
+                temp = A[i][j];
+                A[i][j] = A[i][n-1-j];
+                A[i][n-1-j] = temp;
+            }
+        }
+        
+    }
+
+    public static void main(String[] args) {
+        int [][] A={{0,1,2},{4,5,6},{8,9,-99}};
+        // Print the 2D array using Arrays.deepToString
+        System.out.println(Arrays.deepToString(A));
+        // System.out.println(Arrays.toString(A));
+         rotateMatrix.rotate(A);
+        // System.out.println(Arrays.toString(A));
+        // abpve not work
+        // Print the 2D array using Arrays.deepToString
+        System.out.println(Arrays.deepToString(A));
+    }
+}
+
+// //lc submit,exactly same
+// class Solution {
+//     public void rotate(int[][] A) {
+//                 int n=A.length; //int m=A[0].length;
+//         int i,j;
+//         //Transpose
+//         for(i=0;i<n;i++){
+//             for(j=i;j<n;j++){
+//                 int temp = 0;
+//                 temp = A[i][j];
+//                 A[i][j] = A[j][i];
+//                 A[j][i] = temp;
+//             }
+//         }
+//         //Reverse each row
+//         for(i=0;i<n;i++){
+//             for(j=0;j<n/2;j++){
+//                 int temp = 0;
+//                 temp = A[i][j];
+//                 A[i][j] = A[i][n-1-j];
+//                 A[i][n-1-j] = temp;
+//             }
+//         }
+        
+
+//     }
+// }
+
+package Arrays.Medium;
+//q13
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+public class spiralMatrix {
+
+    //lc needs arraylist return, hence not just using array like in my pseudocode in notes
+
+    public static List<Integer> spiralOrder(int[][] a) {
+        int n=a.length; int m= a[0].length;
+        List<Integer> B=new ArrayList<>();
+        int t=0;int r=m-1; int b=n-1; int l=0; int i,j;
+        while(t<=b && l<=r){
+            //t th row
+            for(i=l;i<=r;i++){
+                B.add(a[t][i]);
+            } t++;
+            //r th col
+            for(i=t;i<=b;i++){
+                B.add(a[i][r]);
+            } r--;
+
+            //
+            if(t<=b){
+                //b th row
+                for(i=r;i>=l;i--){
+                    B.add(a[b][i]);
+                } b--;
+            }
+
+            //
+            if(l<=r){
+                //l th col
+                for(i=b;i>=t;i--){
+                    B.add(a[i][l]);
+                } l++;
+            }   
+        }return B;
+    }
+
+
+        public static void main(String[] args) {
+        int [][] A={{0,1,2},{4,5,6},{8,9,-99}};
+        // Print the 2D array using Arrays.deepToString
+        System.out.println(Arrays.deepToString(A));
+        // System.out.println(Arrays.toString(A));
+        List<Integer> B= spiralMatrix.spiralOrder(A);
+        // System.out.println(Arrays.toString(A));
+        // abpve not work
+        // Print the 2D array using Arrays.deepToString
+        System.out.println(B);
+    }
+
+}
+//lc submission
+// class Solution {
+//     public List<Integer> spiralOrder(int[][] a) {
+//         int n=a.length; int m= a[0].length;
+//         List<Integer> B=new ArrayList<>();
+//         int t=0;int r=m-1; int b=n-1; int l=0; int i,j;
+//         while(t<=b && l<=r){
+//             //t th row
+//             for(i=l;i<=r;i++){
+//                 B.add(a[t][i]);
+//             } t++;
+//             //r th col
+//             for(i=t;i<=b;i++){
+//                 B.add(a[i][r]);
+//             } r--;
+
+//             //
+//             if(t<=b){
+//                 //b th row
+//                 for(i=r;i>=l;i--){
+//                     B.add(a[b][i]);
+//                 } b--;
+//             }
+
+//             //
+//             if(l<=r){
+//                 //l th col
+//                 for(i=b;i>=t;i--){
+//                     B.add(a[i][l]);
+//                 } l++;
+//             }   
+//         }return B;
+//     }
+// }
+
+package Arrays.Medium;
+// //q14
+// 560. Subarray Sum Equals K
+// Medium
+// Topics
+// Companies
+// Hint
+// Given an array of integers nums and an integer k, return the total number of subarrays whose sum equals to k.
+
+// A subarray is a contiguous non-empty sequence of elements within an array.
+
+ 
+
+// Example 1:
+
+// Input: nums = [1,1,1], k = 2
+// Output: 2
+// Example 2:
+
+// Input: nums = [1,2,3], k = 3
+// Output: 2
+ 
+
+// Constraints:
+
+// 1 <= nums.length <= 2 * 104
+// -1000 <= nums[i] <= 1000
+// -107 <= k <= 107
+// Seen this question in a real interview before?
+// 1/5
+// Yes
+// No
+// Accepted
+// 1.2M
+// Submissions
+// 2.8M
+// Acceptance Rate
+// 43.6%
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
+public class CountSubarrsSumEqK {
+
+    public static int subarraySum(int[] A, int k) {
+        Map<Integer, Integer> prefixSum = new HashMap<>();
+        int sum=0;
+        int cnt=0;
+        
+        for (int num : A){
+            sum += num;
+            if(sum == k) cnt++;
+            if(prefixSum.containsKey(sum-k)) 
+                cnt += prefixSum.get(sum-k);
+            prefixSum.put(sum, prefixSum.getOrDefault(sum, 0) + 1);
+        }
+        return cnt;
+
+  
+    }
+    public static void main(String[] args) {
+        int[] a1 = {5,1,4,2,3,4,3,2};//{-1,-1,0,3,-3,4,-5,6,-7};
+        int [] a2 = {-1,-2,3};
+        int [] a3={1,1,1,1,1,1,2,2,3,3,2,1};
+        int [] a4={-1,-1,1};
+        System.out.println("Original array: " + Arrays.toString(a4));
+        int  cnt= CountSubarrsSumEqK.subarraySum(a4,0);
+        System.out.println("Count of no. of subarr: "+cnt);
+        }
+    
+}
+
+//failed for many cases
+// public static int subarraySum(int[] a, int k) {
+//     int n=a.length; int i,j;
+//     int sum=a[0];
+//     for(i=1;i<n;i++){
+//         sum+=a[i];
+//         a[i]=sum;
+//     }
+//     System.out.println("PrefixSum[] array: " + Arrays.toString(a));
+
+//     int cnt=0;
+
+//     for(i=n-1;i>=0;i--){
+//         for(j=i-1;j>=0;j--){
+//             if(a[i]-a[j]==k) cnt++;
+//         }
+//     } return cnt;
+// }
+
+//works for all cases, very slow
+// public static int subarraySum(int[] a, int k) {
+//     int n=a.length; int i,j;
+//     int prefixSum[]=new int[n+1];
+//     prefixSum[0]=0;
+//     int sum=a[0];
+//     prefixSum[1]=a[0];
+//     for(i=1;i<n;i++){
+//         sum+=a[i];
+//         prefixSum[i+1]=sum;
+//     }
+//     System.out.println("PrefixSum[] array: " + Arrays.toString(prefixSum));
+
+//     int cnt=0;
+
+//     for(i=n;i>=0;i--){
+//         for(j=i-1;j>=0;j--){
+//             if(prefixSum[i]-prefixSum[j]==k) cnt++;
+//         }
+//     } return cnt;
+// }
+
+//also works, even lower SC, but still slow
+// class Solution {
+//     public int subarraySum(int[] a, int k) {
+//         int n=a.length; int i,j;
+//         int sum=a[0];
+//         for(i=1;i<n;i++){
+//             sum+=a[i];
+//             a[i]=sum;
+//         }
+//         //System.out.println("PrefixSum[] array: " + Arrays.toString(a));
+    
+//         int cnt=0;
+    
+//         for(i=n-1;i>=0;i--){
+//             for(j=i-1;j>=0;j--){
+//                 if(a[i]-a[j]==k) cnt++;
+//             }
+//             if(a[i]-0==k) cnt++; //right
+//         } 
+//         //if(a[0]-0==k) cnt++; //wrong
+//         return cnt;
+//     }
+// }
+
+//
+// public static int subarraySum(int[] a, int k) {
+//     //brute force, works with -ves too
+//     int n=a.length; int i,j;
+//     int sum=a[0];
+//     for(i=1;i<n;i++){
+//         sum+=a[i];
+//         a[i]=sum;
+//     }
+//     System.out.println("PrefixSum[] array: " + Arrays.toString(a));
+
+//     int cnt=0;
+
+//     for(i=n-1;i>=0;i--){
+//         for(j=i-1;j>=0;j--){
+//             if(a[i]-a[j]==k) cnt++;
+//         }
+//         if(a[i]-0==k) cnt++;
+//     } 
+    
+//     return cnt;
+// }
+
+//was working on this, but doesn't work if negatives in array
+  //     //brute force, works with -ves too
+    //     int n=a.length; int i,j;
+    //     int prefixSum[]=new int[n+1];
+    //     prefixSum[0]=0;
+    //     int sum=a[0];
+    //     prefixSum[1]=a[0];
+    //     for(i=1;i<n;i++){
+    //         sum+=a[i];
+    //         prefixSum[i+1]=sum;
+    //     }
+
+    //     int cnt=0;
+
+    //     int l=0;int r=1;
+    //     while (l<=n && r<=n && l<r) { //if(r<n)r++;
+    //         if(l<r)
+    //         {
+    //             if(prefixSum[r]-prefixSum[l]==k ){
+    //             r++;
+    //             cnt++;
+    //             continue;
+    //         }
+    //         else if(prefixSum[r]-prefixSum[l]<k ){r++;continue;}
+    //         else if(prefixSum[r]-prefixSum[l]>k ){l++;continue;}
+    //         r++;
+    //     }
+        
+        
+    // }return cnt;

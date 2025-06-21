@@ -1,0 +1,1005 @@
+package StackAndQueue.Lec4_Implementation;
+
+import java.util.ArrayDeque;
+import java.util.Deque;
+
+/*Q1 239. Sliding Window Maximum
+Hard
+Topics
+Companies
+Hint
+You are given an array of integers nums, there is a sliding window of size k which is moving from the very left of the array to the very right. You can only see the k numbers in the window. Each time the sliding window moves right by one position.
+
+Return the max sliding window.
+
+ 
+
+Example 1:
+
+Input: nums = [1,3,-1,-3,5,3,6,7], k = 3
+Output: [3,3,5,5,6,7]
+Explanation: 
+Window position                Max
+---------------               -----
+[1  3  -1] -3  5  3  6  7       3
+ 1 [3  -1  -3] 5  3  6  7       3
+ 1  3 [-1  -3  5] 3  6  7       5
+ 1  3  -1 [-3  5  3] 6  7       5
+ 1  3  -1  -3 [5  3  6] 7       6
+ 1  3  -1  -3  5 [3  6  7]      7
+Example 2:
+
+Input: nums = [1], k = 1
+Output: [1]
+ 
+
+Constraints:
+
+1 <= nums.length <= 105
+-104 <= nums[i] <= 104
+1 <= k <= nums.length
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+1.1M
+Submissions
+2.3M
+Acceptance Rate
+46.7% */
+public class Sliding_WIndow_Max {
+    //optimal way 1 - monotonic increasing deque, lto r traversal
+    // public int[] maxSlidingWindow(int[] a, int k) {
+    //     int n = a.length;
+    //     if(k==1) return  a;
+    //     int [] windowMaxs = new int[n-k+1];
+    //     //int maxIndex=0; //realized no need for maxIndex, (i- k +1) does it
+    //     Deque<Integer> dq=new ArrayDeque<>();
+    //     for(int i = 0; i< n; i++){
+    //         while(!dq.isEmpty() && dq.peek()<=(i-k)) dq.pollFirst(); //or dq.poll()
+    //         while(!dq.isEmpty() && a[dq.peekLast()] < a[i]) dq.pollLast();
+    //         dq.add(i);// or dq.offer(i)
+    //         if(i<(k-1)) continue;
+    //         windowMaxs[i-k+1]=a[dq.peekFirst()]; //or dq.peek() would do too
+    //     }
+    //     return windowMaxs;
+    // }
+
+    //Optimal way 2 - Precomputation
+        public static int[] maxSlidingWindow(int[] a, int k) {
+            if (a == null || a.length == 0) return new int[0];
+
+            int n = a.length;
+            int[] l = new int[n];
+            int[] r = new int[n];
+    
+            // Compute l[] and r[] in a single iter
+            for (int i = 0; i < n; i++) {
+                // Compute l[i]
+                if (i % k == 0) {
+                    l[i] = a[i]; //left boundary start
+                } else {
+                    l[i] = Math.max(l[i - 1], a[i]);
+                }
+    
+                // Compute r[n - i - 1]
+                int j = n - i - 1;
+                if (j % k == k - 1 || j == n - 1) {
+                    r[j] = a[j]; //right boundary start
+                } else {
+                    r[j] = Math.max(r[j + 1], a[j]);
+                }
+            }
+    
+            // Build the result w[]
+            int[] w = new int[n - k + 1];//n - k + 1 == # k-sized windows
+            for (int i = 0; i < (n - k + 1); i++) {
+                w[i] = Math.max(r[i], l[i + k - 1]);
+            }
+    
+            return w;
+    
+        }
+
+    // //Reference code - found discussion at - https://leetcode.com/problems/sliding-window-maximum/solutions/65881/o-n-solution-in-java-with-two-simple-pass-in-the-array/
+    // // very short and fun to type, great for interview situation
+    // public int[] maxSlidingWindow(int[] nums, int k) {
+    //     int[] result = new int[nums.length - k + 1];
+    
+    //     int[] l=new int[nums.length];
+    //     int[] r=new int[nums.length];
+    //     r[nums.length-1]=nums[nums.length-1];
+        
+    //     for(int i=1;i<nums.length;i++)
+    //         l[i]=(i%k==0)?nums[i]:Math.max(l[i-1],nums[i]);
+        
+    //     for(int j=nums.length-2;j>=0;j--)
+    //         r[j]=(j%k==0)?nums[j]:Math.max(r[j+1],nums[j]);
+        
+    //     for (int i = 0; i < result.length; i++) 
+    //         result[i] = Math.max(l[i + k -1], r[i]);
+
+    //     return result;    
+    // }
+
+
+    // //Brute force - Time Limit Exceeded - 40 / 51 testcases passed
+    // public int[] maxSlidingWindow(int[] a, int k) {
+    //     int n = a.length;
+    //     if(k==1) return  a;
+    //     int [] windowMaxs = new int[n-k+1];
+    //     int max = a[0]; int maxIndex=0;
+    //     for(int i =0; i<=(n-k); i++){
+    //         max = a[i]; maxIndex = i;
+    //         for(int j = i; j<=(i+k-1); j++){
+    //             if(a[j]> max) {
+    //                 max = a[j];
+    //                 maxIndex = j;
+    //             }
+    //         }
+    //         windowMaxs[i]=max;
+    //     }
+    //     return windowMaxs;
+    // }
+
+
+    // first attempt, some mistakes due to a oversight
+        // public static int[] maxSlidingWindow(int[] a, int k) {
+        //     int n = a.length;
+        // //if(n==k) return a;
+        // if(k==1) return  a;
+        // //if(n-k < 1) return new int[]{}; 
+        // int [] windowMaxs = new int[n-k+1];
+        // int max = a[0]; int maxIndex=0;
+        // //first sliding window max
+        // for(int i =1; i<k ; i++){
+        //     if(max < a[i]){
+        //         max = a[i];
+        //         maxIndex = i;
+        //     }
+        // }
+        // windowMaxs[0] = max;
+        // if(n==k) return windowMaxs;
+        // //for next sliding windows
+        // //i = fix left, j = sliding right
+        // for(int i=1; i<(n-k) ; i++){
+        //     if(i > maxIndex) {
+        //         max = Integer.MIN_VALUE;
+        //         maxIndex = -1;
+        //     }
+        //     for(int j=i; j<(i+k) ; j++){
+        //         if(a[j] >= max) {
+        //             max = a[j];
+        //             maxIndex = j;
+        //         }
+        //     } windowMaxs[i] = max;
+
+        // }
+        // if(a[n-1]> max) windowMaxs[n-k] = a[n-1];
+        // else windowMaxs[n-k] = max;
+        // return windowMaxs;
+        // }
+
+        
+        public static void main(String args[]) {
+            int i, j, n, k = 3, x;
+            int arr[]={4,0,-1,3,5,3,6,8};
+            int ans[] = maxSlidingWindow(arr, k);
+            System.out.println("Maximum element in every " + k + " window ");
+            for (i = 0; i < ans.length; i++)
+                System.out.print(ans[i] + "  ");
+    
+        }
+}
+package StackAndQueue.Lec4_Implementation;
+/*Q2 901. Online Stock Span
+Medium
+Topics
+Companies
+Design an algorithm that collects daily price quotes for some stock and returns the span of that stock's price for the current day.
+
+The span of the stock's price in one day is the maximum number of consecutive days (starting from that day and going backward) for which the stock price was less than or equal to the price of that day.
+
+For example, if the prices of the stock in the last four days is [7,2,1,2] and the price of the stock today is 2, then the span of today is 4 because starting from today, the price of the stock was less than or equal 2 for 4 consecutive days.
+Also, if the prices of the stock in the last four days is [7,34,1,2] and the price of the stock today is 8, then the span of today is 3 because starting from today, the price of the stock was less than or equal 8 for 3 consecutive days.
+Implement the StockSpanner class:
+
+StockSpanner() Initializes the object of the class.
+int next(int price) Returns the span of the stock's price given that today's price is price.
+ 
+
+Example 1:
+
+Input
+["StockSpanner", "next", "next", "next", "next", "next", "next", "next"]
+[[], [100], [80], [60], [70], [60], [75], [85]]
+Output
+[null, 1, 1, 1, 2, 1, 4, 6]
+
+Explanation
+StockSpanner stockSpanner = new StockSpanner();
+stockSpanner.next(100); // return 1
+stockSpanner.next(80);  // return 1
+stockSpanner.next(60);  // return 1
+stockSpanner.next(70);  // return 2
+stockSpanner.next(60);  // return 1
+stockSpanner.next(75);  // return 4, because the last 4 prices (including today's price of 75) were less than or equal to today's price.
+stockSpanner.next(85);  // return 6
+ 
+
+Constraints:
+
+1 <= price <= 105
+At most 104 calls will be made to next.
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+323.5K
+Submissions
+490K
+Acceptance Rate
+66.0% */
+// import java.util.ArrayList;
+// import java.util.List;
+import java.util.Stack;
+//import java.util.Stack;
+//Actually we don't need to store the array, just need spans in case of violation of --ing monotonic stack
+public class StockSpanner {
+    // A stack to store pairs of (price[i], span[i])
+    private Stack<int[]> stack;
+
+    public StockSpanner() {
+        stack = new Stack<>();
+    }
+
+    public int next(int price) {
+        int span = 1;
+        // While the stack is not empty and the top of the stack has a price less than or equal to the current price
+        while (!stack.isEmpty() && stack.peek()[0] <= price) {
+            // Add the span of the top of the stack to the current span
+            span += stack.pop()[1];
+        }
+        // Push the current price and its span to the stack
+        stack.push(new int[]{price, span});
+        return span;
+    }
+
+    public static void main(String[] args) {
+        StockSpanner stockSpanner = new StockSpanner();
+        System.out.println(stockSpanner.next(100)); // return 1
+        System.out.println(stockSpanner.next(80));  // return 1
+        System.out.println(stockSpanner.next(60));  // return 1
+        System.out.println(stockSpanner.next(70));  // return 2
+        System.out.println(stockSpanner.next(60));  // return 1
+        System.out.println(stockSpanner.next(75));  // return 4
+        System.out.println(stockSpanner.next(85));  // return 6
+    }
+}
+
+// Reference code, that stores the array
+// public class OnlineStockSpan {
+
+//     List<Integer> list;
+  
+//     public OnlineStockSpan() {
+//       this.list = new ArrayList<>();
+//     }
+  
+//     public int next(int price) {
+//       list.add(price);
+//       int count = 0;
+//       for (int i = list.size() - 1; i >= 0; i--) {
+//         if (list.get(i) > price)
+//           break;
+//         count++;
+//       }
+//       return count;
+//     }
+  
+//     public int[] calculateSpans(int[] prices) {
+  
+//       int[] spans = new int[prices.length];
+//       spans[0] = 1; // Span of first element is always 1
+  
+//       Stack<Integer> indexStack = new Stack<>();
+  
+//       // Push the index of first element
+//       indexStack.push(0);
+  
+//       for (int i = 1; i < prices.length; i++) {
+//         while (!indexStack.isEmpty()
+//             && prices[indexStack.peek()] < prices[i])
+//           indexStack.pop();
+  
+//         // If index stack is empty, the price at index 'i'
+//         // is greater than all previous values
+//         if (indexStack.isEmpty())
+//           spans[i] = i + 1;
+//         else
+//           spans[i] = i - indexStack.peek();
+  
+//         indexStack.push(i);
+//       }
+  
+//       return spans;
+//     }
+  
+// }
+// /**
+//  * Your StockSpanner object will be instantiated and called as such:
+//  * StockSpanner obj = new StockSpanner();
+//  * int param_1 = obj.next(price);
+//  */
+
+package StackAndQueue.Lec4_Implementation;
+//Question description from YT, as locked behind LC Premium - https://www.youtube.com/watch?v=iHM1FPLGcsU
+//Detailed Description available here - https://bohenan.gitbooks.io/leetcode/content/find-the-celebrity.html
+// this is technically a graph problem, why is it in stack section?
+// 
+/*Q3 277. Find the Celebrity
+Suppose you are at a party with n people (labeled from 0ton - 1) and among them, there may exist one celebrity. 
+The definition of a celebrity is that all the othern - 1people know him/her but he/she does not know any of them.
+
+Now you want to find out who the celebrity is or verify that there is not one. 
+The only thing you are allowed to do is to ask questions like: 
+"Hi, A. Do you know B?" to get information of whether A knows B. 
+You need to find out the celebrity (or verify there is not one) 
+by asking as few questions as possible (in the asymptotic sense).
+
+You are given a helper function bool knows(a, b) which tells you whether A knows B. 
+Implement a functionint findCelebrity(n), your function should minimize the number of calls to knows.
+
+Note: There will be exactly one celebrity if he/she is in the party. 
+Return the celebrity's label if there is a celebrity in the party. 
+If there is no celebrity, return-1. */
+public class CelebrityProblem {
+    //Celebrity - 1. knows no one 2. everyone knows 'em
+    public int findCelebrity(int n) {
+        // Think of 1st person as candidate, initially
+        int candidate = 0;
+        for(int i = 1; i < n; i++){
+            // If candidate knows anyone, he is no longer the candidate cuz he knows someone
+            // now the person he knows is the candidate
+            if(knows(candidate, i)) candidate = i;
+            // do this till find the node(person) who everyone points to, directly or indirectly
+            // indirectly means there exists a path but no direct connection
+        }
+
+        //if there exists celebrity at all, then it is our final candidate till now
+        //but need to check if 
+        //1. this final candidate knows anyone or not
+        //2. if there exists anyone who doesn't know our final candidate
+        for(int i = 0; i < n; i++){
+            if(i == candidate) continue; // no need to check as no one knows himself, lol
+            if(knows(candidate, i) || !(knows(i, candidate))) return -1;
+        }
+        return candidate;
+    }
+    private boolean knows(int a, int b) {
+        // This should return true if person a knows person b, otherwise false.
+        // The actual implementation would depend on the problem's environment, like graph implemention is matrix or LL based.
+        return true; // Placeholder implementation
+    }
+    public static void main(String[] args) {
+        CelebrityProblem cp = new CelebrityProblem();
+        int n = 4; // Ex. no. of people
+        int celebrity = cp.findCelebrity(n);
+        System.out.println(celebrity == -1 ? "No celebrity" : "Celebrity ID: " + celebrity);
+    }
+}
+
+//SImilar gfg problem - link -https://www.geeksforgeeks.org/problems/the-celebrity-problem/1?itm_source=geeksforgeeks&itm_medium=article&itm_campaign=bottom_sticky_on_article
+// I forced use of stack here, lol, although better to do w/o it, as given below
+// class Solution
+// { 
+//     //Function to find if there is a celebrity in the party or not.
+//     int celebrity(int M[][], int n)
+//     {
+//     	 Stack<Integer> stack = new Stack<>();
+
+//         // S1: Push all people onto the stack.
+//         for (int i = 0; i < n; i++) {
+//             stack.push(i);
+//         }
+
+//         // S2: Eliminate non-celebrities.
+//         while (stack.size() > 1) {
+//             int a = stack.pop();
+//             int b = stack.pop();
+//             if (M[a][b]==1) {
+//                 stack.push(b); // a can't be a celebrity, but b might be
+//             } else {
+//                 stack.push(a); // b can't be a celebrity, but a might be
+//             }
+//         }
+
+//         // S3: Verify the potential candidate.
+//         int candidate = stack.pop();
+//         for (int i = 0; i < n; i++) {
+//             if (i != candidate) {
+//                 //if candidate knows anyone or there exists atleast one who dpesn't know candidate  
+//                 if (M[candidate][i]==1 || M[i][candidate]==0) {
+//                     return -1; // then Candidate is not a celebrity
+//                 }
+//             }
+//         }
+
+//         return candidate;
+//     }   
+// }
+
+// //w/o stack, much better soln.
+// class Solution
+// { 
+//     //Function to find if there is a celebrity in the party or not.
+//     int celebrity(int M[][], int n)
+//     {
+//     	int candidate =0;
+    	
+//     	for(int i=0;i<n;i++){
+//     	    if(M[candidate][i]==1) candidate = i;
+//     	}
+    	
+//         for (int i = 0; i < n; i++) {
+//             if (i != candidate) {
+//                 if (M[candidate][i]==1 || M[i][candidate]==0) return -1;
+//             }
+//         }
+
+//         return candidate;
+//     }
+    
+   
+// }
+
+package StackAndQueue.Lec4_Implementation;
+/*Q4  146. LRU Cache
+Solved
+Medium
+Topics
+Companies
+Design a data structure that follows the constraints of a Least Recently Used (LRU) cache.
+
+Implement the LRUCache class:
+
+LRUCache(int capacity) Initialize the LRU cache with positive size capacity.
+int get(int key) Return the value of the key if the key exists, otherwise return -1.
+void put(int key, int value) Update the value of the key if the key exists. Otherwise, add the key-value pair to the cache. If the number of keys exceeds the capacity from this operation, evict the least recently used key.
+The functions get and put must each run in O(1) average time complexity.
+
+ 
+
+Example 1:
+
+Input
+["LRUCache", "put", "put", "get", "put", "get", "put", "get", "get", "get"]
+[[2], [1, 1], [2, 2], [1], [3, 3], [2], [4, 4], [1], [3], [4]]
+Output
+[null, null, null, 1, null, -1, null, -1, 3, 4]
+
+Explanation
+LRUCache lRUCache = new LRUCache(2);
+lRUCache.put(1, 1); // cache is {1=1}
+lRUCache.put(2, 2); // cache is {1=1, 2=2}
+lRUCache.get(1);    // return 1
+lRUCache.put(3, 3); // LRU key was 2, evicts key 2, cache is {1=1, 3=3}
+lRUCache.get(2);    // returns -1 (not found)
+lRUCache.put(4, 4); // LRU key was 1, evicts key 1, cache is {4=4, 3=3}
+lRUCache.get(1);    // return -1 (not found)
+lRUCache.get(3);    // return 3
+lRUCache.get(4);    // return 4
+ 
+
+Constraints:
+
+1 <= capacity <= 3000
+0 <= key <= 104
+0 <= value <= 105
+At most 2 * 105 calls will be made to get and put.
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+1.7M
+Submissions
+3.9M
+Acceptance Rate
+42.7%*/
+
+import java.util.HashMap;
+import java.util.Map;
+
+class LRUCache {
+    // Create a DLL(doubly linked list)
+    //Create 2 dummy nodes to easily track head and tail and do insert/delete from front/rear
+    Node head = new Node(0, 0); 
+    Node tail = new Node(0, 0);
+    // Create a hmap to store (key,node address) pair
+    Map<Integer, Node> hmap = new HashMap<>();
+
+    int capacity;
+
+    public LRUCache(int capacity) {
+        // Ini. the capacity of the cache
+        this.capacity = capacity;
+        // Link the head and tail
+        head.next = tail;
+        tail.prev = head;
+    }
+
+    public int get(int key) {
+        // Check if the key exists in the hmap
+        if (hmap.containsKey(key)) {
+            Node node = hmap.get(key);
+            // Remove the node from its current position
+            remove(node);
+            // Insert the node at the head (most recently used)
+            insert(node);
+            return node.val;
+        } else {
+            return -1; // Key does not exist
+        }
+    }
+
+    public void put(int key, int val) {
+        // If the key already exists, remove the old node
+        if (hmap.containsKey(key)) {
+            remove(hmap.get(key));
+        }
+        // If the cache is full, remove the least recently used node
+        if (hmap.size() == capacity) {
+            remove(tail.prev);
+        }
+        // Insert the new node at the head (most recently used)
+        insert(new Node(key, val));
+    }
+
+    private void remove(Node node) {
+        // Remove the node from the hmap
+        hmap.remove(node.key);
+        // Unlink the node from the DLL by skipping over it
+        node.prev.next = node.next;
+        node.next.prev = node.prev;
+    }
+
+    private void insert(Node node) {
+        // Add the node to the hmap
+        hmap.put(node.key, node);
+        // Link the node right after the head
+        node.next = head.next;
+        node.next.prev = node;
+        head.next = node;
+        node.prev = head;
+    }
+
+    // Define the Node class for the DLL
+    class Node {
+        Node prev, next;
+        int key, val;
+        Node(int key, int val) {
+            this.key = key;
+            this.val = val;
+        }
+    }
+
+    public static void main(String[] args) {
+        LRUCache lRUCache = new LRUCache(2);
+        lRUCache.put(1, 1); // cache is {1=1}
+        lRUCache.put(2, 2); // cache is {1=1, 2=2}
+        System.out.println(lRUCache.get(1));    // return 1
+        lRUCache.put(3, 3); // LRU key was 2, evicts key 2, cache is {1=1, 3=3}
+        System.out.println(lRUCache.get(2));    // returns -1 (not found)
+        lRUCache.put(4, 4); // LRU key was 1, evicts key 1, cache is {4=4, 3=3}
+        System.out.println(lRUCache.get(1));    // return -1 (not found)
+        System.out.println(lRUCache.get(3));    // return 3
+        System.out.println(lRUCache.get(4));    // return 4
+    }
+}
+// //https://leetcode.com/problems/lru-cache/solutions/45939/laziest-implementation-java-s-linkedhashmap-takes-care-of-everything/
+// //another shorter soln.
+// class LRUCache {
+//     private LinkedHashMap<Integer, Integer> map;
+//     private int SIZE;
+//     public LRUCache(int capacity) {
+//         map = new LinkedHashMap<>();
+//         SIZE = capacity;
+//     }
+    
+//     public int get(int key) {
+//         if(map.containsKey(key)) {
+//             int value = map.remove(key);
+//             map.put(key, value);
+//             return value;
+//         }
+//         return -1;
+//     }
+    
+//     public void put(int key, int value) {
+//         if(map.containsKey(key)) {
+//             map.remove(key);
+//         }else if(map.size() + 1 > SIZE) {
+//             map.remove(map.keySet().iterator().next());
+//         }
+//         map.put(key, value);
+//     }
+//     }
+
+//https://leetcode.com/problems/lru-cache/solutions/801375/java-o-1-solution-clean-and-detailed-explanation/
+//https://android.googlesource.com/platform/frameworks/support.git/+/795b97d901e1793dac5c3e67d43c96a758fec388/v4/java/android/support/v4/util/LruCache.java
+
+package StackAndQueue.Lec4_Implementation;
+/*Q5 
+
+
+Code
+Accepted
+Accepted
+Code Sample
+Code Sample
+Testcase
+Testcase
+Test Result
+460. LFU Cache
+Solved
+Hard
+Topics
+Companies
+Design and implement a data structure for a Least Frequently Used (LFU) cache.
+
+Implement the LFUCache class:
+
+LFUCache(int capacity) Initializes the object with the capacity of the data structure.
+int get(int key) Gets the value of the key if the key exists in the cache. Otherwise, returns -1.
+void put(int key, int value) Update the value of the key if present, or inserts the key if not already present. When the cache reaches its capacity, it should invalidate and remove the least frequently used key before inserting a new item. For this problem, when there is a tie (i.e., two or more keys with the same frequency), the least recently used key would be invalidated.
+To determine the least frequently used key, a use counter is maintained for each key in the cache. The key with the smallest use counter is the least frequently used key.
+
+When a key is first inserted into the cache, its use counter is set to 1 (due to the put operation). The use counter for a key in the cache is incremented either a get or put operation is called on it.
+
+The functions get and put must each run in O(1) average time complexity.
+
+ 
+
+Example 1:
+
+Input
+["LFUCache", "put", "put", "get", "put", "get", "get", "put", "get", "get", "get"]
+[[2], [1, 1], [2, 2], [1], [3, 3], [2], [3], [4, 4], [1], [3], [4]]
+Output
+[null, null, null, 1, null, -1, 3, null, -1, 3, 4]
+
+Explanation
+// cnt(x) = the use counter for key x
+// cache=[] will show the last used order for tiebreakers (leftmost element is  most recent)
+LFUCache lfu = new LFUCache(2);
+lfu.put(1, 1);   // cache=[1,_], cnt(1)=1
+lfu.put(2, 2);   // cache=[2,1], cnt(2)=1, cnt(1)=1
+lfu.get(1);      // return 1
+                 // cache=[1,2], cnt(2)=1, cnt(1)=2
+lfu.put(3, 3);   // 2 is the LFU key because cnt(2)=1 is the smallest, invalidate 2.
+                 // cache=[3,1], cnt(3)=1, cnt(1)=2
+lfu.get(2);      // return -1 (not found)
+lfu.get(3);      // return 3
+                 // cache=[3,1], cnt(3)=2, cnt(1)=2
+lfu.put(4, 4);   // Both 1 and 3 have the same cnt, but 1 is LRU, invalidate 1.
+                 // cache=[4,3], cnt(4)=1, cnt(3)=2
+lfu.get(1);      // return -1 (not found)
+lfu.get(3);      // return 3
+                 // cache=[3,4], cnt(4)=1, cnt(3)=3
+lfu.get(4);      // return 4
+                 // cache=[4,3], cnt(4)=2, cnt(3)=3
+ 
+
+Constraints:
+
+1 <= capacity <= 104
+0 <= key <= 105
+0 <= value <= 109
+At most 2 * 105 calls will be made to get and put.
+ 
+
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+254.6K
+Submissions
+573K
+Acceptance Rate
+44.4%
+ */
+import java.util.HashMap;
+import java.util.Map;
+
+class LFUCache {
+    // Refer to Notes for comments or the code at end
+    int cap;
+    int currSize;
+    int minFreq;
+    Map<Integer, DLLNode> cache;
+    Map<Integer, DoubleLinkedList> freqHmap;
+
+    public LFUCache(int cap) {
+        this.cap = cap;
+        this.currSize = 0;
+        this.minFreq = 0;
+        this.cache = new HashMap<>();
+        this.freqHmap = new HashMap<>();
+    }
+
+    public int get(int key) {
+        DLLNode currNode = cache.get(key);
+        if (currNode == null) {
+            return -1;
+        }
+        updateNode(currNode);
+        return currNode.val;
+    }
+
+    public void put(int key, int value) {
+        if (cap == 0) {
+            return;
+        }
+
+        if (cache.containsKey(key)) {
+            DLLNode currNode = cache.get(key);
+            currNode.val = value;
+            updateNode(currNode);
+        }
+        else {
+            currSize++;
+            if (currSize > cap) {
+                DoubleLinkedList minFreqList = freqHmap.get(minFreq);
+                cache.remove(minFreqList.tail.prev.key);
+                minFreqList.removeNode(minFreqList.tail.prev);
+                currSize--;
+            }
+            minFreq = 1;
+            DLLNode newNode = new DLLNode(key, value);
+
+            DoubleLinkedList currList = freqHmap.getOrDefault(1, new DoubleLinkedList());
+            currList.addNode(newNode);
+            freqHmap.put(1, currList);
+            cache.put(key, newNode);
+        }
+    }
+
+    public void updateNode(DLLNode currNode) {
+        int currFreq = currNode.freq;
+        DoubleLinkedList currList = freqHmap.get(currFreq);
+        currList.removeNode(currNode);
+
+        if (currFreq == minFreq && currList.listSize == 0) {
+            minFreq++;
+        }
+
+        currNode.freq++;
+        DoubleLinkedList newList = freqHmap.getOrDefault(currNode.freq, new DoubleLinkedList());
+        newList.addNode(currNode);
+        freqHmap.put(currNode.freq, newList);
+    }
+
+    class DLLNode {
+        int key;
+        int val;
+        int freq;
+        DLLNode prev;
+        DLLNode next;
+
+        public DLLNode(int key, int val) {
+            this.key = key;
+            this.val = val;
+            this.freq = 1;
+        }
+    }
+
+    class DoubleLinkedList {
+        int listSize;
+        DLLNode head;
+        DLLNode tail;
+        public DoubleLinkedList() {
+            this.listSize = 0;
+            this.head = new DLLNode(0, 0);
+            this.tail = new DLLNode(0, 0);
+            head.next = tail;
+            tail.prev = head;
+        }
+
+        public void addNode(DLLNode currNode) {
+            DLLNode nextNode = head.next;
+            currNode.next = nextNode;
+            currNode.prev = head;
+            head.next = currNode;
+            nextNode.prev = currNode;
+            listSize++;
+        }
+
+        public void removeNode(DLLNode currNode) {
+            DLLNode prevNode = currNode.prev;
+            DLLNode nextNode = currNode.next;
+            prevNode.next = nextNode;
+            nextNode.prev = prevNode;
+            listSize--;
+        }
+
+    }
+}
+
+/**
+ * Your LFUCache object will be instantiated and called as such:
+ * LFUCache obj = new LFUCache(capacity);
+ * int param_1 = obj.get(key);
+ * obj.put(key,value);
+ */
+//nice posts below for different ways and visualization- 
+//https://leetcode.com/problems/lfu-cache/solutions/94657/java-solutions-of-three-different-ways-priorityqueue-o-capacity-treemap-o-log-capacity-doublelinkedlist-o-1
+//https://leetcode.com/problems/lfu-cache/solutions/443113/visualization-for-2-hashmap-1-doublelinkedlist-approach/
+
+// //Reference code by Striver's YT
+// class LFUCache {
+
+//     final int capacity;
+//     int curSize;
+//     int minFrequency;
+//     Map<Integer, DLLNode> cache;
+//     Map<Integer, DoubleLinkedList> frequencyMap;
+
+//     /*.*/
+//     /*
+//     * @param capacity: total capacity of LFU Cache
+//     * @param curSize: current size of LFU cache
+//     * @param minFrequency: frequency of the last linked list (the minimum frequency of entire LFU cache)
+//     * @param cache: a hash map that has key to Node mapping, which used for storing all nodes by their keys
+//     * @param frequencyMap: a hash map that has key to linked list mapping, which used for storing all
+//     * double linked list by their frequencies
+//     * */
+//     public LFUCache(int capacity) {
+//         this.capacity = capacity;
+//         this.curSize = 0;
+//         this.minFrequency = 0;
+
+//         this.cache = new HashMap<>();
+//         this.frequencyMap = new HashMap<>();
+//     }
+
+//     /** get node value by key, and then update node frequency as well as relocate that node **/
+//     public int get(int key) {
+//         DLLNode curNode = cache.get(key);
+//         if (curNode == null) {
+//             return -1;
+//         }
+//         updateNode(curNode);
+//         return curNode.val;
+//     }
+
+//     /**
+//      * add new node into LFU cache, as well as double linked list
+//      * condition 1: if LFU cache has input key, update node value and node position in list
+//      * condition 2: if LFU cache does NOT have input key
+//      *  - sub condition 1: if LFU cache does NOT have enough space, remove the Least Recent Used node
+//      *  in minimum frequency list, then add new node
+//      *  - sub condition 2: if LFU cache has enough space, add new node directly
+//      * **/
+//     public void put(int key, int value) {
+//         // corner case: check cache capacity initialization
+//         if (capacity == 0) {
+//             return;
+//         }
+
+//         if (cache.containsKey(key)) {
+//             DLLNode curNode = cache.get(key);
+//             curNode.val = value;
+//             updateNode(curNode);
+//         }
+//         else {
+//             curSize++;
+//             if (curSize > capacity) {
+//                 // get minimum frequency list
+//                 DoubleLinkedList minFreqList = frequencyMap.get(minFrequency);
+//                 cache.remove(minFreqList.tail.prev.key);
+//                 minFreqList.removeNode(minFreqList.tail.prev);
+//                 curSize--;
+//             }
+//             // reset min frequency to 1 because of adding new node
+//             minFrequency = 1;
+//             DLLNode newNode = new DLLNode(key, value);
+
+//             // get the list with frequency 1, and then add new node into the list, as well as into LFU cache
+//             DoubleLinkedList curList = frequencyMap.getOrDefault(1, new DoubleLinkedList());
+//             curList.addNode(newNode);
+//             frequencyMap.put(1, curList);
+//             cache.put(key, newNode);
+//         }
+//     }
+
+//     public void updateNode(DLLNode curNode) {
+//         int curFreq = curNode.frequency;
+//         DoubleLinkedList curList = frequencyMap.get(curFreq);
+//         curList.removeNode(curNode);
+
+//         // if current list the the last list which has lowest frequency and current node is the only node in that list
+//         // we need to remove the entire list and then increase min frequency value by 1
+//         if (curFreq == minFrequency && curList.listSize == 0) {
+//             minFrequency++;
+//         }
+
+//         curNode.frequency++;
+//         // add current node to another list has current frequency + 1,
+//         // if we do not have the list with this frequency, initialize it
+//         DoubleLinkedList newList = frequencyMap.getOrDefault(curNode.frequency, new DoubleLinkedList());
+//         newList.addNode(curNode);
+//         frequencyMap.put(curNode.frequency, newList);
+//     }
+
+//     /*
+//     * @param key: node key
+//     * @param val: node value
+//     * @param frequency: frequency count of current node
+//     * (all nodes connected in same double linked list has same frequency)
+//     * @param prev: previous pointer of current node
+//     * @param next: next pointer of current node
+//     * */
+//     class DLLNode {
+//         int key;
+//         int val;
+//         int frequency;
+//         DLLNode prev;
+//         DLLNode next;
+
+//         public DLLNode(int key, int val) {
+//             this.key = key;
+//             this.val = val;
+//             this.frequency = 1;
+//         }
+//     }
+
+//     /*
+//     * @param listSize: current size of double linked list
+//     * @param head: head node of double linked list
+//     * @param tail: tail node of double linked list
+//     * */
+//     class DoubleLinkedList {
+//         int listSize;
+//         DLLNode head;
+//         DLLNode tail;
+//         public DoubleLinkedList() {
+//             this.listSize = 0;
+//             this.head = new DLLNode(0, 0);
+//             this.tail = new DLLNode(0, 0);
+//             head.next = tail;
+//             tail.prev = head;
+//         }
+
+//         /** add new node into head of list and increase list size by 1 **/
+//         public void addNode(DLLNode curNode) {
+//             DLLNode nextNode = head.next;
+//             curNode.next = nextNode;
+//             curNode.prev = head;
+//             head.next = curNode;
+//             nextNode.prev = curNode;
+//             listSize++;
+//         }
+
+//         /** remove input node and decrease list size by 1**/
+//         public void removeNode(DLLNode curNode) {
+//             DLLNode prevNode = curNode.prev;
+//             DLLNode nextNode = curNode.next;
+//             prevNode.next = nextNode;
+//             nextNode.prev = prevNode;
+//             listSize--;
+//         }
+
+//     }
+// }
+
+// /**
+//  * Your LFUCache object will be instantiated and called as such:
+//  * LFUCache obj = new LFUCache(capacity);
+//  * int param_1 = obj.get(key);
+//  * obj.put(key,value);
+//  */
+

@@ -1,0 +1,665 @@
+package Sorting;
+import java.util.*;
+//q1
+//Problem Statement: Given an array of N integers, write a program to implement the Selection sorting algorithm.
+//Iterative
+
+class SelectionSort {
+
+    private int[] arrayCopy;
+
+    SelectionSort(int[] A) {
+        arrayCopy = Arrays.copyOf(A, A.length);
+    }
+
+    public int[] ActuallySelectionSort(int[] A) {
+        int i, j;
+        int min;
+        for (i = 0; i < A.length - 1; i++) {
+            min = i;
+            for (j = i+1 ; j < A.length; j++) {
+                if (A[j] < A[min]) {
+                    min = j;
+                }
+            }
+            Swap(A, min, i);
+        }
+        return A;
+    }
+
+    public void Swap(int A[], int x, int y) {
+        //Don't use this method of swapping in JAVA
+        // A[x] = A[x] + A[y]; 
+        // A[y] = A[x] - A[y]; 
+        // A[x] = A[x] - A[y]; 
+        int temp = A[x];
+        A[x] = A[y];
+        A[y] = temp;
+    }
+    public void PrintArray(int A[]){
+        System.out.print("[");
+        for (int i = 0; i < A.length-1; i++) {
+            System.out.print(A[i] + ", ");
+        }
+        System.out.print(A[A.length-1]+"]");
+    }
+
+    
+
+    public static void main(String[] args) {
+        int[] A = {11, 2, 5, 7, 90, 55, 33, 23, 27};
+        SelectionSort ss = new SelectionSort(A);
+        int[] sortedArray = ss.ActuallySelectionSort(ss.arrayCopy);
+        ss.PrintArray(sortedArray);
+        
+}
+}
+
+//1st Attempt, few mistakes, few optimizations
+// import java.util.*;
+
+// class SelectionSort{
+
+//     SelectionSort(int [] A)
+//     {
+//         int [] a=A;
+
+//     }
+
+//     public int [] ActuallySelectionSort(int [] A)
+//     {
+//         int i,j;
+//         int min; //int swapped=0;
+//         for(i=0;i<A.length-1;i++){
+//             min=i;
+//             for(j=i+1;j<A.length;j++){
+//                 if(A[j]<A[min]){
+//                     min=j;
+//                     //swapped=1;
+//                 }
+                
+
+//             }Swap(A,min,i);
+
+//         }
+//         return A;
+
+        
+//     }
+
+//     public void Swap(int A[], int x, int y) {
+//         A[x] = A[x] + A[y]; // Add the value of A[y] to A[x]
+//         A[y] = A[x] - A[y]; // Subtract the original value of A[y] from the sum stored in A[x], which effectively stores the value of A[x] in A[y]
+//         A[x] = A[x] - A[y]; // Subtract the new value of A[y] from the sum stored in A[x], which effectively stores the original value of A[y] in A[x]
+//     }
+    
+
+//     // public void Swap(int A[],int x, int y){
+//     //     // int a=A[x];int b=A[y];
+//     //     // a=a+b;//say a=1,b=4, a+b->a=5
+//     //     // b=a-b;//a-b->b=1
+//     //     // a=a-b;//a-b->a=4
+//     //     // A[x]=a;A[y]=b;
+//     // }
+
+//     public static void main(String[] args) {
+//         int [] A={11,2,5,7,90,55,33,23,27};
+//         SelectionSort ss = new SelectionSort(A);
+//         int[] sortedArray = ss.ActuallySelectionSort(A);
+//         for (int i = 0; i < sortedArray.length; i++) {
+//             System.out.print(sortedArray[i] + " ");
+//     }
+
+// }}
+
+package Sorting;
+import java.util.*;
+
+//q1
+//Problem Statement: Given an array of N integers, write a program to implement the Selection sorting algorithm.
+//Recursive
+
+class RecursiveSelectionSort {
+
+    private int[] arrayCopy;
+
+    RecursiveSelectionSort(int[] A) {
+        arrayCopy = Arrays.copyOf(A, A.length);
+    }
+
+    public int[] ActuallyRecursiveSelectionSort(int[] A, int n, int startI, int lastI) {
+        if(startI>lastI) return A;
+        
+        int minI=findMinI(A,startI,startI+1);
+        if(minI!=startI) Swap(A, startI, minI);
+        ActuallyRecursiveSelectionSort(A, n, startI+1, lastI);
+
+        return A;
+    }
+
+    private int findMinI(int[] A, int minI, int i) {
+        if(i>=A.length) return minI;
+        if(A[i]<A[minI]) minI=i;
+        return findMinI(A, minI, i+1);
+    }
+
+    public void Swap(int A[], int x, int y) {
+        //Don't use this method of swapping in JAVA
+        // A[x] = A[x] + A[y]; 
+        // A[y] = A[x] - A[y]; 
+        // A[x] = A[x] - A[y]; 
+        int temp = A[x];
+        A[x] = A[y];
+        A[y] = temp;
+    }
+    public void PrintArray(int A[]){
+        System.out.print("[");
+        for (int i = 0; i < A.length-1; i++) {
+            System.out.print(A[i] + ", ");
+        }
+        System.out.print(A[A.length-1]+"]");
+    }
+
+    
+
+    public static void main(String[] args) {
+        int[] A = {11, 2, 5, 7, 90, 55, 33, 23, 27};
+        RecursiveSelectionSort ss = new RecursiveSelectionSort(A);
+        int[] sortedArray = ss.ActuallyRecursiveSelectionSort(ss.arrayCopy,A.length,0,A.length-1);
+        ss.PrintArray(sortedArray);
+        
+}
+}
+
+package Sorting;
+
+import java.util.Arrays;
+
+//q2
+//Problem Statement: Given an array of N integers, write a program to implement the Bubble Sorting algorithm
+//Iterative, Improved version
+public class BubbleSort {
+    private int[] arrayCopy;
+
+    BubbleSort(int[] A) {
+        arrayCopy = Arrays.copyOf(A, A.length);
+    }
+
+    public int[] ActuallyBubbleSort(int[] A) {
+        int i;
+        //Improved/optimized BubbleSOrt
+        int swapped=1;
+        int pass;
+        for(pass=A.length-1;pass>=0 && swapped==1;pass--){
+            swapped=0;
+            for(i=0;i<=(pass-1);i++){
+                if(A[i]>A[i+1]){
+                    Swap(A, i, i+1);
+                    swapped=1;
+                }
+            }
+        }
+        return A;
+    }
+
+    public void Swap(int A[], int x, int y) {
+        int temp = A[x];
+        A[x] = A[y];
+        A[y] = temp;
+    }
+    public void PrintArray(int A[]){
+        System.out.print("[");
+        for (int i = 0; i < A.length-1; i++) {
+            System.out.print(A[i] + ", ");
+        }
+        System.out.print(A[A.length-1]+"]");
+    }
+
+    
+
+    public static void main(String[] args) {
+        int[] A = {11, 2, 5, 7, 90, 55, 33, 23, 27};
+        BubbleSort ss = new BubbleSort(A);
+        int[] sortedArray = ss.ActuallyBubbleSort(ss.arrayCopy);
+        ss.PrintArray(sortedArray);
+        
+}
+}
+
+package Sorting;
+import java.util.*;
+//q3
+//Problem Statement: Given an array of N integers, write a program to implement the Insertion sorting algorithm.
+//Iterative
+
+
+class InsertionSort {
+
+    private int[] arrayCopy;
+
+    InsertionSort(int[] A) {
+        arrayCopy = Arrays.copyOf(A, A.length);
+    }
+
+    public int[] ActuallyInsertionSort(int[] A) {
+        int i, j;
+        
+        //int pass=A.length-1;
+        int key;
+        int keyVal;
+        i=0;
+        while(i<A.length-1){
+            key=i+1;
+            keyVal=A[key];
+            j=i;
+            while(j>=0 && A[j]>keyVal){
+                A[j+1]=A[j];
+                j--;
+
+            } A[j+1]=keyVal;
+            i++;
+
+        }
+
+        return A;
+    }
+
+    public void Swap(int A[], int x, int y) {
+        int temp = A[x];
+        A[x] = A[y];
+        A[y] = temp;
+    }
+    public void PrintArray(int A[]){
+        System.out.print("[");
+        for (int i = 0; i < A.length-1; i++) {
+            System.out.print(A[i] + ", ");
+        }
+        System.out.print(A[A.length-1]+"]");
+    }
+
+    
+
+    public static void main(String[] args) {
+        int[] A = {11, 2, 5, 7, 90, 55, 33, 23, 27};
+        InsertionSort ss = new InsertionSort(A);
+        int[] sortedArray = ss.ActuallyInsertionSort(ss.arrayCopy);
+        ss.PrintArray(sortedArray);
+        
+}
+}
+
+package Sorting;
+
+import java.util.Arrays;
+//q4
+//Problem:  Given an array of size n, sort the array using Merge Sort.
+//Recursive, do Iterative(later)
+public class MergeSort {
+    private int[] arrayCopy;
+
+    MergeSort(int[] A) {
+        arrayCopy = Arrays.copyOf(A, A.length);
+    }
+    private void ActuallyMergeSort(int[] A, int L, int R) {
+        if (L < R) {
+            int mid = (L + R) / 2;
+
+            ActuallyMergeSort(A, L, mid);
+            ActuallyMergeSort(A, mid + 1, R);
+
+            merge(A, L, mid, R);
+        }}
+
+        private void merge(int[] a, int l, int mid, int r) {
+            int[] b = new int[r - l + 1];
+            int i = l;
+            int j = mid + 1;
+            int k = 0;
+    
+            while (i <= mid && j <= r) {
+                if (a[i] <= a[j]) {
+                    b[k++] = a[i++];
+                } else {
+                    b[k++] = a[j++];
+                }
+            }
+    
+            while (i <= mid) {
+                b[k++] = a[i++];
+            }
+    
+            while (j <= r) {
+                b[k++] = a[j++];
+            }
+    
+            for (int ind = l; ind <= r; ind++) {
+                a[ind] = b[ind - l];
+            }
+        }    
+    //1st Attempt, few mistakes
+    // public int[] ActuallyMergeSort(int[] A,int L, int R) {
+    //     if(L>=R) return A;
+    //     int mid=(L+R)/2;
+
+    //     ActuallyMergeSort(A, L, mid);
+    //     ActuallyMergeSort(A, mid+1, R);
+
+    //     merge(A,L,mid,R);
+
+    //     return A;
+    // }
+
+    // private void merge(int[] a, int l, int mid, int r) {
+    //     int [] b=new int[r-l+1];
+    //     int i=l;int j = mid+1; int k=0;
+
+    //     while(i<=mid && j<=r){
+    //         if(a[i]<=a[j]){
+    //             b[k]=a[i]; i++;k++;
+    //         } 
+    //         if(a[j]>a[i]){
+    //             b[k]=a[j];j++;k++;
+    //         }}
+    //         //if(i<=mid){
+    //             while(i<=mid){
+    //                 b[k++]=a[i++];
+    //             }
+    //         //}else{
+    //             while(j<=r){
+    //                 b[k++]=a[j++];
+    //             }
+    //         //}
+        
+    //     for(int ind = l;ind<=r;ind++){
+    //         a[ind]=b[ind-l];
+    //     }
+    // }
+
+    public void Swap(int A[], int x, int y) {
+        int temp = A[x];
+        A[x] = A[y];
+        A[y] = temp;
+    }
+    public void PrintArray(int A[]){
+        System.out.print("[");
+        for (int i = 0; i < A.length-1; i++) {
+            System.out.print(A[i] + ", ");
+        }
+        System.out.print(A[A.length-1]+"]");
+    }
+
+    
+
+    public static void main(String[] args) {
+        int[] A = {11, 2, 5, 7, 90, 55, 33, 23, 27};
+        MergeSort ss = new MergeSort(A);
+        //int[] sortedArray = ss.ActuallyMergeSort(ss.arrayCopy,0,A.length-1);
+        ss.ActuallyMergeSort(A, 0, A.length - 1);
+        //ss.PrintArray(sortedArray);
+        ss.PrintArray(A);
+        
+}
+}
+
+package Sorting;
+
+import java.util.Arrays;
+//q5
+//Problem Statement: Given an array of N integers, write a program to implement the Recursive Bubble Sort algorithm.
+//Recursive
+public class RecursiveBubbleSort {
+    private int[] arrayCopy;
+
+    RecursiveBubbleSort(int[] A) {
+        arrayCopy = Arrays.copyOf(A, A.length);
+    }
+
+    public int[] ActuallyRecursiveBubbleSort(int[] A,int l) {
+        if(l==0||l==1) return A;
+
+        //Perform 1 pass of Bubble SOrt
+        //shift max elem to ->most
+        BubblePass(A,l);
+
+        //Recursively Shift next highest elem to -> most
+        //continually for (decrerasing by  1) subarray
+        ActuallyRecursiveBubbleSort(A,l-1);
+
+        return A;
+    }
+
+    private void BubblePass(int[] a, int l) {
+        //Pass counter fn
+        if(l==1) return;
+
+        int i=0;
+        BubbleSwap(a,l,i);
+
+        BubblePass(a, l-1);
+    }
+
+    private void BubbleSwap(int[] a, int l, int i) {
+        if(i>=l-1) return;
+        //compare ith elem with right adjacent elem
+        if(a[i]>a[i+1]) Swap(a, i+1, i);
+        BubbleSwap(a, l, i+1);
+    }
+
+    public void Swap(int A[], int x, int y) {
+        int temp = A[x];
+        A[x] = A[y];
+        A[y] = temp;
+    }
+    public void PrintArray(int A[]){
+        System.out.print("[");
+        for (int i = 0; i < A.length-1; i++) {
+            System.out.print(A[i] + ", ");
+        }
+        System.out.print(A[A.length-1]+"]");
+    }
+
+    
+
+    public static void main(String[] args) {
+        int[] A = {11, 2, 5, 7, 90, 55, 33, 23, 27};
+        RecursiveBubbleSort ss = new RecursiveBubbleSort(A);
+        int[] sortedArray = ss.ActuallyRecursiveBubbleSort(ss.arrayCopy,A.length);
+        ss.PrintArray(sortedArray);
+        
+}
+}
+
+
+package Sorting;
+import java.util.*;
+//q6
+//Problem Statement: Given an array of N integers, write a program to implement the Recursive Insertion Sort algorithm.
+//Recursive
+class RecursiveInsertionSort {
+
+    private int[] arrayCopy;
+
+    RecursiveInsertionSort(int[] A) {
+        arrayCopy = Arrays.copyOf(A, A.length);
+    }
+
+    public int[] ActuallyRecursiveInsertionSort(int[] A) {
+        int i=1;
+        int l=A.length;
+        InsertPass(A,l,i);
+        return A;
+    }
+
+    private void InsertPass(int[] a, int l, int i) {
+        if(i>l-1){return;}
+        int key=a[i];
+        int j=i-1;
+        InsertKeyShift(a,l,i,key,j);
+
+        InsertPass(a, l, i+1);
+    }
+
+    private void InsertKeyShift(int[] a, int l, int i, int key, int j) {
+        if(j<0||key>a[j]){//be careful, I did j==0, took so much time to identify and fix
+            a[j+1]=key; return;
+        }
+        a[j+1]=a[j];
+
+        InsertKeyShift(a, l, i, key, j-1);
+
+    }
+
+    public void Swap(int A[], int x, int y) {
+        int temp = A[x];
+        A[x] = A[y];
+        A[y] = temp;
+    }
+    public void PrintArray(int A[]){
+        System.out.print("[");
+        for (int i = 0; i < A.length-1; i++) {
+            System.out.print(A[i] + ", ");
+        }
+        System.out.print(A[A.length-1]+"]");
+    }
+
+    
+
+    public static void main(String[] args) {
+        int[] A = {11, 2, 5, 7, 90, 55, 33, 23, 27};
+        RecursiveInsertionSort ss = new RecursiveInsertionSort(A);
+        int[] sortedArray = ss.ActuallyRecursiveInsertionSort(ss.arrayCopy);
+        ss.PrintArray(sortedArray);
+        
+}
+}
+
+package Sorting;
+import java.util.Arrays;
+
+//q7
+//Problem Statement:  Given an array of n integers, sort the array using the Quicksort method.
+//Recursive, do iterative(later)
+
+
+//2nd attempt, revise, few corrections
+
+public class QuickSort {
+    private int[] arrayCopy;
+
+    public QuickSort(int[] A) {
+        arrayCopy = Arrays.copyOf(A, A.length);
+    }
+
+    public int[] ActuallyQuickSort(int[] A, int l, int r) {
+        if (l < r) {
+            int q = partition(A, l, r);
+            ActuallyQuickSort(A, l, q - 1);
+            ActuallyQuickSort(A, q + 1, r);
+        }
+        return A;
+    }
+
+    private int partition(int[] a, int l, int r) {
+        
+        int i = l + 1;
+        int j = r;
+        int pivot = a[l];
+
+        while (i <= j) {
+            while (i <= j && a[i] <= pivot)  i++;
+            
+            while (i <= j && a[j] > pivot) j--;
+            if (i < j)  Swap(a, i, j);
+        }
+        Swap(a, l, j);
+        return j;
+    }
+
+    public void Swap(int A[], int x, int y) {
+        int temp = A[x];
+        A[x] = A[y];
+        A[y] = temp;
+    }
+
+    public void PrintArray(int A[]) {
+        System.out.print("[");
+        for (int i = 0; i < A.length - 1; i++) {
+            System.out.print(A[i] + ", ");
+        }
+        System.out.print(A[A.length - 1] + "]");
+    }
+
+    public static void main(String[] args) {
+        int[] A = {11, 2, 5, 7, 90, 55, 33, 23, 27};
+        QuickSort ss = new QuickSort(A);
+        int[] sortedArray = ss.ActuallyQuickSort(ss.arrayCopy, 0, A.length - 1);
+        ss.PrintArray(sortedArray);
+    }
+}
+
+
+//1st attempt, few  mistakes
+// package Sorting;
+
+// import java.util.Arrays;
+
+// public class QuickSort {
+//     private int[] arrayCopy;
+
+//     QuickSort(int[] A) {
+//         arrayCopy = Arrays.copyOf(A, A.length);
+//     }
+
+//     public int[] ActuallyQuickSort(int[] A,int l, int r) {
+//         if(l==r) return A;
+
+//         else{
+//             int q = partition(A,l,r);
+//             ActuallyQuickSort(A, l, q-1);
+//             ActuallyQuickSort(A, q+1, r);
+//         }
+        
+//         return A;
+//     }
+
+//     private int partition(int[] a, int l, int r) {
+//         int i=l+1;
+//         int j=r;
+//         int pivot=a[l];
+//         while(i<=j){
+//             while(i<=j && a[i]<=pivot) i++;
+//             while(i<=j && a[j]> pivot) j--;
+//             if(i<j){
+//                 Swap(a, j, i);
+//                 //i++;j--; //mostake
+//             }}
+//             Swap(a, j, l);
+//             return j;
+        
+//     }
+
+//     public void Swap(int A[], int x, int y) {
+//         int temp = A[x];
+//         A[x] = A[y];
+//         A[y] = temp;
+//     }
+//     public void PrintArray(int A[]){
+//         System.out.print("[");
+//         for (int i = 0; i < A.length-1; i++) {
+//             System.out.print(A[i] + ", ");
+//         }
+//         System.out.print(A[A.length-1]+"]");
+//     }
+
+    
+
+//     public static void main(String[] args) {
+//         int[] A = {11, 2, 5, 7, 90, 55, 33, 23, 27};
+//         QuickSort ss = new QuickSort(A);
+//         int[] sortedArray = ss.ActuallyQuickSort(ss.arrayCopy,0,A.length-1);
+//         ss.PrintArray(sortedArray);
+        
+// }
+// }
+
+

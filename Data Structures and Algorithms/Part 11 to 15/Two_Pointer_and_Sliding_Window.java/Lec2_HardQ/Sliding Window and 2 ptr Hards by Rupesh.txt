@@ -1,0 +1,331 @@
+package Two_Pointer_and_Sliding_Window.java.Lec2_HardQ;
+/*Q1 340. Longest Substring with At Most K Distinct Characters 🔒
+中文文档
+
+Description
+Given a string s and an integer k, return the length of the longest substring of s that contains at most k distinct characters.
+
+ 
+
+Example 1:
+
+Input: s = "eceba", k = 2
+Output: 3
+Explanation: The substring is "ece" with length 3.
+Example 2:
+
+Input: s = "aa", k = 1
+Output: 2
+Explanation: The substring is "aa" with length 2.
+ 
+
+Constraints:
+
+1 <= s.length <= 5 * 104
+0 <= k <= 50*/
+import java.util.HashMap;
+
+public class Longest_Substring_with_At_Most_K_Distinct_Characters {
+    public int lengthOfLongestSubstring(String str, int k){
+        int maxL=0; int l=0,r=0;
+        char s[] = str.toCharArray();
+        HashMap<Character, Integer> hmap=new HashMap<>();
+        while(r<s.length){
+            hmap.put(s[r], (hmap.getOrDefault(s[r], 0)+1));
+            if(hmap.size()>k){
+                hmap.put(s[l], (hmap.getOrDefault(s[l], 0)-1));
+                if(hmap.get(s[l])==0) hmap.remove(s[l]);
+                l++;
+            }
+            //if(hmap.size()<=k)
+            maxL = Math.max(maxL, (r-l+1));
+            r++;
+        } return maxL;
+    }
+}
+
+// GFG submission for similar problem - https://www.geeksforgeeks.org/problems/longest-k-unique-characters-substring0853/1
+// public int longestkSubstr(String str, int k) {
+//     int maxL=-1; int l=0,r=0;
+//     char s[] = str.toCharArray();
+//     HashMap<Character, Integer> hmap=new HashMap<>();
+//     while(r<s.length){
+//         hmap.put(s[r], (hmap.getOrDefault(s[r], 0)+1));
+//         while(hmap.size()>k){
+//             hmap.put(s[l], (hmap.getOrDefault(s[l], 0)-1));
+//             if(hmap.get(s[l])==0) hmap.remove(s[l]);
+//             l++;
+//         }
+//         if(hmap.size()==k) maxL = Math.max(maxL, (r-l+1));
+//         r++;
+//     } return maxL;
+// }
+
+
+
+package Two_Pointer_and_Sliding_Window.java.Lec2_HardQ;
+
+import java.util.HashMap;
+
+/*Q2 992. Subarrays with K Different Integers
+Hard
+Topics
+Companies
+Hint
+Given an integer array nums and an integer k, return the number of good subarrays of nums.
+
+A good array is an array where the number of different integers in that array is exactly k.
+
+For example, [1,2,3,1,2] has 3 different integers: 1, 2, and 3.
+A subarray is a contiguous part of an array.
+
+ 
+
+Example 1:
+
+Input: nums = [1,2,1,2,3], k = 2
+Output: 7
+Explanation: Subarrays formed with exactly 2 different integers: [1,2], [2,1], [1,2], [2,3], [1,2,1], [2,1,2], [1,2,1,2]
+Example 2:
+
+Input: nums = [1,2,1,3,4], k = 3
+Output: 3
+Explanation: Subarrays formed with exactly 3 different integers: [1,2,1,3], [2,1,3], [1,3,4].
+ 
+
+Constraints:
+
+1 <= nums.length <= 2 * 104
+1 <= nums[i], k <= nums.length
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+222K
+Submissions
+349.1K
+Acceptance Rate
+63.6% */
+public class Subarrays_with_K_Different_Integers {
+    public int subarraysWithKDistinct(int[] a, int k) {
+        return countSubarrSumLessThanEqualToK(a, a.length, k) - countSubarrSumLessThanEqualToK(a, a.length, (k-1));
+    }
+    private int countSubarrSumLessThanEqualToK(int[] a, int n, int k) {
+        if(k<0) return 0;
+        //if(k==1) return n;//fails [2,1,1,1,2], k=1, 5 wrong, 8 correct
+        HashMap<Integer,Integer> hFreq = new HashMap<>();
+        int l=0,r=0,cnt=0,sum=0;
+        while(r<n){
+            hFreq.put(a[r], hFreq.getOrDefault(a[r], 0)+1);
+            while(hFreq.size()>k){
+                hFreq.put(a[l], hFreq.get(a[l])-1);
+                if(hFreq.get(a[l])==0) hFreq.remove(a[l]);
+                l++; //shrink
+            }
+            int subArrWithSameEndR= r-l+1; 
+            cnt+=subArrWithSameEndR;
+            r++;//expand
+        } return cnt;
+    }
+}
+
+
+package Two_Pointer_and_Sliding_Window.java.Lec2_HardQ;
+/*Q3 76. Minimum Window Substring
+Solved
+Hard
+Topics
+Companies
+Hint
+Given two strings s and t of lengths m and n respectively, return the minimum window 
+substring
+ of s such that every character in t (including duplicates) is included in the window. If there is no such substring, return the empty string "".
+
+The testcases will be generated such that the answer is unique.
+
+ 
+
+Example 1:
+
+Input: s = "ADOBECODEBANC", t = "ABC"
+Output: "BANC"
+Explanation: The minimum window substring "BANC" includes 'A', 'B', and 'C' from string t.
+Example 2:
+
+Input: s = "a", t = "a"
+Output: "a"
+Explanation: The entire string s is the minimum window.
+Example 3:
+
+Input: s = "a", t = "aa"
+Output: ""
+Explanation: Both 'a's from t must be included in the window.
+Since the largest window of s only has one 'a', return empty string.
+ 
+
+Constraints:
+
+m == s.length
+n == t.length
+1 <= m, n <= 105
+s and t consist of uppercase and lowercase English letters.
+ 
+
+Follow up: Could you find an algorithm that runs in O(m + n) time?
+
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+1.4M
+Submissions
+3.2M
+Acceptance Rate
+43.3% */
+import java.util.HashMap;
+
+public class Minimum_Window_Substring {
+    public String minWindow(String str, String ttr) {
+        int n = str.length(), m = ttr.length();
+        int l = 0, r = 0, cnt = 0, sIndx = -1, minL = Integer.MAX_VALUE;
+        int hash[] = new int[256]; 
+        char s[] = str.toCharArray(), t[] =ttr.toCharArray();
+        // Preputting the values of string t into the hashmap
+        for (int i = 0; i < m; i++) hash[t[i]]++;
+        
+        while (r < n) {
+            if(hash[s[r]]>0) cnt++;//if rth char is in t, its inclusion must ++ cnt
+            hash[s[r]]--;//count rth char 
+            while(cnt==m){
+                //when reach target count, try to shrink to get minimum size window with target count satisfied
+                int currL=r-l+1;
+                if(minL>currL){
+                    minL=currL;
+                    sIndx=l;
+                }
+                hash[s[l]]++;//uncount lth char
+                if(hash[s[l]]>0) cnt--; //if lth char is in t, its exclusion must -- cnt
+                l++;//shrink
+            }
+            r++;//expand
+        }
+        
+        // If sIndx is never updated, return empty string
+        return sIndx == -1 ? "" : str.substring(sIndx, sIndx + minL);
+    }
+} 
+// Hashmap soln.
+// public String minWindow(String s, String t) {
+//     int l = 0, r = 0, cnt = 0, sIndx = -1, minL = Integer.MAX_VALUE;
+//     HashMap<Character, Integer> hmap = new HashMap<>();
+    
+//     // Preputting the values of string t into the hashmap
+//     for (int i = 0; i < t.length(); i++) {
+//         hmap.put(t.charAt(i), hmap.getOrDefault(t.charAt(i), 0) + 1);
+//     }
+    
+//     while (r < s.length()) {
+//         char ch = s.charAt(r);
+        
+//         // If the character is in t and its count in the hashmap is greater than 0, increase cnt
+//         if (hmap.containsKey(ch)) {
+//             if (hmap.get(ch) > 0) {
+//                 cnt++;
+//             }
+//             // Decrease the count in the hashmap
+//             hmap.put(ch, hmap.get(ch) - 1);
+//         }
+        
+//         // When all characters of t are matched (cnt == t.length())
+//         while (cnt == t.length()) {
+//             // Update the minimum length and starting index of the substring
+//             if (r - l + 1 < minL) {
+//                 minL = r - l + 1;
+//                 sIndx = l;
+//             }
+            
+//             // Try to contract the window from the left
+//             char leftChar = s.charAt(l);
+//             if (hmap.containsKey(leftChar)) {
+//                 hmap.put(leftChar, hmap.get(leftChar) + 1);
+//                 // If a character count goes above 0, it means we need more of this character
+//                 if (hmap.get(leftChar) > 0) {
+//                     cnt--;
+//                 }
+//             }
+//             l++;
+//         }
+        
+//         r++;
+//     }
+    
+//     // If sIndx is not updated, return empty string
+//     return sIndx == -1 ? "" : s.substring(sIndx, sIndx + minL);
+// }
+
+package Two_Pointer_and_Sliding_Window.java.Lec2_HardQ;
+/*Q4 727. Minimum Window Subsequence
+Given strings S and T, find the minimum (contiguous) substring W of S, so that T is a subsequence of W.
+
+If there is no such window in S that covers all characters in T, return the empty string "". If there are multiple such minimum-length windows, return the one with the left-most starting index.
+
+Example 1:
+
+Input:
+S = "abcdebdde", T = "bde"
+Output: "bcde"
+Explanation:
+"bcde" is the answer because it occurs before "bdde" which has the same length.
+"deb" is not a smaller window because the elements of T in the window must occur in order.
+ 
+
+Note:
+
+All the strings in the input will only contain lowercase letters.
+The length of S will be in the range [1, 20000].
+The length of T will be in the range [1, 100].
+ 
+
+Difficulty:
+Hard
+Lock:
+Prime
+Company:
+Amazon Bloomberg eBay Google Houzz Microsoft
+Problem Solution
+727-Minimum-Window-Subsequence */
+//similar q at gfg - https://www.geeksforgeeks.org/problems/minimum-window-subsequence/0
+public class Minimum_Window_Subsequence {
+    public String minWindow(String str, String ttr){
+        int n=str.length(), m=ttr.length(), sIndx=-1, eIndx=n;
+        int minL=n, i=0,j=0;
+        char[] s = str.toCharArray(), t=ttr.toCharArray();
+        while(i<n){
+            if(s[i]==t[j]){
+                j++;
+                if(j==m){
+                    int end=i;//found valid end
+                    j--; //bring j back to last char of t
+                    while(j>=0){//backtrack to find start
+                        if(s[i]==t[j])j--;
+                        i--;
+                    }
+                    //bring i and j back to on boundary
+                    j++;
+                    i++;
+                    int start=i;//found valid window start
+                    int currL= end -start +1;
+                    if(currL<minL){
+                        minL=currL;
+                        sIndx=start;
+                        eIndx=end;
+                    }
+                }
+            }
+            ++i;
+        }
+        return (sIndx==-1)?"":str.substring(sIndx, eIndx+1);
+    }
+}

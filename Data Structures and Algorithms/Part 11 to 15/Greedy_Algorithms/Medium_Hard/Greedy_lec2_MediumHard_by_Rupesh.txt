@@ -1,0 +1,823 @@
+package Greedy_Algorithms.Medium_Hard;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+/*Q1 N meetings in one room
+Difficulty: EasyAccuracy: 45.3%Submissions: 241K+Points: 2
+There is one meeting room in a firm. There are n meetings in the form of (start[i], end[i]) where start[i] is start time of meeting i and end[i] is finish time of meeting i.
+What is the maximum number of meetings that can be accommodated in the meeting room when only one meeting can be held in the meeting room at a particular time? Return the maximum number of meetings that can be held in the meeting room.
+
+ 
+
+Note: Start time of one chosen meeting can't be equal to the end time of the other chosen meeting.
+
+
+Examples :
+
+Input: n = 6, start[] = {1,3,0,5,8,5}, end[] =  {2,4,6,7,9,9}
+Output: 4
+Explanation: Maximum four meetings can be held with given start and end timings. The meetings are - (1, 2),(3, 4), (5,7) and (8,9)
+Input: n = 3, start[] = {10, 12, 20}, end[] = {20, 25, 30}
+Output: 1
+Explanation: Only one meetings can be held with given start and end timings.
+Expected Time Complexity : O(n*Logn)
+Expected Auxilliary Space : O(n)
+
+
+Constraints:
+1 ≤ n ≤ 105
+0 ≤ start[i] < end[i] ≤ 105 */
+public class N_meetings_in_one_room {
+    //Function to find the maximum number of meetings that can
+    //be performed in a meeting room.
+    public static int maxMeetings(int start[], int end[], int n) {
+        int[][] meetings = new int[n][3];
+        for (int i = 0; i < n; i++) {
+            meetings[i][0] = start[i];
+            meetings[i][1] = end[i];
+            meetings[i][2] = i;//can omit if only ask count
+        }
+
+        Arrays.sort(meetings, (a, b) -> a[1] - b[1]);
+
+        int cnt = 1;//if ask no. of meets only
+        int lastMeetingEndTime = meetings[0][1];
+        //ArrayList<Integer> AnsSeqn = new ArrayList<>();//if ask sequence
+
+        for (int i = 1; i < n; i++) {
+            if (meetings[i][0] > lastMeetingEndTime) {
+                cnt++;
+                lastMeetingEndTime = meetings[i][1];
+                //AnsSeqn.add(meetings[i][2]);
+            }
+        }
+
+        return cnt;
+        //Collections.sort(AnsSeqn);
+        //return AnsSeqn;
+    }
+}
+/*//Reference
+import java.util.*;
+class meeting {
+    int start;
+    int end;
+    int pos;
+     
+    meeting(int start, int end, int pos)
+    {
+        this.start = start;
+        this.end = end;
+        this.pos = pos;
+    }
+}
+class meetingComparator implements Comparator<meeting>
+{
+    @Override
+    public int compare(meeting o1, meeting o2) 
+    {
+        if (o1.end < o2.end)
+            return -1;
+        else if (o1.end > o2.end)
+            return 1;
+        else if(o1.pos < o2.pos)
+            return -1;
+        return 1; 
+    }
+}
+public class Meeting {
+    static void maxMeetings(int start[], int end[], int n) {
+        ArrayList<meeting> meet = new ArrayList<>();
+        
+        for(int i = 0; i < start.length; i++)
+            meet.add(new meeting(start[i], end[i], i+1));
+        
+        meetingComparator mc = new meetingComparator(); 
+        Collections.sort(meet, mc); 
+        ArrayList<Integer> answer = new ArrayList<>();
+        answer.add(meet.get(0).pos);
+        int limit = meet.get(0).end; 
+        
+        for(int i = 1;i<start.length;i++) {
+            if(meet.get(i).start > limit) {
+                limit = meet.get(i).end; 
+                answer.add(meet.get(i).pos);
+            }
+        }
+        System.out.println("The order in which the meetings will be performed is ");
+        for(int i = 0;i<answer.size(); i++) {
+            System.out.print(answer.get(i) + " ");
+        }
+    }
+    public static void main(String args[])
+    {
+        int n = 6;
+        int start[] = {1,3,0,5,8,5};
+        int end[] = {2,4,5,7,9,9};
+        maxMeetings(start,end,n);
+        
+    }
+} */
+
+package Greedy_Algorithms.Medium_Hard;
+/*Q2 55. Jump Game
+Medium
+Topics
+Companies
+You are given an integer array nums. You are initially positioned at the array's first index, and each element in the array represents your maximum jump length at that position.
+
+Return true if you can reach the last index, or false otherwise.
+
+ 
+
+Example 1:
+
+Input: nums = [2,3,1,1,4]
+Output: true
+Explanation: Jump 1 step from index 0 to 1, then 3 steps to the last index.
+Example 2:
+
+Input: nums = [3,2,1,0,4]
+Output: false
+Explanation: You will always arrive at index 3 no matter what. Its maximum jump length is 0, which makes it impossible to reach the last index.
+ 
+
+Constraints:
+
+1 <= nums.length <= 104
+0 <= nums[i] <= 105
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+2M
+Submissions
+5.2M
+Acceptance Rate
+38.6% */
+public class Jump_Game {
+    public boolean canJump(int[] a) {
+        int maxReach = 0;
+        int n = a.length;
+        for (int i = 0; i < n; i++) {
+            if (i > maxReach) {
+                return false;
+            }
+
+            maxReach = Math.max(maxReach, i + a[i]);
+
+            if(maxReach>=n) return true;
+        }
+
+        return true;
+    }
+}
+
+package Greedy_Algorithms.Medium_Hard;
+/*Q3 45. Jump Game II
+Medium
+Topics
+Companies
+You are given a 0-indexed array of integers nums of length n. You are initially positioned at nums[0].
+
+Each element nums[i] represents the maximum length of a forward jump from index i. In other words, if you are at nums[i], you can jump to any nums[i + j] where:
+
+0 <= j <= nums[i] and
+i + j < n
+Return the minimum number of jumps to reach nums[n - 1]. The test cases are generated such that you can reach nums[n - 1].
+
+ 
+
+Example 1:
+
+Input: nums = [2,3,1,1,4]
+Output: 2
+Explanation: The minimum number of jumps to reach the last index is 2. Jump 1 step from index 0 to 1, then 3 steps to the last index.
+Example 2:
+
+Input: nums = [2,3,0,1,4]
+Output: 2
+ 
+
+Constraints:
+
+1 <= nums.length <= 104
+0 <= nums[i] <= 1000
+It's guaranteed that you can reach nums[n - 1].
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+1.3M
+Submissions
+3.3M
+Acceptance Rate
+40.6% */
+public class Jump_Game_2 {
+    public int jump(int[] a) {
+        int n =a.length;
+        int l=0,r=0;
+        int jmps=0;
+        while(r<n-1){
+            int farthest=0;
+            for(int i=l;i<=r;i++){
+                farthest = Math.max(farthest, i+a[i]);
+            }
+            jmps++;
+            l=r+1;
+            r=farthest;
+        }
+        return jmps;
+    }
+}
+
+package Greedy_Algorithms.Medium_Hard;
+
+import java.util.Arrays;
+
+/*Q4 Minimum Platforms
+Difficulty: MediumAccuracy: 26.84%Submissions: 436K+Points: 4
+Given arrival and departure times of all trains that reach a railway station. Find the minimum number of platforms required for the railway station so that no train is kept waiting.
+Consider that all the trains arrive on the same day and leave on the same day. Arrival and departure time can never be the same for a train but we can have arrival time of one train equal to departure time of the other. At any given instance of time, same platform can not be used for both departure of a train and arrival of another train. In such cases, we need different platforms.
+
+Examples:
+
+Input: n = 6, arr[] = {0900, 0940, 0950, 1100, 1500, 1800}, 
+            dep[] = {0910, 1200, 1120, 1130, 1900, 2000}
+Output: 3
+Explanation: There are three trains during the time 0940 to 1200. So we need minimum 3 platforms.
+Input: n = 3, arr[] = {0900, 1235, 1100}, 
+            dep[] = {1000, 1240, 1200}
+Output: 1
+Explanation: All train times are mutually exlusive. So we need only one platform
+Input: n = 3, arr[] = {1000, 0935, 1100}, 
+            dep[] = {1200, 1240, 1130}
+Output: 3
+Explanation: All 3 trains have to be their from 11:00 to 11:30
+ 
+
+Note: Time intervals are in the 24-hour format(HHMM) , where the first two characters represent hour (between 00 to 23 ) and the last two characters represent minutes (this will be <= 59 and >= 0).
+
+Expected Time Complexity: O(nLogn)
+Expected Auxiliary Space: O(n)
+
+Constraints:
+1 ≤ n ≤ 50000
+0000 ≤ arr[i] ≤ dep[i] ≤ 2359 */
+public class Minimum_Platforms {
+    //Function to find the minimum number of platforms required at the
+    //railway station such that no train waits.
+    static int findPlatform(int AT[], int DT[], int n)
+    {
+        Arrays.sort(AT); 
+        Arrays.sort(DT); 
+  
+        int currentPlatformsNeeded = 1, maxOverlappingArrivalsAndStays = 1; 
+        int i = 1, j = 0; 
+  
+        while (i < n && j < n) { 
+        
+            if (AT[i] <= DT[j]) { 
+                currentPlatformsNeeded++; 
+                i++; 
+            } 
+  
+            else if (AT[i] > DT[j]) { 
+                currentPlatformsNeeded--; 
+                j++; 
+            } 
+  
+            maxOverlappingArrivalsAndStays = Math.max(currentPlatformsNeeded, maxOverlappingArrivalsAndStays) ;
+        } 
+  
+        return maxOverlappingArrivalsAndStays;
+    }
+}
+
+package Greedy_Algorithms.Medium_Hard;
+
+import java.util.Arrays;
+
+/*Q5 Job Sequencing Problem
+Difficulty: MediumAccuracy: 34.51%Submissions: 217K+Points: 4
+Given a set of N jobs where each jobi has a deadline and profit associated with it.
+
+Each job takes 1 unit of time to complete and only one job can be scheduled at a time. We earn the profit associated with job if and only if the job is completed by its deadline.
+
+Find the number of jobs done and the maximum profit.
+
+Note: Jobs will be given in the form (Jobid, Deadline, Profit) associated with that Job. Deadline of the job is the time before which job needs to be completed to earn the profit.
+
+
+Example 1:
+
+Input:
+N = 4
+Jobs = {(1,4,20),(2,1,10),(3,1,40),(4,1,30)}
+Output:
+2 60
+Explanation:
+Job1 and Job3 can be done with
+maximum profit of 60 (20+40).
+Example 2:
+
+Input:
+N = 5
+Jobs = {(1,2,100),(2,1,19),(3,2,27),
+        (4,1,25),(5,1,15)}
+Output:
+2 127
+Explanation:
+2 jobs can be done with
+maximum profit of 127 (100+27).
+
+Your Task :
+You don't need to read input or print anything. Your task is to complete the function JobScheduling() which takes an integer N and an array of Jobs(Job id, Deadline, Profit) as input and returns the count of jobs and maximum profit as a list or vector of 2 elements.
+
+
+Expected Time Complexity: O(NlogN)
+Expected Auxilliary Space: O(N)
+
+
+Constraints:
+1 <= N <= 105
+1 <= Deadline <= N
+1 <= Profit <= 500 */
+//given
+class Job {
+    int id, profit, deadline;
+    Job(int x, int y, int z){
+        this.id = x;
+        this.deadline = y;
+        this.profit = z; 
+    }
+}
+
+public class Job_Sequencing_Problem {
+    int[] JobScheduling(Job arr[], int n) {
+      Arrays.sort(arr, (a, b) -> (b.profit - a.profit));
+
+      int maxDeadline = 0;
+
+      for (int i = 0; i < n; i++) {
+         if (arr[i].deadline > maxDeadline) maxDeadline = arr[i].deadline;
+      }
+
+      int JobSchedulingSlots[] = new int[maxDeadline + 1];
+
+      for (int i = 1; i <= maxDeadline; i++) JobSchedulingSlots[i] = -1;
+
+      int jobsScheduledYet = 0, estimatedProfitYet = 0;
+
+      for (int i = 0; i < n; i++) {
+
+         for (int j = arr[i].deadline; j > 0; j--) {
+
+            // job slot unoccupied, so we can fix schedule of next most profitable among remaining jobs in that slot 
+            if (JobSchedulingSlots[j] == -1) {
+               JobSchedulingSlots[j] = i;
+               jobsScheduledYet++;
+               estimatedProfitYet += arr[i].profit;
+               break;
+            }
+         }
+      }
+
+      return new int[] {jobsScheduledYet,estimatedProfitYet};
+
+   }
+}
+
+package Greedy_Algorithms.Medium_Hard;
+/*Q6 135. Candy
+Hard
+Topics
+Companies
+There are n children standing in a line. Each child is assigned a rating value given in the integer array ratings.
+
+You are giving candies to these children subjected to the following requirements:
+
+Each child must have at least one candy.
+Children with a higher rating get more candies than their neighbors.
+Return the minimum number of candies you need to have to distribute the candies to the children.
+
+ 
+
+Example 1:
+
+Input: ratings = [1,0,2]
+Output: 5
+Explanation: You can allocate to the first, second and third child with 2, 1, 2 candies respectively.
+Example 2:
+
+Input: ratings = [1,2,2]
+Output: 4
+Explanation: You can allocate to the first, second and third child with 1, 2, 1 candies respectively.
+The third child gets 1 candy because it satisfies the above two conditions.
+ 
+
+Constraints:
+
+n == ratings.length
+1 <= n <= 2 * 104
+0 <= ratings[i] <= 2 * 104
+Accepted
+561.6K
+Submissions
+1.3M
+Acceptance Rate
+43.6% */
+public class CandyProblem {
+    public int candy(int[] ratings) {
+        int n = ratings.length;
+        int sum=1,i=1;
+        //int peak,dip;
+        while(i<n){
+            if(ratings[i]==ratings[i-1]){
+                sum++;
+                i++;
+                continue;
+            }
+            int peak=1;
+            while(i<n && ratings[i]>ratings[i-1]){
+                peak++;
+                sum+=peak;
+                i++;
+            }
+            int dip=1;
+            while(i<n && ratings[i]<ratings[i-1]){
+                sum+=dip;
+                dip++;
+                //sum+=dip;//wrong sequence
+                i++;
+            } 
+            if(dip>peak) sum+= (dip - peak);
+        } return sum; 
+    }
+public static void main(String[] args) {
+    CandyProblem cp = new CandyProblem();
+    
+    // Test cases
+    int[] ratings1 = {1, 0, 2};
+    int[] ratings2 = {1, 2, 2};
+    
+    System.out.println(cp.candy(ratings1)); // Output: 5
+    System.out.println(cp.candy(ratings2)); // Output: 4
+}
+
+}
+
+package Greedy_Algorithms.Medium_Hard;
+
+import java.util.Arrays;
+
+/*q7 Shortest Job first
+Difficulty: MediumAccuracy: 72.42%Submissions: 11K+Points: 4
+Geek is a software engineer. He is assigned with the task of calculating average waiting time of all the processes by following shortest job first policy.
+
+The shortest job first (SJF) or shortest job next, is a scheduling policy that selects the waiting process with the smallest execution time to execute next.
+
+Given an array of integers bt of size n. Array bt denotes the burst time of each process. Calculate the average waiting time of all the processes and return the nearest integer which is smaller or equal to the output.
+
+Note: Consider all process are available at time 0.
+
+Example 1:
+
+Input:
+n = 5
+bt = [4,3,7,1,2]
+Output: 4
+Explanation: After sorting burst times by shortest job policy, calculated average waiting time is 4.
+Example 2:
+
+Input:
+n = 4
+arr = [1,2,3,4]
+Output: 2
+Explanation: After sorting burst times by shortest job policy, calculated average waiting time is 2.
+Your Task:
+You don't need to read input or print anything. Your task is to complete the function solve() which takes bt[] as input parameter and returns the average waiting time of all the processes.
+
+Expected Time Complexity: O(nlog(n))
+Expected Auxiliary Space: O(1)
+
+Constraints:
+1 <= n <= 105
+1 <= arr[i] <= 105 */
+public class Shortest_Job_first {
+    static int solve(int bt[] ) {
+        Arrays.sort(bt);
+        int time=0;
+        int wt=0;
+        for(int i=0;i<bt.length;i++){
+            wt+=time;
+            time+=bt[i];
+        }
+        return (wt/bt.length);
+    }
+  
+}
+
+package Greedy_Algorithms.Medium_Hard;
+
+import java.util.HashSet;
+import java.util.LinkedList;
+
+/*Q8 Page Faults in LRU
+Difficulty: EasyAccuracy: 25.51%Submissions: 48K+Points: 2
+In operating systems that use paging for memory management, page replacement algorithm is needed to decide which page needs to be replaced when the new page comes in. Whenever a new page is referred and is not present in memory, the page fault occurs and Operating System replaces one of the existing pages with a newly needed page.
+
+Given a sequence of pages in an array pages[] of length N and memory capacity C, find the number of page faults using Least Recently Used (LRU) Algorithm. 
+
+Note:- Before solving this example revising the OS LRU cache mechanism is recommended.
+
+Example 1:
+
+Input: N = 9, C = 4
+pages = {5, 0, 1, 3, 2, 4, 1, 0, 5}
+Output: 8
+Explaination: memory allocated with 4 pages 5, 0, 1, 
+3: page fault = 4
+page number 2 is required, replaces LRU 5: 
+page fault = 4+1 = 5
+page number 4 is required, replaces LRU 0: 
+page fault = 5 + 1 = 6
+page number 1 is required which is already present: 
+page fault = 6 + 0 = 6
+page number 0 is required which replaces LRU 3: 
+page fault = 6 + 1 = 7
+page number 5 is required which replaces LRU 2: 
+page fault = 7 + 1  = 8.
+Your Task:
+You do not need to read input or print anything. Your task is to complete the function pageFaults() which takes N, C and pages[] as input parameters and returns the number of page faults.
+
+Expected Time Complexity: O(N*C)
+Expected Auxiliary Space: O(N)
+
+Constraints:
+1 ≤ N ≤ 1000
+1 ≤ C ≤ 100
+1 ≤ pages[i] ≤ 1000 */
+public class Page_Faults_in_LRU {
+    static int pageFaults(int N, int C, int pages[]){
+        LinkedList<Integer> LL=new LinkedList<Integer>();
+        HashSet<Integer> HS=new HashSet<>();
+        
+        int pageFaults=0;
+        
+        for(int i=0;i<N;i++){
+            
+            if(HS.contains(pages[i])){
+                LL.remove((Integer)pages[i]);
+                LL.add(pages[i]);
+                
+            }
+            else {
+                pageFaults++;
+                if(LL.size()==C){
+                    int LRUpg=LL.removeFirst();
+                    HS.remove(LRUpg);
+                }
+                LL.add(pages[i]);
+                HS.add(pages[i]);
+            }
+        }
+        return pageFaults;
+    }
+}
+
+package Greedy_Algorithms.Medium_Hard;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/*Q9 57. Insert Interval
+Medium
+Topics
+Companies
+Hint
+You are given an array of non-overlapping intervals intervals where intervals[i] = [starti, endi] represent the start and the end of the ith interval and intervals is sorted in ascending order by starti. You are also given an interval newInterval = [start, end] that represents the start and end of another interval.
+
+Insert newInterval into intervals such that intervals is still sorted in ascending order by starti and intervals still does not have any overlapping intervals (merge overlapping intervals if necessary).
+
+Return intervals after the insertion.
+
+Note that you don't need to modify intervals in-place. You can make a new array and return it.
+
+ 
+
+Example 1:
+
+Input: intervals = [[1,3],[6,9]], newInterval = [2,5]
+Output: [[1,5],[6,9]]
+Example 2:
+
+Input: intervals = [[1,2],[3,5],[6,7],[8,10],[12,16]], newInterval = [4,8]
+Output: [[1,2],[3,10],[12,16]]
+Explanation: Because the new interval [4,8] overlaps with [3,5],[6,7],[8,10].
+ 
+
+Constraints:
+
+0 <= intervals.length <= 104
+intervals[i].length == 2
+0 <= starti <= endi <= 105
+intervals is sorted by starti in ascending order.
+newInterval.length == 2
+0 <= start <= end <= 105
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+1.2M
+Submissions
+2.8M
+Acceptance Rate
+42.0% */
+public class Insert_Intervals {
+    public int[][] insert(int[][] intervals, int[] newInterval) {
+        List<int[]> ans = new ArrayList<>();
+        int i=0; int n= intervals.length;
+
+        //Left - all intervals that end before start of NI
+        while(i<n && intervals[i][1]<newInterval[0]){
+            ans.add(intervals[i]);
+            i++;
+        }
+        //Overlaps - all intervals that end after start of NI only(as exit from prev loop)
+        // loop runs till we keep finding intervals whose start before end of NI
+        while(i<n && intervals[i][0]<=newInterval[1]){
+            newInterval[0]=Math.min(intervals[i][0], newInterval[0]);
+            newInterval[1]=Math.max(intervals[i][1], newInterval[1]);
+            i++;
+        }
+        ans.add(newInterval);
+        //exit from loop when start of intervals after end of NI only
+        // Right
+        while(i<n){
+            ans.add(intervals[i]);
+            i++;
+        }
+        return ans.toArray(new int[ans.size()][2]);
+    }
+}
+
+// //Reference code using for loop
+// public int[][] insert(int[][] intervals, int[] newInterval) {
+//     List<int[]> ans = new ArrayList<>();
+//     int[] toAdd = newInterval;
+    
+//     for (int i = 0; i < intervals.length; i ++) {
+//         /*1. No overlap and toAdd appears before current interval, add toAdd to result.*/
+//         if (intervals[i][0] > toAdd[1]) {
+//             ans.add(toAdd);
+//             toAdd = intervals[i];
+//         }
+//         /*2. Has overlap, update the toAdd to the merged interval.*/
+//         else if (intervals[i][1] >= toAdd[0])  
+//             toAdd = new int[] {Math.min(intervals[i][0], toAdd[0]),
+//                                Math.max(intervals[i][1], toAdd[1]) };
+//         /*3. No overlap and toAdd appears after current interval, add current interval to result.*/
+//         else ans.add(intervals[i]); 
+//     }
+//     ans.add(toAdd);
+//     return ans.toArray(new int[ans.size()][2]);
+// }
+// https://leetcode.com/problems/insert-interval/solutions/477856/beat-99-consice-java-solution/
+
+package Greedy_Algorithms.Medium_Hard;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+/*Q10 56. Merge Intervals
+Solved
+Medium
+Topics
+Companies
+Given an array of intervals where intervals[i] = [starti, endi], merge all overlapping intervals, and return an array of the non-overlapping intervals that cover all the intervals in the input.
+
+ 
+
+Example 1:
+
+Input: intervals = [[1,3],[2,6],[8,10],[15,18]]
+Output: [[1,6],[8,10],[15,18]]
+Explanation: Since intervals [1,3] and [2,6] overlap, merge them into [1,6].
+Example 2:
+
+Input: intervals = [[1,4],[4,5]]
+Output: [[1,5]]
+Explanation: Intervals [1,4] and [4,5] are considered overlapping.
+ 
+
+Constraints:
+
+1 <= intervals.length <= 104
+intervals[i].length == 2
+0 <= starti <= endi <= 104
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+2.6M
+Submissions
+5.4M
+Acceptance Rate
+47.8% */
+public class Merge_Intevals {
+     public int[][] merge(int[][] intervals) {
+        List<int[]> ans = new ArrayList<>();
+        
+        if(intervals.length == 0 || intervals == null) {
+            return ans.toArray(new int[0][]);
+        }
+        
+        
+        Arrays.sort(intervals, (a, b) -> a[0] - b[0]);
+        
+        int start = intervals[0][0];
+        int end = intervals[0][1];
+        
+        for(int[] i : intervals) {
+            if(i[0] <= end) {
+                end = Math.max(end, i[1]);
+            }
+            else {
+                ans.add(new int[]{start, end});
+                start = i[0];
+                end = i[1];
+            }
+        }
+        ans.add(new int[]{start, end});
+        return ans.toArray(new int[0][]);
+    }
+}
+
+package Greedy_Algorithms.Medium_Hard;
+import java.util.Arrays;
+
+/*Q11 435. Non-overlapping Intervals
+Medium
+Topics
+Companies
+Given an array of intervals intervals where intervals[i] = [starti, endi], return the minimum number of intervals you need to remove to make the rest of the intervals non-overlapping.
+
+ 
+
+Example 1:
+
+Input: intervals = [[1,2],[2,3],[3,4],[1,3]]
+Output: 1
+Explanation: [1,3] can be removed and the rest of the intervals are non-overlapping.
+Example 2:
+
+Input: intervals = [[1,2],[1,2],[1,2]]
+Output: 2
+Explanation: You need to remove two [1,2] to make the rest of the intervals non-overlapping.
+Example 3:
+
+Input: intervals = [[1,2],[2,3]]
+Output: 0
+Explanation: You don't need to remove any of the intervals since they're already non-overlapping.
+ 
+
+Constraints:
+
+1 <= intervals.length <= 105
+intervals[i].length == 2
+-5 * 104 <= starti < endi <= 5 * 104
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+621.3K
+Submissions
+1.2M
+Acceptance Rate
+53.9% */
+public class Non_overlapping_Intervals {
+    public int eraseOverlapIntervals(int[][] intervals) {
+        int n=intervals.length;
+        //Sort by asc order of end time
+        Arrays.sort(intervals, (a,b)-> a[1] - b[1]);
+        int cnt=1;//1st interval/meeting always includes
+        int lastEndTime=intervals[0][1];
+        for(int i=0; i<n;i++){
+            if(intervals[i][0]>= lastEndTime){
+                //include
+                cnt++;
+                lastEndTime =intervals[i][1]; //increasing order of end time, no need to take max
+                //lastEndTime = Math.max(lastEndTime, intervals[i][1]);
+            }
+        }
+        return n-cnt;
+    }
+}
+

@@ -1,0 +1,420 @@
+package Linked_Lists.Doubly_Linked_List;
+
+//Q1 part 1
+public class DoublyLinkedList {
+    Node head;
+    Node tail;
+
+    public static class Node {
+        public Node previous;
+        public int value;
+        public Node next;
+
+        Node(int d) {
+            previous = null;
+            value = d;
+            next = null;
+        }
+
+        Node(){
+            previous = null;
+            value=0;
+            next = null;
+        }
+    }
+    // Q2
+    // Fn to add a node at end DLL
+    public void insertAtEnd(int data) {
+        Node newNode = new Node(data);
+
+        // If the DLL is empty, both head and tail will point to newNode
+        if (head == null) {
+            head = newNode;
+            tail = newNode;
+        } else {
+            // else, update the next ptr of the tail and the prev pointer of the newNode
+            tail.next = newNode;
+            newNode.previous = tail;
+            // Update the tail to the new node
+            tail = newNode; //or tail=tail.next
+        }
+    }
+
+    // Fn to add a node to start of Dll
+    public void insertAtStart(int data){
+        Node newNode = new Node(data);
+
+        // If the DLL is empty, both head and tail will point to newNode
+        if (head == null) {
+            head = newNode;
+            tail = newNode;
+        } else
+        {
+            newNode.previous = null;
+            newNode.next = head;
+            head = head.previous; //== newNode
+        }
+    }
+
+    // Test cases for all methods
+    public static void main(String[] args) {
+        DoublyLinkedList dll = new DoublyLinkedList();
+
+        // Test insertAtEnd and display
+        dll.insertAtEnd(1);
+        dll.insertAtEnd(2);
+        dll.insertAtEnd(3);
+        dll.insertAtEnd(4);
+        dll.insertAtEnd(5);
+        System.out.println("Nodes of doubly linked list:");
+        dll.display(); // Expected output: 1->2->3->4->5->null
+
+        // Test reverseDisplay
+        System.out.println("Nodes of doubly linked list in reverse:");
+        dll.reverseDisplay(); // Expected output: 5<-4<-3<-2<-1<-null
+
+        // Test constructDLL and display
+        int[] arr = {10, 20, 30, 40, 50};
+        dll.constructDLL(arr);
+        System.out.println("Nodes of constructed doubly linked list:");
+        dll.display(); // Expected output: 10->20->30->40->50->null
+
+        // Test reverseDisplay on constructed list
+        System.out.println("Nodes of constructed doubly linked list in reverse:");
+        dll.reverseDisplay(); // Expected output: 50<-40<-30<-20<-10<-null
+
+        // Test addNode
+        dll.addNode(dll.head, 2, 25);
+        System.out.println("Nodes of doubly linked list after adding 25 at position 2:");
+        dll.display(); // Expected output: 10->20->25->30->40->50->null
+
+        // Test addNode at the beginning
+        dll.addNode(dll.head, 0, 5);
+        System.out.println("Nodes of doubly linked list after adding 5 at position 0:");
+        dll.display(); // Expected output: 5->10->20->25->30->40->50->null
+
+        // Test addNode at the end
+        dll.addNode(dll.head, 7, 55);
+        System.out.println("Nodes of doubly linked list after adding 55 at the end:");
+        dll.display(); // Expected output: 5->10->20->25->30->40->50->55->null
+
+        // Test reverseDLL
+        dll.head = reverseDLL(dll.head);
+        // Update tail to the new tail (which is the old head)
+        dll.tail = dll.head;
+        while (dll.tail.next != null) {
+            dll.tail = dll.tail.next;
+        }
+        System.out.println("Nodes of doubly linked list after reversal:");
+        dll.display(); // Expected output: 55->50->40->30->25->20->10->5->null
+        System.out.println("Nodes of doubly linked list in reverse after reversal:");
+        dll.reverseDisplay(); // Expected output: 5<-10<-20<-25<-30<-40<-50<-55<-null
+
+
+        // Test deleteNode
+        dll.head = dll.deleteNode(dll.head, 2);
+        System.out.println("Nodes of doubly linked list after deleting position 2:");
+        dll.display(); // Expected output: 55->40->30->25->20->10->5->null
+    }
+
+    //Fn to print DLL Forwards
+    public void display() {
+        if(head==null) System.out.println("null");
+        Node travel = head;
+        while(travel!=null)
+        {
+            System.out.print(travel.value+"->");
+            travel=travel.next;
+        } System.out.println("null");
+    }
+
+    //Fn to reverse print DLL
+    public void reverseDisplay(){
+        if(tail==null) System.out.println("null");
+        Node t = tail;
+        while(t!=null)
+        {
+            System.out.print(t.value+"<-");
+            t=t.previous;
+        } System.out.println("null");
+    }
+    //Q1 part 2
+    Node constructDLL(int a[]) {
+        int n = a.length;
+        if (n == 0) return null;
+
+        head = new Node(a[0]);
+        Node prevNode = head;
+        Node currentNode;
+
+        for (int i = 1; i < n; i++) {
+            currentNode = new Node(a[i]);
+            prevNode.next = currentNode;
+            currentNode.previous = prevNode;
+            prevNode = currentNode;
+        }
+
+        tail = prevNode; // at end prevNode at last currentNode
+        return head;
+        // first attempt
+        // int n = a.length;
+        // if(n==0) return null;
+        // head=new Node(a[0]);
+        // head.previous=null;
+        // Node t = head.next;
+        // Node prevT=head;
+        // // Loop to add the rest of the nodes
+        // for (int i = 1; i < n; i++) {
+        //     t.previous=prevT;
+        //     t = new Node(a[i]);
+        //     t = t.next; // Move the t ptr to the next node
+        //     prevT=prevT.next;
+        // }
+        // return head;
+
+        //gfg submission
+        // class Solution {
+        //     Node constructDLL(int a[]) {
+        //         int n = a.length;
+        //         if (n == 0) return null;
+        
+        //         Node head = new Node(a[0]);
+        //         Node prevNode = head;
+        //         Node currentNode;
+        
+        //         for (int i = 1; i < n; i++) {
+        //             currentNode = new Node(a[i]);
+        //             prevNode.next = currentNode;
+        //             currentNode.prev = prevNode;
+        //             prevNode = currentNode;
+        //         }
+        
+        //         Node tail = prevNode;
+        //         return head;
+        //     }
+        // }
+    }
+    // Q2 part 3
+    // Function to insert a new node at a given position in the doubly linked list
+    void addNode(Node h, int p, int x) {
+        if (h == null) return;
+        Node newNode = new Node(x);
+        
+        if (p == 0) {
+            // insert at start
+            newNode.next = head;
+            head.previous = newNode;
+            head = newNode;
+            return;
+        }
+        // node ptr to traverse
+        Node t = h;
+        // travel to (p-1)th node
+        for (int pos = 1; pos < p && t != null; pos++) {
+            t = t.next;
+        }
+        // if (p-1)th or pth place has no node, just insert at end 
+        if (t == null || t.next == null) {
+            tail.next = newNode;
+            newNode.previous = tail;
+            tail = newNode;
+            return;
+        }
+        newNode.next = t.next;
+        newNode.previous = t;
+        if (t.next != null) {
+            t.next.previous = newNode;
+        }
+        t.next = newNode;
+
+        // // first attempt, so wrong
+        // if(h==null) return;
+		// Node t = h; //at p0s=1
+		// Node prevT = null;
+		// int pos;//=1;
+		// for(pos = 1; pos > p; pos++){
+		//     prevT=t;
+		//     t=t.next;
+		//     if(t==null) return;
+		// }
+		// Node newNode=new Node(x);
+		// newNode.prev=t;
+		// newNode.next=t.next;
+		// t.next.prev = newNode;
+		// t.next = newNode;
+    }
+//     //gfg submission
+//     class GfG
+// {
+//     //Function to insert a new node after given position in doubly linked list.
+//     void addNode(Node head, int p, int x)
+// 	{
+//         //if (h == null) return;
+//         Node newNode = new Node(x);
+        
+//         if (p == -1) {
+//             // insert at start
+//             newNode.next = head;
+//             head.prev = newNode;
+//             head = newNode;
+//             head.prev =null;
+//             return;
+//         }
+//         // node ptr to traverse
+//         Node t = head;
+//         // travel to (p)th node
+//         for (int pos = 1; pos <= p && t != null; pos++) {
+//             t = t.next;
+//         }
+//         // if (p)th or (p+1)th place has no node, just insert at end 
+//         if (t == null || t.next == null) {
+//             if(t==null) t=t.prev;
+//             t.next = newNode;
+//             newNode.prev=t;
+//             newNode.next=null;
+//             return;
+//         }
+//         newNode.next = t.next;
+//         newNode.prev = t;
+//         if (t.next != null) {
+//             t.next.prev = newNode;
+//         }
+//         t.next = newNode;
+// 	}
+// }
+
+//Q3
+// function that deletes pth place node and returns the head of the linkedlist
+Node deleteNode(Node h,int p)
+{
+    Node t = h; Node prevT=h;
+    if(p==1) // del 1st node
+    {
+        t=t.next;
+        t.previous=null;
+        h=t;
+        return h;
+    }
+    //Travel to pth place
+    int pos=1;
+    while(pos<=p-1 && (t.next!=null || t!=null)){
+        prevT=t;
+        t=t.next;
+        pos++;
+    }
+    if(t.next==null||t==null)
+    {
+        //del last elem
+        // No need for below 3 lines
+        //if(t==null) t=prevT;
+        //prevT=prevT.prev;
+        //t=t.prev;
+        prevT.next=null;
+        return h;
+    }
+    // Normal inbetween node
+    t.next.previous=prevT;
+    prevT.next=t.next;
+    return h;
+}
+
+//Q4
+// First Attempt, almost correct logic, but NullPtrException if do it this way at last line of while loop
+// public static Node reverseDLL(Node  h)
+// {
+//     Node t=h;
+//     Node prevT=null;
+//     Node FutT=t.next;
+//     while(t!=null){
+//         t.prev=FutT;
+//         t.next=prevT;
+//         prevT=t;
+//         t=FutT;
+//         FutT=(FutT.next!=null)? FutT.next: null;
+        
+//     }
+//     h = prevT;
+//     return h;
+// }
+
+// 2nd attempt, slightly wrong at end
+
+// @SuppressWarnings("null")
+// public static Node reverseDLL(Node  h)
+// {
+//         if (h == null || h.next == null) {
+//             return h; 
+//         }
+//         Node t = h;
+//         Node prevT = null;
+//         Node FutT = null;
+        
+//         while (t!= null) {
+//             FutT = t.next;
+//             prevT = t.previous;
+//             t.next = prevT;
+//             t.previous = FutT;
+//             t = FutT;
+//         }
+        
+//         return ; // the new head of the rev Dll 
+        
+// }
+
+
+// correct one, attempt 3, gfg submission
+
+// public static Node reverseDLL(Node  h)
+// {
+//         if (h == null || h.next == null) {
+//             return h; 
+//         }
+//         Node t = h;
+//         Node prevT = null;
+//         Node FutT = null;
+
+//         while (t!= null) {
+//             FutT = t.next;
+//             prevT = t.previous;
+//             t.previous = FutT;
+//             t.next = prevT;
+//             t= FutT;
+//             // doing without FutT below
+//             // //FutT = t.next;
+//             // prevT = t.previous;
+//             // //t.prev = FutT;
+//             // t.previous = t.next;
+//             // t.next = prevT;
+//             // //t = FutT;
+//             // t=t.previous;
+//         }
+        
+//         h = prevT.previous; 
+//         return h;
+        
+//    }
+// attempt 4, best attempt
+ // Q4
+ public static Node reverseDLL(Node h) {
+    if (h == null || h.next == null) {
+        return h;
+    }
+
+    Node t = h;
+    Node prevT = null;
+    Node FutT;
+
+    while (t != null) {
+        FutT = t.next;
+        prevT = t.previous;
+        t.previous = FutT;
+        t.next = prevT;
+        if (FutT == null) {
+            h = t;
+        }
+        t = FutT;
+    }
+
+    return h;
+}
+}

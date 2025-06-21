@@ -1,0 +1,403 @@
+package Sorting;
+
+public class MinHeap {
+    private int[] heap;
+    private int size;
+    private int capacity;
+
+    public MinHeap(int capacity) {
+        this.capacity = capacity;
+        this.size = 0;
+        heap = new int[capacity];
+    }
+
+    private int parent(int i) {
+        return (i - 1) / 2;
+    }
+
+    private int leftChild(int i) {
+        return 2 * i + 1;
+    }
+
+    private int rightChild(int i) {
+        return 2 * i + 2;
+    }
+
+    private void swap(int i, int j) {
+        int temp = heap[i];
+        heap[i] = heap[j];
+        heap[j] = temp;
+    }
+
+    private void heapifyUp(int i) {
+        while (i > 0 && heap[parent(i)] > heap[i]) {
+            swap(i, parent(i));
+            i = parent(i);
+        }
+    }
+
+    private void heapifyDown(int i) {
+        int minIndex = i;
+        int left = leftChild(i);
+        int right = rightChild(i);
+
+        if (left < size && heap[left] < heap[minIndex])
+            minIndex = left;
+        
+        if (right < size && heap[right] < heap[minIndex])
+            minIndex = right;
+
+        if (i != minIndex) {
+            swap(i, minIndex);
+            heapifyDown(minIndex);
+        }
+    }
+
+    public void insert(int value) {
+        if (size == capacity) {
+            System.out.println("Heap is full!");
+            return;
+        }
+        heap[size] = value;
+        heapifyUp(size);
+        size++;
+    }
+
+    public int extractMin() {
+        if (size <= 0)
+            throw new IllegalStateException("Heap is empty!");
+
+        int min = heap[0];
+        heap[0] = heap[size - 1];
+        size--;
+        heapifyDown(0);
+        return min;
+    }
+
+    public int peek() {
+        if (size == 0)
+            throw new IllegalStateException("Heap is empty!");
+        return heap[0];
+    }
+
+    private void resize() {
+        int[] newHeap = new int[capacity * 2];
+        System.arraycopy(heap, 0, newHeap, 0, capacity);
+        heap = newHeap;
+        capacity *= 2;
+    }
+    
+    public void removeAtIndex(int index) {
+        if (index >= size || index < 0) {
+            throw new IndexOutOfBoundsException("Index out of bounds");
+        }
+        heap[index] = heap[size - 1];
+        size--;
+        heapifyDown(index);
+    }
+
+    public boolean search(int value) {
+        for (int i = 0; i < size; i++) {
+            if (heap[i] == value) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void heapSort(int[] array) {
+        // S1: Build a min-heap from the input array
+        for (int i = 0; i < array.length; i++) {
+            insert(array[i]);
+        }
+
+        // S2: Extract elements from the min-heap and store them in the output array
+        for (int i = 0; i < array.length; i++) {
+            array[i] = extractMin();
+        }
+    }
+}
+
+package Sorting;
+
+public class MaxHeap {
+
+    private int[] heap;
+    private int size;
+    private int capacity;
+
+    public MaxHeap(int capacity) {
+        this.capacity = capacity;
+        this.size = 0;
+        heap = new int[capacity];
+    }
+
+    private int parent(int i) {
+        return (i - 1) / 2;
+    }
+
+    private int leftChild(int i) {
+        return 2 * i + 1;
+    }
+
+    private int rightChild(int i) {
+        return 2 * i + 2;
+    }
+
+    private void swap(int i, int j) {
+        int temp = heap[i];
+        heap[i] = heap[j];
+        heap[j] = temp;
+    }
+
+    private void heapifyUp(int i) {
+        while (i > 0 && heap[parent(i)] < heap[i]) {
+            swap(i, parent(i));
+            i = parent(i);
+        }
+    }
+
+    private void heapifyDown(int i) {
+        int maxIndex = i;
+        int left = leftChild(i);
+        int right = rightChild(i);
+
+        if (left < size && heap[left] > heap[maxIndex])
+            maxIndex = left;
+        
+        if (right < size && heap[right] > heap[maxIndex])
+            maxIndex = right;
+
+        if (i != maxIndex) {
+            swap(i, maxIndex);
+            heapifyDown(maxIndex);
+        }
+    }
+
+
+    public void insert(int value) {
+        if (size == capacity) {
+            System.out.println("Heap is full!");
+            return;
+        }
+        heap[size] = value;
+        heapifyUp(size);
+        size++;
+    }
+
+    public int extractMax() {
+        if (size <= 0)
+            throw new IllegalStateException("Heap is empty!");
+
+        int min = heap[0];
+        heap[0] = heap[size - 1];
+        size--;
+        heapifyDown(0);
+        return min;
+    }
+
+    public int peek() {
+        if (size == 0)
+            throw new IllegalStateException("Heap is empty!");
+        return heap[0];
+    }
+
+    private void resize() {
+        int[] newHeap = new int[capacity * 2];
+        System.arraycopy(heap, 0, newHeap, 0, capacity);
+        heap = newHeap;
+        capacity *= 2;
+    }
+    
+    public void removeAtIndex(int index) {
+        if (index >= size || index < 0) {
+            throw new IndexOutOfBoundsException("Index out of bounds");
+        }
+        heap[index] = heap[size - 1];
+        size--;
+        heapifyDown(index);
+    }
+    // Not working 1st attempt, can't figure why
+    // public boolean search(int value) {
+    //     for (int i = 0; i < size; i++) {
+    //         if (heap[i] == value) {
+    //             return true;
+    //         }
+    //     }
+    //     return false;
+    // }
+        //Also Not working due to some reason I can't figure
+    public boolean search(int value) {
+        // Starting search from the root
+        return searchHelper(0, value);
+    }
+    
+    private boolean searchHelper(int index, int value) {
+        // If the index is beyond the heap size, return false
+        if (index >= size) {
+            return false;
+        }
+    
+        // Check if the current node contains the value
+        if (heap[index] == value) {
+            return true;
+        }
+    
+        // Recursively search in the left and right subtrees
+        return searchHelper(leftChild(index), value) || searchHelper(rightChild(index), value);
+    }
+    
+    public void heapSort(int[] array) {
+        // S1: Build a max-heap from the input array
+        for (int i = 0; i < array.length; i++) {
+            insert(array[i]);
+        }
+
+        // S2: Extract elements from the max-heap and store them in the output array
+        for (int i = 0; i < array.length; i++) {
+            array[i] = extractMax();
+        }
+    }
+}
+
+//In a different file
+package Sorting;
+
+public class HeapTesting {
+
+    public static void main(String[] args) {
+        int[] array = {3, 1, 4, 1, 5, 9, 2, 6};
+        
+        // Sorting using MinHeap
+        MinHeap minHeap = new MinHeap(array.length);
+        minHeap.heapSort(array);
+        System.out.println("Sorted array using MinHeap:");
+        for (int num : array) {
+            System.out.print(num + " ");
+        }
+        System.out.println();
+
+        System.out.println("Search for 2: " + minHeap.search(2)); // Should print true
+        System.out.println("Search for 7: " + minHeap.search(7)); // Should print false
+
+        // Sorting using MaxHeap
+        MaxHeap maxHeap = new MaxHeap(array.length);
+        maxHeap.heapSort(array);
+        System.out.println("Sorted array using MaxHeap:");
+        for (int num : array) {
+            System.out.print(num + " ");
+        }
+        System.out.println();
+
+        System.out.println("Search for 2: " + maxHeap.search(2)); // Should print true
+        System.out.println("Search for 7: " + maxHeap.search(7)); // Should print false
+
+    }
+
+
+}
+/////
+
+package Sorting;
+import java.util.*;
+public class CountingSort {
+    public static void countingSort(int[] array) {
+        int max = getMax(array);
+        int[] count = new int[max + 1];
+        int[] result = new int[array.length];
+
+        // Count no. of occurrences (freq.) of each element
+        for (int value : array) {
+            count[value]++;
+        }
+
+        // Modify count array to store cumulative count
+        for (int i = 1; i < count.length; i++) {
+            count[i] += count[i - 1];
+        }
+
+        // Build the sorted array
+        for (int i = array.length - 1; i >= 0; i--) {
+            result[count[array[i]] - 1] = array[i];
+            count[array[i]]--;
+        }
+
+        // Copy the sorted elements back into the original array
+        System.arraycopy(result, 0, array, 0, array.length);
+    }
+
+    private static int getMax(int[] array) {
+        //int max = -1; Works but best practice as below
+        int max = Integer.MIN_VALUE;
+        for (int value : array) {
+            if (value > max) {
+                max = value;
+            }
+        }
+        return max;
+    }
+
+    public static void main(String[] args) {
+        int[] array = {4, 2, 2, 8, 3, 3, 1};
+        System.out.println("Original array: " + Arrays.toString(array));
+        countingSort(array);
+        System.out.println("Sorted array: " + Arrays.toString(array));
+    }
+}
+
+package Sorting;
+
+import java.util.Arrays;
+
+public class RadixSort {
+    public static void radixSort(int[] array) {
+        // Find the max. no. to know the no. of digits
+        int max = getMax(array);
+
+        // Perform counting sort for every digit from least significant to most significant
+        for (int exp = 1; max / exp > 0; exp *= 10) {
+            countingSort(array, exp);
+        }
+    }
+
+    private static void countingSort(int[] array, int exp) {
+        int[] count = new int[10];
+        int[] output = new int[array.length];
+
+        // Count the freq. of occurrences of each digit in the current position
+        for (int value : array) {
+            count[(value / exp) % 10]++;
+        }
+
+        // Modify count array to store cumulative count
+        for (int i = 1; i < count.length; i++) {
+            count[i] += count[i - 1];
+        }
+
+        // Build the sorted output array
+        for (int i = array.length - 1; i >= 0; i--) {
+            output[count[(array[i] / exp) % 10] - 1] = array[i];
+            count[(array[i] / exp) % 10]--;
+        }
+
+        // Copy the sorted elements back into the original array
+        System.arraycopy(output, 0, array, 0, array.length);
+    }
+
+    private static int getMax(int[] array) {
+        int max = array[0];
+        for (int value : array) {
+            if (value > max) {
+                max = value;
+            }
+        }
+        return max;
+    }
+
+    public static void main(String[] args) {
+        int[] array = {170, 45, 75, 90, 802, 24, 2, 66};
+        System.out.println("Original array: " + Arrays.toString(array));
+        radixSort(array);
+        System.out.println("Sorted array: " + Arrays.toString(array));
+    }
+}

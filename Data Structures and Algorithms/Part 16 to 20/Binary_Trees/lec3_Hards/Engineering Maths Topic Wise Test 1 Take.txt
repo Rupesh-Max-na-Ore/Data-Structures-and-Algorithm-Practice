@@ -1,0 +1,83 @@
+Engineering Maths Topic Wise Test 1	Take Test	Apr 17, 2024	Complete GATE CSE Linear Algebra
+Discrete Maths Topic Wise Test 1	Take Test	Apr 18, 2024	Propositional logic, First order logic
+Engineering Maths Topic Wise Test 2	Take Test
+Apr 19, 2024	Complete GATE CSE Probability
+Discrete Maths Topic Wise Test 2	Take Test
+Apr 22, 2024	Set Theory, Functions, Relations, Lattices
+Engineering Maths Topic Wise Test 3	Take Test	Apr 25, 2024	Complete GATE CSE Calculus
+Discrete Maths Topic Wise Test 3	Take Test	Apr 28, 2024	Group Theory
+Engineering Maths Subject Wise Test 1	Take Test	May 1, 2024	Complete GATE CSE Engineering Maths syllabus
+Discrete Maths Topic Wise Test 4	Take Test	May 4, 2024	Combinatorics
+Discrete Maths Topic Wise Test 5	Take Test	May 7, 2024	Graph Theory
+Discrete Maths Subject Wise Test 1	Take Test	May 10, 2024	Complete GATE CSE Discrete Maths syllabus
+DM,EM 65Q Full Length Test 1	Take Test	May 13, 2024	Complete Discrete Maths and GATE CSE Engineering Maths Syllabus
+Digital Logic Topic Wise Test 1	Take Test	May 16, 2024	Boolean Algebra, Minimization, Number System
+Digital Logic Topic Wise Test 2	Take Test	May 19, 2024	Combinational Circuits
+Digital Logic Topic Wise Test 3	Take Test	May 22, 2024	Sequential Circuits
+Digital Logic Subject Wise Test 1	Take Test	May 25, 2024	Complete Digital Logic syllabus
+Database Topic Wise Test 1	Take Test	May 28, 2024	Normalization
+C Programming Topic Wise Test 1	Take Test	May 31, 2024	Number Representation, Control Statements (if-else, switch-case, loops), Operators
+Database Topic Wise Test 2	Take Test	Jun 3, 2024	ER Model, Integrity Constraints
+C Programming Topic Wise Test 2	Take Test	Jun 6, 2024	Compilation system, Storage class, Function, Recursion, Pointers
+Extra Probability and Statistics Test 1	Take Test	Jun 6, 2024	Discrete and Continuous Random Variables
+Database Topic Wise Test 3	Take Test	Jun 9, 2024	Queries, SQL, TRC, Relational Algebra
+C Programming Topic Wise Test 3	Take Test	Jun 12, 2024	Pointers, Char array and strings, Structures, Dynamic memory allocation
+Database Topic Wise Test 4	Take Test	Jun 15, 2024	Indexing, B Tree, B+ Tree
+C Programming Subject Wise Test 1	Upcoming	Jun 18, 2024	Complete C Programming syllabus
+Extra Probability and Statistics Test 2	Take Test	Jun 19, 2024	Bayes Theorem, Conditional Probability
+Extra Calculus Test 1	Take Test	Jun 20, 2024	Limits, Continuity
+Database Topic Wise Test 5	Take Test	Jun 21, 2024	Transaction management
+Theory of Computation Topic Wise Test 1	Take Test	Jun 24, 2024	Finite Automata
+Database Subject Wise Test 1	Upcoming	Jun 27, 2024	Computer Database syllabus
+Computer Networks Topic Wise Test 1	Take Test	Jun 30, 2024	IP addessing (subnetting and supenetting), Data Link layer
+Theory of Computation Topic Wise Test 2	Take Test	Jul 3, 2024	Regular Expression
+Computer Networks Topic Wise Test 2	Take Test	Jul 6, 2024	Netwok Layer
+Theory of Computation Topic Wise Test 3	Take Test	Jul 9, 2024	CFG, PDA
+Computer Networks Topic Wise Test 3	Take Test	Jul 12, 2024	Routing algoithms, Transport layer
+Theory of Computation Topic Wise Test 4	Take Test	Jul 15, 2024	Closure Properties, language class detction
+Computer Networks Topic Wise Test 4	Take Test	Jul 18, 2024	Transport layer, Application Layer
+Theory of Computation Topic Wise Test 5	Take Test	Jul 21, 2024	Decidability, Undecidability
+Computer Networks Subject Wise Test 1	Take Test	Jul 24, 2024	Complete Computer Networks Syllabus
+Theory of Computation Subject Wise Test 1	Take Test	Jul 27, 2024	Complete Theory of Computation Syllabus
+Compiler Design Topic Wise Test 1	Take Test	Jul 30, 2024	Lexical, Synatx Analysis, Parsers
+Computer Orgranisation Topic Wise Test 1	Take Test	Aug 2, 2024	Basics, Addressing Modes, Control Unit
+Compiler Design Topic Wise Test 2	Take Test	Aug 5, 2024	Semantic Analysis, SDT, SDD, Parser
+Computer Orgranisation Topic Wise Test 2	Take Test	Aug 8, 2024	Pipelining
+Compiler Design Topic Wise Test 3	Take Test	Aug 11, 2024	Intermediate Codes, DAG, SSA, Code Optimisation
+Computer Orgranisation Topic Wise Test 3	Take Test	Aug 14, 2024	Cache Memory
+Compiler Design Subject Wise Test 1	Upcoming	Aug 17, 2024	Complete Compiler Design Syllabus
+CN,DBMS,TOC,CD 65Q Full Length Test 2	Take Test	Aug 20, 2024	Complete Computer Networks, DBMS, Theory of Computation, and Compiler Design Syllabus
+Computer Orgranisation Topic Wise Test 4	Take Test	Aug 23, 2024	I/O Interfacing, Magnetic Disk
+Computer Orgranisation Subject Wise Test 1	Upcoming	Aug 26, 2024	Complete Computer Organisation Syllabus
+Operating Systems Topic Wise Test 1	Take Test	Aug 29, 2024	Scheduling
+Operating Systems Topic Wise Test 2	Take Test	Sep 1, 2024	Synchronisation, Deadlock
+Operating Systems Topic Wise Test 3	Take Test	Sep 4, 2024	Memory Management
+Operating Systems Topic Wise Test 4	Take Test	Sep 7, 2024	File system, Fork, Systems calls
+Operating Systems Subject Wise Test 1	Upcoming	Sep 10, 2024	Complete Operating Systems Syllabus
+OS,COA,Digital Logics 65Q Full Length Test 3	Take Test	Sep 13, 2024	Complete Operating Systems, Coputer Organization & Architecture, and Digital Logics Syllabus
+Data Structures Topic Wise Test 1	Take Test	Sep 16, 2024	Linked List
+Data Structures Topic Wise Test 2	Take Test	Sep 19, 2024	Asymptotic Notations and Loops time complexity.
+Data Structures Topic Wise Test 3	Take Test	Sep 22, 2024	Stack and Queue
+Data Structures Topic Wise Test 4	Take Test	Sep 25, 2024	Combinatorics in Trees (Binary tree, Binary search tree, AVL tree, Heap)
+Data Structures Topic Wise Test 5	Take Test	Sep 28, 2024	Hashing with Probability
+Data Structures Subject Wise Test 1	Upcoming	Oct 1, 2024	Complete Data Structres Syllabus
+Algorithm Topic Wise Test 1	Take Test	Oct 4, 2024	Divide and Conquer (few probabilistic questions in algorithm)
+Algorithm Topic Wise Test 2	Take Test	Oct 7, 2024	Recurrence relation (Master theorem, iteration method, change of variable, tree method etc)
+Algorithm Topic Wise Test 3	Take Test	Oct 10, 2024	Greedy Algorithms
+Algorithm Topic Wise Test 4	Take Test	Oct 13, 2024	Dynamic Programming
+Algorithm Subject Wise Test 1	Upcoming	Oct 16, 2024	Complete Algorithm Syllabus
+C,DS,Algo 65Q Full Length Test 4	Upcoming	Oct 19, 2024	Complete C Programming, Data Structures, and Algorithm Syllabus
+GO Classes CS 2025 Mock Test 1	Upcoming	Oct 22, 2024	Mock Test
+GO Classes CS 2025 Mock Test 2	Upcoming	Oct 29, 2024	Mock Test
+GO Classes CS 2025 Mock Test 3	Upcoming	Nov 5, 2024	Mock Test
+GO Classes CS 2025 Mock Test 4	Upcoming	Nov 12, 2024	Mock Test
+GO Classes CS 2025  Mock Test 5	Upcoming	Nov 19, 2024	Mock Test
+GO Classes CS 2025 Mock Test 6	Upcoming	Nov 26, 2024	Mock Test
+GO Classes CS 2025 Mock Test 7	Upcoming	Dec 10, 2024	Mock Test
+GO Classes CS 2025 Mock Test 8	Upcoming	Dec 17, 2024	Mock Test
+GO Classes CS 2025 Mock Test 9	Upcoming	Dec 24, 2024	Mock Test
+GO Classes CS 2025 Mock Test 10	Upcoming	Dec 31, 2024	Mock Test
+GO Classes CS 2025 Mock Test 11	Upcoming	Jan 13, 2025	Mock Test
+GO Classes CS 2025 Mock Test 12	Upcoming	Jan 21, 2025	Mock Test
+GO Classes CS 2025 Mock Test 13	Upcoming	Jan 28, 2025	Mock Test
+GO Classes CS 2025 Mock Test 14	Upcoming	Feb 4, 2025	Mock Test

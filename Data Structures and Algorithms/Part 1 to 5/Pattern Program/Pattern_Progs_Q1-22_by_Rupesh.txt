@@ -1,0 +1,1301 @@
+/* P1
+*****
+*****
+*****
+*****
+*****
+ using iteration & recursion
+*/
+
+import java.util.Scanner;
+
+public class p1 {
+
+    public static void printPattern(int rows, int cols)
+    {
+        //Loop for rows
+        for(int i=0; i<rows;i++)
+        {   
+            //Loop for cols.
+            // to Print '*' cols no. of times
+            for(int j=0;j<cols;j++)
+            {
+                System.out.print("*");
+            }
+            System.out.println();
+        }
+    }
+    
+
+    public static void printPatternR(int rows, int cols) {
+        //Base case- when rows becomes 0, stop recursion
+        if (rows == 0)
+            return;
+        
+        
+        // Print '*' cols no. of times
+        for (int i = 0; i < cols; i++) {
+            System.out.print("*");
+        }
+        System.out.println();
+
+        //Recursive case
+        //Recursive call with rows - 1
+        printPatternR(rows - 1, cols);
+    }
+
+    public static void main(String[] args) {
+        Scanner s = new Scanner(System.in);
+
+        System.out.print("Enter the number of rows and columuns: ");
+        int rows = s.nextInt();
+        int cols = rows; 
+        // as No. of cols is same as rows
+        System.out.println("Iterative soln:");
+        printPattern(rows, cols);
+        // fn call
+        System.out.println("Recursive soln:");
+        printPatternR(rows, cols);
+
+        s.close();
+    }
+}
+
+/* P2
+*
+**
+***
+****
+*****
+ using iteration & recursion
+*/
+
+import java.util.Scanner;
+
+public class p2 {
+
+    public static void printPatternR(int rows) {
+        if (rows == 0)
+            return;
+
+        
+
+        // Recursive call with rows - 1
+        printPatternR(rows - 1);
+
+        // Print '*' 'rows' number of times
+        printStars(1, rows);
+        System.out.println();
+    }
+
+    public static void printStars(int current, int target) {
+        if (current > target)
+            return;
+        System.out.print("*");
+        printStars(current + 1, target);
+    }
+
+    public static void main(String[] args) {
+        Scanner s = new Scanner(System.in);
+
+        System.out.print("Enter the number of rows: ");
+        int rows = s.nextInt();
+
+        //Iterative Fn use
+        System.out.println("Iterative Implementation");
+        for(int i=0;i<rows;i++)
+        {
+                for(int j=0;j<=i;j++)
+                {
+                    System.out.print("*");
+                }
+                System.out.println();
+        }
+
+        // Recursive Fn call
+        System.out.println("Recursive Implementation");
+        printPatternR(rows);
+
+        s.close();
+    }
+}
+
+/* P3
+1
+12
+123
+1234
+12345
+ using iteration & recursion
+*/
+
+import java.util.Scanner;
+
+public class p3 {
+
+    public static void printPatternR(int rows) {
+        if (rows == 0)
+            return;
+
+        
+
+        // Recursive call with rows - 1
+        printPatternR(--rows);
+
+        // Print '*' 'rows' number of times
+        printStars(0, rows);
+        System.out.println();
+    }
+
+    public static void printStars(int current, int target) {
+        if (current == target)
+            return;
+        System.out.print(current+1);
+        printStars(++current, target);
+    }
+
+    public static void main(String[] args) {
+        Scanner s = new Scanner(System.in);
+
+        System.out.print("Enter the number of rows: ");
+        int rows = s.nextInt();
+
+        //Iterative Fn use
+        System.out.println("Iterative Implementation");
+        for(int i=0;i<rows;i++)
+        {
+                for(int j=0;j<=i;j++)
+                {
+                    System.out.print(j+1);
+                }
+                System.out.println();
+        }
+
+        // Recursive Fn call
+        System.out.println("Recursive Implementation");
+        printPatternR(rows);
+
+        s.close();
+    }
+}
+/* P4
+1
+22
+333
+4444
+55555
+ using iteration & recursion
+*/
+
+import java.util.Scanner;
+
+public class p4 {
+
+    public static void printPatternR(int rows) {
+        if (rows == 0)
+            return;
+
+        
+
+        // Recursive call with rows - 1
+        printPatternR(rows - 1);
+
+        // Print '*' 'rows' number of times
+        printStars(0, rows);
+        System.out.println();
+    }
+
+    public static void printStars(int current, int target) {
+        if (current == target)
+            return;
+        System.out.print(target);
+        printStars(current + 1, target);
+    }
+
+    public static void main(String[] args) {
+        Scanner s = new Scanner(System.in);
+
+        System.out.print("Enter the number of rows: ");
+        int rows = s.nextInt();
+
+        //Iterative Fn use
+        System.out.println("Iterative Implementation");
+        for(int i=1;i<=rows;i++)
+        {
+                for(int j=1;j<=i;j++)
+                {
+                    System.out.print(i);
+                }
+                System.out.println();
+        }
+
+        // Recursive Fn call
+        System.out.println("Recursive Implementation");
+        printPatternR(rows);
+
+        s.close();
+    }
+}
+
+
+/* P5
+*****
+****
+***
+**
+*
+ using iteration & recursion
+*/
+
+import java.util.Scanner;
+
+public class p5 {
+
+    public static void printPatternR(int rows) {
+        if (rows == 0)
+            return;
+
+        // Print '*' 'rows' number of times
+        printStars(1, rows);
+        System.out.println();
+
+        // Recursive call with rows - 1
+        printPatternR(rows - 1);
+    }
+
+    public static void printStars(int current, int target) {
+        if (current > target)
+            return;
+        System.out.print("*");
+        printStars(current + 1, target);
+    }
+
+    public static void main(String[] args) {
+        Scanner s = new Scanner(System.in);
+
+        System.out.print("Enter the number of rows: ");
+        int rows = s.nextInt();
+
+        //Iterative Fn use
+        System.out.println("Iterative Implementation");
+        for(int i=rows;i>=1;i--)
+        {
+                for(int j=1;j<=i;j++)
+                {
+                    System.out.print("*");
+                }
+                System.out.println();
+        }
+
+        // Recursive Fn call
+        System.out.println("Recursive Implementation");
+        printPatternR(rows);
+
+        s.close();
+    }
+}
+
+/* P6
+12345
+1234
+123
+12
+1
+ using iteration & recursion
+*/
+
+import java.util.Scanner;
+
+public class p6 {
+
+    public static void printPatternR(int rows) {
+        if (rows == 0)
+            return;
+
+        // Print '*' 'rows' number of times
+        printStars(1, rows);
+        System.out.println();
+
+        // Recursive call with rows - 1
+        printPatternR(rows - 1);
+    }
+
+    public static void printStars(int current, int target) {
+        if (current > target)
+            return;
+        System.out.print(current);
+        printStars(current + 1, target);
+    }
+
+    public static void main(String[] args) {
+        Scanner s = new Scanner(System.in);
+
+        System.out.print("Enter the number of rows: ");
+        int rows = s.nextInt();
+
+        //Iterative Fn use
+        System.out.println("Iterative Implementation");
+        for(int i=rows;i>=1;i--)
+        {
+                for(int j=1;j<=i;j++)
+                {
+                    System.out.print(j);
+                }
+                System.out.println();
+        }
+
+        // Recursive Fn call
+        System.out.println("Recursive Implementation");
+        printPatternR(rows);
+
+        s.close();
+    }
+}
+
+/* P7
+    *
+   ***
+  *****
+ *******
+*********
+ using iteration & recursion
+*/
+
+import java.util.Scanner;
+
+public class p7 {
+
+    public static void printPatternR(int rows,int currentRow) {
+        if (currentRow > rows)
+            return;
+
+        
+        //print gaps row - currentRow times
+        int Ngap=rows - currentRow;
+        for(int i = 0; i < Ngap; i++) {
+            System.out.print(" ");
+        }
+
+        //print * 2*currentRow-rows times
+        int Nstar=2*currentRow-1;
+        for(int i = 0; i < Nstar; i++) {
+            System.out.print("*");
+        }
+
+        System.out.println();
+
+        // Recursive call with updated currentRow
+        printPatternR(rows, currentRow + 1);
+    }
+
+   
+
+    public static void main(String[] args) {
+        Scanner s = new Scanner(System.in);
+
+        System.out.print("Enter the number of rows: ");
+        int rows = s.nextInt();
+        int gap, star;
+        //Iterative Fn use
+        System.out.println("Iterative Implementation");
+        gap=rows;
+            star=1;
+        for(int i=1;i<=rows;i++)
+        {
+            
+                for(int j=1;j<=gap-i;j++)
+                {
+                    System.out.print(" ");
+                }
+                for(int k=1;k<=star;k++)
+                {
+                    System.out.print("*");
+                }
+                System.out.println();
+                
+                star=star+2;
+        }
+
+        // Recursive Fn call
+        System.out.println("Recursive Implementation");
+        printPatternR(rows,1);
+
+        s.close();
+    }
+}
+
+/* P8
+    *
+   ***
+  *****
+ *******
+*********
+ using iteration & recursion
+*/
+
+import java.util.Scanner;
+
+public class p8 {
+
+    public static void printPatternR(int rows,int currentRow) {
+        if (currentRow > rows)
+            return;
+
+        
+        //print gaps currentRow-1 times
+        int Ngap=currentRow-1;
+        for(int i = 0; i < Ngap; i++) {
+            System.out.print(" ");
+        }
+
+        //print * 2*(rows-currentRow)+1 times
+        int Nstar=2*(rows-currentRow)+1;
+        for(int i = 0; i < Nstar; i++) {
+            System.out.print("*");
+        }
+
+        System.out.println();
+
+        // Recursive call with updated currentRow
+        printPatternR(rows, currentRow + 1);
+    }
+
+   
+
+    public static void main(String[] args) {
+        Scanner s = new Scanner(System.in);
+
+        System.out.print("Enter the number of rows: ");
+        int rows = s.nextInt();
+        int gap, star;
+        //Iterative Fn use
+        System.out.println("Iterative Implementation");
+        gap=0;
+            star=2*rows-1;
+        for(int i=1;i<=rows;i++)
+        {
+            
+                for(int j=1;j<=gap;j++)
+                {
+                    System.out.print(" ");
+                }
+                for(int k=1;k<=star;k++)
+                {
+                    System.out.print("*");
+                }
+                System.out.println();
+                gap++;
+                star=star-2;
+        }
+
+        // Recursive Fn call
+        System.out.println("Recursive Implementation");
+        printPatternR(rows,1);
+
+        s.close();
+    }
+}
+
+/* P9
+    *
+   ***
+  *****
+   ***
+    *
+ using iteration & recursion
+*/
+
+import java.util.Scanner;
+
+public class p9 {
+
+    public static void printPatternR1(int rows,int currentRow,int same) {
+        if (currentRow > rows)
+            return;
+
+            int Ngap;
+        //print gaps row - currentRow +1(extra 1 gap for transition) times
+        if(same==0) Ngap=rows - currentRow + 1;
+        else Ngap=rows - currentRow;
+        for(int i = 0; i < Ngap; i++) {
+            System.out.print(" ");
+        }
+
+        //print * 2*currentRow-rows times
+        int Nstar=2*currentRow-1;
+        for(int i = 0; i < Nstar; i++) {
+            System.out.print("*");
+        }
+
+        System.out.println();
+
+        // Recursive call with updated currentRow
+        printPatternR1(rows, currentRow + 1,same);
+    }
+
+    public static void printPatternR2(int rows,int currentRow) {
+        if (currentRow > rows)
+            return;
+
+        
+        //print gaps currentRow-1 times
+        int Ngap=currentRow-1;
+        for(int i = 0; i < Ngap; i++) {
+            System.out.print(" ");
+        }
+
+        //print * 2*(rows-currentRow)+1 times
+        int Nstar=2*(rows-currentRow)+1;
+        for(int i = 0; i < Nstar; i++) {
+            System.out.print("*");
+        }
+
+        System.out.println();
+
+        // Recursive call with updated currentRow
+        printPatternR2(rows, currentRow + 1);
+    }
+
+    public static void main(String[] args) {
+        Scanner s = new Scanner(System.in);
+
+        System.out.print("Enter the number of rows: ");
+        int rows = s.nextInt();
+        //to determine whether rows is even or odd, hence the distribution of work among loops
+        int n= rows;
+        int n1,n2;
+        n1=n/2;
+        if(n%2==0) {
+            n2=n/2;
+        }else{
+            n2=n/2+1;
+        }
+        int gap, star;
+        //Iterative implementation 
+        System.out.println("Iterative Implementation");
+        //1st half subproblem
+        if(n1==n2)
+        gap=n1;
+        else gap=n1+1;
+        star=1;
+        for(int i=1;i<=n1;i++)
+        {
+            
+                for(int j=1;j<=gap-i;j++)
+                {
+                    System.out.print(" ");
+                }
+                for(int k=1;k<=star;k++)
+                {
+                    System.out.print("*");
+                }
+                System.out.println();
+                
+                star=star+2;
+        }
+        gap=0;
+            star=2*n2-1;
+        for(int i=1;i<=n2;i++)
+        {
+            
+                for(int j=1;j<=gap;j++)
+                {
+                    System.out.print(" ");
+                }
+                for(int k=1;k<=star;k++)
+                {
+                    System.out.print("*");
+                }
+                System.out.println();
+                gap++;
+                star=star-2;
+        }
+
+        // Recursive Fn call
+        System.out.println("Recursive Implementation");
+        FullprintPatternR(rows);
+        // char ch=65;
+        // System.out.println((char)(ch+1));
+        s.close();
+    }
+
+
+
+    private static void FullprintPatternR(int rows) {
+        int n= rows;
+        int n1,n2;
+        int same=0;
+        n1=n/2;
+        if(n%2==0) {
+            n2=n/2; same=1;
+        }else{
+            n2=n/2+1;
+        }
+        
+        printPatternR1(n1,1,same);
+        printPatternR2(n2,1);
+    }
+}
+
+
+/* P10
+*
+**
+***
+**
+*
+ using iteration & recursion
+*/
+
+import java.util.Scanner;
+
+public class p10 {
+
+    public static void printPatternRu(int rows) {
+        if (rows == 0)
+            return;
+
+        
+
+        // Recursive call with rows - 1
+        printPatternRu(rows - 1);
+
+        // Print '*' 'rows' number of times
+        printStarsU(1, rows);
+        System.out.println();
+    }
+
+    public static void printStarsU(int current, int target) {
+        if (current > target)
+            return;
+        System.out.print("*");
+        printStarsU(current + 1, target);
+    }
+
+    public static void printPatternRl(int rows) {
+        if (rows == 0)
+            return;
+
+        // Print '*' 'rows' number of times
+        printStarsL(1, rows);
+        System.out.println();
+
+        // Recursive call with rows - 1
+        printPatternRl(rows - 1);
+    }
+
+    public static void printStarsL(int current, int target) {
+        if (current > target)
+            return;
+        System.out.print("*");
+        printStarsL(current + 1, target);
+    }
+
+    public static void main(String[] args) {
+        Scanner s = new Scanner(System.in);
+
+        System.out.print("Enter the number of rows: ");
+        int rows = s.nextInt();
+
+        int n2=Math.ceilDiv(rows,2);
+        int n1=rows/2;
+        int n3;
+        if(n1%2==0) n3=n1;
+        else n3=n1+1;
+
+        System.out.println("Iterative Implementation");
+        for(int i=0;i<n3;i++)
+        {
+                for(int j=0;j<=i;j++)
+                {
+                    System.out.print("*");
+                }
+                System.out.println();
+        }
+        for(int i=n2;i>=1;i--)
+        {
+                for(int j=1;j<=i;j++)
+                {
+                    System.out.print("*");
+                }
+                System.out.println();
+        }
+
+        //Iterative Fn use
+        // gives this 
+        // *
+        // **
+        // ***
+        // ***
+        // **
+        // *  for n=6(even)
+        // System.out.println("Iterative Implementation");
+        // for(int i=0;i<n1;i++)
+        // {
+        //         for(int j=0;j<=i;j++)
+        //         {
+        //             System.out.print("*");
+        //         }
+        //         System.out.println();
+        // }
+        // for(int i=n2;i>=1;i--)
+        // {
+        //         for(int j=1;j<=i;j++)
+        //         {
+        //             System.out.print("*");
+        //         }
+        //         System.out.println();
+        // }
+        System.out.println("Recursive Implementation");
+        //n2 &n3 placement interchangeable here
+        printPatternRu(n2);
+        printPatternRl(n3);
+        // Recursive Fn call
+        // System.out.println("Recursive Implementation");
+        // printPatternRu(n1);
+        // printPatternRl(n2);
+
+        s.close();
+    }
+}
+
+/* P11
+1
+01
+101
+0101
+10101
+ using iteration & recursion
+*/
+
+import java.util.Scanner;
+
+public class p11 {
+
+    public static void printPatternR(int rows) {
+        if (rows == 0)
+            return;
+
+        
+
+        // Recursive call with rows - 1
+        printPatternR(rows - 1);
+
+        // Print '*' 'rows' number of times
+        printStars(0, rows);
+        System.out.println();
+    }
+
+    public static void printStars(int current, int target) {
+        if (current == target)
+            return;
+        System.out.print((current+target)%2);
+        printStars(current + 1, target);
+    }
+
+    public static void main(String[] args) {
+        Scanner s = new Scanner(System.in);
+
+        System.out.print("Enter the number of rows: ");
+        int rows = s.nextInt();
+
+        //Iterative Fn use
+        System.out.println("Iterative Implementation");
+        for(int i=1;i<=rows;i++)
+        {
+                for(int j=1;j<=i;j++)
+                {
+                    System.out.print((i+j+1)%2);
+                }
+                System.out.println();
+        }
+
+        // Recursive Fn call
+        System.out.println("Recursive Implementation");
+        printPatternR(rows);
+
+        s.close();
+    }
+}
+
+
+/* P12
+1      1
+12    21
+123  321
+12344321
+ using iteration & recursion(do later)
+*/
+
+import java.util.Scanner;
+
+public class p12 {
+
+
+    public static void main(String[] args) {
+        Scanner s = new Scanner(System.in);
+
+        System.out.print("Enter the number of rows: ");
+        int n = s.nextInt();
+        int Ngap1,Ngap2,N1=1,N2=1,i=1,j=1,k=1,l=1,m=1;
+        Ngap1=n-1;
+        Ngap2=Ngap1;
+
+
+        //Iterative soln
+        System.out.println("Iterative Implementation");
+        while(i<=n)
+        {
+            j=1;k=1;l=1;m=1;
+            while(j<=N1) {System.out.print(j);j++;}
+            while(k<=Ngap1) {System.out.print(" ");k++;}
+            while(l<=Ngap2) {System.out.print(" ");l++;}
+            while(m<=N2) {System.out.print(N2-m+1);m++;}
+            System.out.println();
+            N1++;N2++;Ngap1--;Ngap2--;i++;
+
+        }
+
+        
+
+        s.close();
+    }
+}
+
+/* P13
+1
+23
+456
+78910
+1112131415
+ using iteration & recursion(do later)
+*/
+
+import java.util.Scanner;
+
+public class p13 {
+
+    public static void main(String[] args) {
+        Scanner s = new Scanner(System.in);
+
+        System.out.print("Enter the number of rows: ");
+        int n = s.nextInt();
+        int count=1;
+        
+        for(int i=1;i<=n;i++)
+        {
+            for(int j=1;j<=i;j++)
+            {
+                System.out.print(count);
+                count++;
+            }System.out.println();
+        }
+    }
+    
+}
+/* P14
+A
+AB
+ABC
+ABCD
+ABCDE
+ using iteration & recursion(do later)
+*/
+
+import java.util.Scanner;
+
+public class p14 {
+    public static void main(String[] args) {
+        
+    
+    Scanner s = new Scanner(System.in);
+
+        System.out.print("Enter the number of rows: ");
+        int n = s.nextInt();
+        char ch=65;
+        int i,j;
+        for(i=0;i<n;i++)
+        {   
+            ch=65;
+            for(j=0;j<=i;j++)
+            {
+                //System.out.print((char)(ch+j));
+                System.out.print(ch++);
+            }System.out.println();
+        }
+    }
+}
+/* P15
+ABCDEF
+ABCDE
+ABCD
+ABC
+AB
+A
+ using iteration & recursion(do later)
+*/
+
+import java.util.Scanner;
+
+public class p15 {
+    
+    public static void main(String[] args) {
+        
+    
+    Scanner s = new Scanner(System.in);
+
+        System.out.print("Enter the number of rows: ");
+        int n = s.nextInt();
+        char ch=65;
+        int i,j;
+        for(i=0;i<n;i++)
+        {   
+            ch='A';
+            for(j=0;j<=n-i-1;j++)
+            {
+                //System.out.print((char)(ch+j));
+                System.out.print(ch++);
+            }System.out.println();
+        }
+    }
+
+    
+}
+/* P16
+A
+BB
+CCC
+DDDD
+EEEEE
+ using iteration & recursion(do later)
+*/
+
+import java.util.Scanner;
+
+public class p16 {
+    public static void main(String[] args) {
+        
+    
+    Scanner s = new Scanner(System.in);
+
+        System.out.print("Enter the number of rows: ");
+        int n = s.nextInt();
+        char ch='A';
+        int i,j;
+        for(i=0;i<n;i++)
+        {   
+            
+            for(j=0;j<=i;j++)
+            {
+                //System.out.print((char)(ch+j));
+                System.out.print(ch);
+            }System.out.println();ch++;
+        }
+    }
+}
+/* P17
+    A
+   ABA
+  ABCBA
+ ABCDCBA
+ABCDEDCBA
+ using iteration & recursion(do later)
+*/
+
+import java.util.Scanner;
+
+public class p17 {
+    public static void main(String[] args) {
+        
+    
+    Scanner s = new Scanner(System.in);
+
+        System.out.print("Enter the number of rows: ");
+        int n = s.nextInt();
+        char ch=64;
+        int i,j,k,l;
+        for(i=1;i<=n;i++)
+        {   
+            ch=65;
+            
+            for(j=1;j<=n-i;j++)
+            {
+                System.out.print(" ");
+            }
+            for(k=1;k<=(i);k++)
+            {
+                System.out.print(ch);
+                ++ch;
+            }--ch;
+            for(l=1;l<=i-1;l++)
+            {
+                System.out.print(--ch);
+            }
+            System.out.println();
+        }
+    }
+    
+}
+/* P16
+Enter the number of rows: 5
+E
+DE
+CDE
+BCDE
+ABCDE
+ using iteration & recursion(do later)
+*/
+
+import java.util.Scanner;
+
+public class p18 {
+    public static void main(String[] args) {
+        
+    
+    Scanner s = new Scanner(System.in);
+
+        System.out.print("Enter the number of rows: ");
+        int n = s.nextInt();
+        char ch='A';
+        int i,j;
+        int UL=n;
+        int LL=n-1;
+        for(i=1;i<=n;i++)
+        {   
+            LL=UL-i;
+            while(LL<UL)
+            {
+                System.out.print((char)(ch+LL));
+                LL++;
+            }System.out.println();
+        }
+    }
+}
+/* P19
+Enter the number of rows: 5
+**********
+****  ****
+***    ***
+**      **
+*        *
+*        *
+**      **
+***    ***
+****  ****
+**********
+
+ using iteration & recursion(do later)
+*/
+
+import java.util.Scanner;
+
+public class p19 {
+    public static void main(String[] args) {
+        Scanner s = new Scanner(System.in);
+
+        System.out.print("Enter the number of rows: ");
+        int n = s.nextInt();
+        int Nstar1=n;
+        int Nstar2=n;
+        int Ngap=0;
+        int i,j,k,l;
+        //Upper Half
+        for(i=1;i<=n;i++)
+        {
+            for(j=1;j<=Nstar1;j++) System.out.print("*");
+            for(k=1;k<=Ngap;k++) System.out.print(" ");
+            for(l=1;l<=Nstar2;l++) System.out.print("*");
+            System.out.println();
+            Nstar1--;Nstar2--;
+            Ngap=Ngap+2; 
+        }
+
+        //Lower Half
+        Ngap=2*(n-1);
+        Nstar1=i;
+        Nstar2=i;
+
+        for(i=1;i<=n;i++)
+        {
+            for(j=1;j<=i;j++) System.out.print("*");
+            for(k=1;k<=Ngap;k++) System.out.print(" ");
+            for(l=1;l<=i;l++) System.out.print("*");
+            System.out.println();
+            Ngap=Ngap-2; 
+        }
+    }
+}
+/* P20
+Enter the number of rows: 5
+*        *
+**      **
+***    ***
+****  ****
+**********
+****  ****
+***    ***
+**      **
+*        *
+
+ using iteration & recursion(do later)
+*/
+
+import java.util.Scanner;
+
+public class p20 {
+    public static void main(String[] args) {
+        Scanner s = new Scanner(System.in);
+
+        System.out.print("Enter the number of rows: ");
+        int n = s.nextInt();
+        int Ngap=2*(n-1);
+        int i,j,k,l;
+        //Upper Half
+        for(i=1;i<=n;i++)
+        {
+            for(j=1;j<=i;j++) System.out.print("*");
+            for(k=1;k<=Ngap;k++) System.out.print(" ");
+            for(l=1;l<=i;l++) System.out.print("*");
+            System.out.println();
+            Ngap=Ngap-2; 
+        }
+
+        Ngap=2;//Lower Half
+
+        for(i=n-1;i>=1;i--)
+        {
+            for(j=1;j<=i;j++) System.out.print("*");
+            for(k=1;k<=Ngap;k++) System.out.print(" ");
+            for(l=1;l<=i;l++) System.out.print("*");
+            System.out.println();
+            Ngap=Ngap+2; 
+        }
+    }
+}
+/* P21
+Enter the number of rows: 7
+*******
+*     *
+*     *
+*     *
+*     *
+*     *
+*******
+ using iteration & recursion(do later)
+*/
+
+import java.util.Scanner;
+
+public class p21 {
+    public static void main(String[] args) {
+        Scanner s=new Scanner(System.in);
+        System.out.print("Enter the number of rows: ");
+        int n = s.nextInt();
+        int Ngap1=0;
+        int Ngap2=n-2;
+        int i,j;
+        for(i=1;i<=n;i++)
+        {
+            if(i==1||i==n){
+                for(j=1;j<=n;j++) System.out.print("*");
+                
+            }
+            else{
+                System.out.print("*");
+                for(j=1;j<=Ngap2;j++) System.out.print(" ");
+                System.out.print("*");
+            }System.out.println();
+        }
+    }
+    
+}
+/* P22
+Enter the number of rows: 5
+555555555
+544444445
+543333345
+543222345
+543212345
+543222345
+543333345
+544444445
+555555555
+ using iteration & recursion(do later)
+*/
+
+import java.util.Scanner;
+
+public class p22 {
+    public static void main(String[] args) {
+        Scanner s=new Scanner(System.in);
+        System.out.print("Enter the number of rows: ");
+        int n = s.nextInt();
+        int i,j;
+
+        //Idea 1 Soln. in My Notebook, simplest, short, but o(n^3)soln and uses matrix, so higher space complexity
+        int N=n;
+        int size=2*n-1;
+        int start=0;
+        int finish=size-1;
+        int A[][]=new int[size][size];
+        System.out.println("Matrix soln.");
+        while(N>0)
+        {
+            for(i=start;i<=finish;i++){
+                for(j=start;j<=finish;j++){
+                    if(i==start||j==start||i==finish||j==finish){
+                        A[i][j]=N;
+                    }
+                }
+            }start++;finish--;N--;
+        }
+        for(i=0;i<size;i++){
+            for( j=0;j<size;j++){
+                System.out.print(A[i][j]);}System.out.println();}
+
+        
+        //Idea 2 Soln. in My Notebook, shortest code, O(n^2) soln.
+        System.out.println("Distance soln.");
+        finish=size-1;
+        for(i=0;i<size;i++){
+            for( j=0;j<size;j++){
+                int top = i;
+                int bottom = finish - i;
+                int right = finish - j;
+                int left = j;              
+                System.out.print(n- Math.min(Math.min(top,bottom), Math.min(left,right)));
+            }System.out.println();
+        }
+        //Idea 3 Soln. in My Notebook, using composition long code, but O(n^2) soln as well
+        System.out.println("Composition soln.");
+        //Upper Half
+        int Ngap=2*(n-1);
+        N=n;
+        for(i=n;i>=1;i--){
+            for(j=n;j>=i;j--) System.out.print(j);
+            for(int k=1;k<=Ngap;k++) System.out.print(N);
+            for(int j2=i+1;j2<=n;j2++) System.out.print(j2);
+            System.out.println(); 
+            N--; Ngap=Ngap-2;
+        }
+        //Lower Half
+        Ngap=1;N=2;
+        int g=2;
+        for(i=n-1;i>=1;i--){
+            for(j=n;j>=g;j--) System.out.print(j);
+            for( int k=1;k<=Ngap;k++) System.out.print(N);
+            for(int j2=g;j2<=n;j2++) System.out.print(j2);
+            System.out.println(); 
+            N++; Ngap=Ngap+2;g++;
+        }
+
+
+    }
+}
+
+
+
+
+
+
+

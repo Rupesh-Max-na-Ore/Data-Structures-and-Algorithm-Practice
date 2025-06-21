@@ -1,0 +1,748 @@
+package Recursion_Pattern_Wise;
+/*Q1 8. String to Integer (atoi)
+
+Medium
+
+Implement the myAtoi(string s) function, which converts a string to a 32-bit signed integer.
+
+The algorithm for myAtoi(string s) is as follows:
+
+Whitespace: Ignore any leading whitespace (" ").
+Signedness: Determine the sign by checking if the next character is '-' or '+', assuming positivity is neither present.
+Conversion: Read the integer by skipping leading zeros until a non-digit character is encountered or the end of the string is reached. If no digits were read, then the result is 0.
+Rounding: If the integer is out of the 32-bit signed integer range [-231, 231 - 1], then round the integer to remain in the range. Specifically, integers less than -231 should be rounded to -231, and integers greater than 231 - 1 should be rounded to 231 - 1.
+Return the integer as the final result.
+
+ 
+
+Example 1:
+
+Input: s = "42"
+
+Output: 42
+
+Explanation:
+
+The underlined characters are what is read in and the caret is the current reader position.
+Step 1: "42" (no characters read because there is no leading whitespace)
+         ^
+Step 2: "42" (no characters read because there is neither a '-' nor '+')
+         ^
+Step 3: "42" ("42" is read in)
+           ^
+Example 2:
+
+Input: s = " -042"
+
+Output: -42
+
+Explanation:
+
+Step 1: "   -042" (leading whitespace is read and ignored)
+            ^
+Step 2: "   -042" ('-' is read, so the result should be negative)
+             ^
+Step 3: "   -042" ("042" is read in, leading zeros ignored in the result)
+               ^
+Example 3:
+
+Input: s = "1337c0d3"
+
+Output: 1337
+
+Explanation:
+
+Step 1: "1337c0d3" (no characters read because there is no leading whitespace)
+         ^
+Step 2: "1337c0d3" (no characters read because there is neither a '-' nor '+')
+         ^
+Step 3: "1337c0d3" ("1337" is read in; reading stops because the next character is a non-digit)
+             ^
+Example 4:
+
+Input: s = "0-1"
+
+Output: 0
+
+Explanation:
+
+Step 1: "0-1" (no characters read because there is no leading whitespace)
+         ^
+Step 2: "0-1" (no characters read because there is neither a '-' nor '+')
+         ^
+Step 3: "0-1" ("0" is read in; reading stops because the next character is a non-digit)
+          ^
+Example 5:
+
+Input: s = "words and 987"
+
+Output: 0
+
+Explanation:
+
+Reading stops at the first non-digit character 'w'.
+
+ 
+
+Constraints:
+
+0 <= s.length <= 200
+s consists of English letters (lower-case and upper-case), digits (0-9), ' ', '+', '-', and '.'.
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+1.6M
+Submissions
+8.9M
+Acceptance Rate
+17.4% */
+public class Atoi_Recursion {
+    public int myAtoi(String str){
+        char[] s= str.toCharArray();
+        int sign=1;
+        long accum=0;
+        int l=s.length; int i=0; boolean signSeen=false;
+        return atoiRecursive(s,l,i,sign,accum, signSeen);
+    }
+
+    private int atoiRecursive(char[] s, int l, int i, int sign, long accum, boolean signSeen) {
+        //Base case
+        if(i==l) {
+            System.out.println("limit a="+accum);
+            return (int)((sign)*accum);
+        }
+        //Recursive cases
+
+        //skip leading spaces
+        if(signSeen==false && (s[i]==' ')) {
+            System.out.println("space a="+accum);
+
+            return atoiRecursive(s, l, i+1, sign, accum, false); 
+        }
+            // sign encounter updation
+        if (!signSeen && (s[i] == '-' || s[i] == '+')) {
+            if (s[i] == '-') sign = -1;
+            System.out.println("sign a="+accum);
+
+            return atoiRecursive(s, l, i + 1, sign, accum, true);
+        }
+
+        //general case, check char
+        int ch=s[i];
+        if (ch >= '0' && ch <= '9') {
+            if(!signSeen) signSeen=true;//once enter here accept no sign
+            // ch is a digit
+            int val= ch - '0';//ascii to int
+            accum=(long)(accum*10 + val);
+            // if at any pt. accum becomes too great for 32bit signed int
+            if(accum>Integer.MAX_VALUE){
+                if(sign==-1) return Integer.MIN_VALUE;
+                else return Integer.MAX_VALUE;
+            }
+           // go deeper in recursion
+           System.out.println("digit char a="+accum);
+
+           //return atoiRecursive(s, l, i+1, sign, accum, signSeen);
+           return atoiRecursive(s, l, i+1, sign, accum, true);
+        } 
+            // ch is not a digit
+            // If a non-digit character is encountered after any valid digit
+            if(accum>0)
+            {
+                System.out.println("non digit char a="+accum);
+
+                return (int)((sign)*accum);
+                
+            }
+          
+          // If no valid digits were found
+          return 0;
+
+    }
+
+    public static void main(String[] args) {
+        Atoi_Recursion solution = new Atoi_Recursion();
+
+        // Test cases
+        System.out.println("Ans is = "+ solution.myAtoi("77"));           // Output: 42
+        System.out.println("Ans is = "+ solution.myAtoi("   -42"));       // Output: -42
+        System.out.println("Ans is = "+ solution.myAtoi("4193 with words")); // Output: 4193
+        System.out.println("Ans is = "+ solution.myAtoi("words and 987")); // Output: 0
+        System.out.println("Ans is = "+ solution.myAtoi("-91283472332")); // Output: -2147483648
+        System.out.println("Ans is = "+ solution.myAtoi("0-1"));          // Output: 0
+    }
+
+}
+// very short soln found, with good comments, might come handy for revision
+// class Solution {
+//     public int myAtoi(String s) {
+//         s = s.trim(); // Remove leading and trailing whitespace
+//         if (s.isEmpty()) return 0; // Return 0 if the string is empty after trimming
+//         return atoiRecursive(s, 0, 1, 0); // Call the recursive helper function
+//     }
+
+//     public int atoiRecursive(String s, int idx, int sign, long res) {
+//         if (idx == s.length()) return (int) (sign * res); // Base case: return the final result
+        
+//         char c = s.charAt(idx); // Get the character at index idx
+        
+//         if (Character.isDigit(c)) {
+//             // If the character is a digit, update the result
+//             res = (res * 10) + (c - '0');
+            
+//             // Check for overflow/underflow
+//             if (res * sign > Integer.MAX_VALUE) return Integer.MAX_VALUE;
+//             if (res * sign < Integer.MIN_VALUE) return Integer.MIN_VALUE;
+            
+//             // Continue recursively with the next character
+//             return atoiRecursive(s, idx + 1, sign, res);
+//         } else if (idx == 0 && (c == '+' || c == '-')) {
+//             // If the character is '+' or '-' and it's the first character, update the sign
+//             if (c == '-') sign = -1;
+            
+//             // Continue recursively with the next character
+//             return atoiRecursive(s, idx + 1, sign, res);
+//         }
+        
+//         // If the character is not a digit and it's not the first character,
+//         // or if it's an invalid character, return the current result
+//         return (int) (sign * res);
+//     }
+// }
+// first try
+// class Solution {
+//     public int myAtoi(String str) {
+//         char[] s= str.toCharArray();
+//         int sign=1;
+//         long accum=0;
+//         int l=s.length; int i=0;
+//         return atoiRecursive(s,l,i,sign,accum);
+//     }
+
+//         private int atoiRecursive(char[] s, int l, int i, int sign, long accum) {
+//         //Base case
+//         if(i==l) return (int)((sign)*accum);
+//         //Recursive cases
+
+//         //skip leading spaces and 0s
+//         if(i<l && accum==0 && (s[i]==' '||s[i]=='0)') 
+//             return atoiRecursive(s, l, i+1, sign, accum); 
+//         // sign encounter updation
+//         if(i<l && accum==0 && (s[i]=='-'||s[i]=='+')){
+//             if(s[i]=='-') sign=-1;
+//             return atoiRecursive(s, l, i+1, sign, accum);
+//         }
+
+//         //general case, check char
+//         int ch=s[i];
+//         if (ch >= '0' && ch <= '9') {
+//             // ch is a digit
+//             int val= ch - '0';//ascii to int
+//             accum=(long)(accum*10 + val);
+//             // if at any pt. accum becomes too great for 32bit signed int
+//             if(accum>Integer.MAX_VALUE){
+//                 if(sign==-1) return Integer.MIN_VALUE;
+//                 else return Integer.MAX_VALUE;
+//             }
+//           } else {
+//             // ch is not a digit
+//             return (int)((sign)*accum);
+//           }
+//           // go deeper in recursion
+//           return atoiRecursive(s, l, i+1, sign, accum);
+
+//     }
+
+// }
+// //lc submission
+// class Solution {
+//     public int myAtoi(String str){
+//             char[] s= str.toCharArray();
+//             int sign=1;
+//             long accum=0;
+//             int l=s.length; int i=0; boolean signSeen=false;
+//             return atoiRecursive(s,l,i,sign,accum, signSeen);
+//         }
+    
+//         private int atoiRecursive(char[] s, int l, int i, int sign, long accum, boolean signSeen) {
+//             //Base case
+//             if(i==l) {
+//                 return (int)((sign)*accum);
+//             }
+//             //Recursive cases
+    
+//             //skip leading spaces
+//             if(signSeen==false && (s[i]==' ')) {
+    
+//                 return atoiRecursive(s, l, i+1, sign, accum, false); 
+//             }
+//                 // sign encounter updation
+//             if (!signSeen && (s[i] == '-' || s[i] == '+')) {
+//                 if (s[i] == '-') sign = -1;
+    
+//                 return atoiRecursive(s, l, i + 1, sign, accum, true);
+//             }
+    
+//             //general case, check char
+//             int ch=s[i];
+//             if (ch >= '0' && ch <= '9') {
+//                 if(!signSeen) signSeen=true;//once enter here accept no sign
+//                 // ch is a digit
+//                 int val= ch - '0';//ascii to int
+//                 accum=(long)(accum*10 + val);
+//                 // if at any pt. accum becomes too great for 32bit signed int
+//                 if(accum>Integer.MAX_VALUE){
+//                     if(sign==-1) return Integer.MIN_VALUE;
+//                     else return Integer.MAX_VALUE;
+//                 }
+//                // go deeper in recursion
+    
+//                //return atoiRecursive(s, l, i+1, sign, accum, signSeen);
+//                return atoiRecursive(s, l, i+1, sign, accum, true);
+//             } 
+//                 // ch is not a digit
+//                 // If a non-digit character is encountered after any valid digit
+//                 if(accum>0)
+//                 {
+    
+//                     return (int)((sign)*accum);
+                    
+//                 }
+              
+//               // If no valid digits were found
+//               return 0;
+    
+//         }
+//     }
+    
+package Recursion_Pattern_Wise;
+/*Q2 50. Pow(x, n)
+Attempted
+Medium
+Implement pow(x, n), which calculates x raised to the power n (i.e., xn).
+
+
+Example 1:
+
+Input: x = 2.00000, n = 10
+Output: 1024.00000
+Example 2:
+
+Input: x = 2.10000, n = 3
+Output: 9.26100
+Example 3:
+
+Input: x = 2.00000, n = -2
+Output: 0.25000
+Explanation: 2-2 = 1/22 = 1/4 = 0.25
+
+Input: x = 2.00000, n = -2147483648
+Output: 
+Explanation:
+ 
+
+Constraints:
+
+-100.0 < x < 100.0
+-231 <= n <= 231-1
+n is an integer.
+Either x is not zero or n > 0.
+-104 <= xn <= 104
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+1.7M
+Submissions
+4.8M
+Acceptance Rate
+34.9% */ 
+public class BinaryExponentiation_power {
+    public double myPow(double x, int n) {
+        if(x==0) return 0;
+        if(n==0 && x!=0) return 1.0;
+        if(x==1.0) return 1.0;
+        if (x == -1.0) return (n % 2 == 0) ? 1.0 : -1.0;
+        int sign=1;
+        if (n<0) sign =-1; // long the exponent to handle edge cases
+        double magnitude=recurPow(x,(long)sign*n,1);
+        double ans = (sign==1)?magnitude:(1/magnitude)  ;
+        return ans;
+    }
+
+    private double recurPow(double x, long n, double ans) {
+        //Base
+        if(n==0) return ans;
+        //Recursive case
+        if(n%2==0){
+            return recurPow(x*x, n/2, ans);
+        }
+        else{
+            return recurPow(x, n-1, ans*x);
+        }
+    }
+
+    public static void main(String[] args) {
+        BinaryExponentiation_power solution = new BinaryExponentiation_power();
+
+        // Test cases
+        System.out.println(solution.myPow(2.00000, 10)); // Output: 1024.00000
+        System.out.println(solution.myPow(2.10000, 3));  // Output: 9.26100
+        System.out.println(solution.myPow(2.00000, -2)); // Output: 0.25000
+        System.out.println(solution.myPow(2.00000, -2147483648)); // Output: 0.0
+    }
+
+}
+// // another, much cleaner soln found on lc forum, for revision
+// class Solution {
+//     public double myPow(double x, int n) {
+        
+//         // Base condition: If n is 0, x^0 is 1
+//         if (n == 0) {
+//             return 1;
+//         }
+
+//         // Convert n to a long integer to handle the edge case with Integer.MIN_VALUE
+//         long N = n;
+
+//         // If n is negative, take the reciprocal of x and make N positive
+//         if (N < 0) {
+//             N = -N;
+//             x = 1 / x;
+//         }
+
+//         // If N is even, recursively compute the square of x^(N/2)
+//         if (N % 2 == 0) {
+//             return myPow(x * x, (int) (N / 2));
+//         } 
+    
+//         // If N is odd, recursively compute x^(N-1) and multiply it by x
+//         else {
+//             return x * myPow(x, (int) (N - 1));
+//         }
+//     }
+// }
+
+package Recursion_Pattern_Wise;
+/*Q3 1922. Count Good Numbers
+Medium
+Topics
+Companies
+Hint
+A digit string is good if the digits (0-indexed) at even indices are even and the digits at odd indices are prime (2, 3, 5, or 7).
+
+For example, "2582" is good because the digits (2 and 8) at even positions are even and the digits (5 and 2) at odd positions are prime. However, "3245" is not good because 3 is at an even index but is not even.
+Given an integer n, return the total number of good digit strings of length n. Since the answer may be large, return it modulo 109 + 7.
+
+A digit string is a string consisting of digits 0 through 9 that may contain leading zeros.
+
+ 
+
+Example 1:
+
+Input: n = 1
+Output: 5
+Explanation: The good numbers of length 1 are "0", "2", "4", "6", "8".
+Example 2:
+
+Input: n = 4
+Output: 400
+Example 3:
+
+Input: n = 50
+Output: 564908303
+ 
+
+Constraints:
+
+1 <= n <= 1015
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+59.4K
+Submissions
+132.5K
+Acceptance Rate
+44.9% */
+public class CountGoodNos {
+        //works now
+    //just added %10^9+7 everywhere to avoid overflow at all cost, lol
+    public int countGoodNumbers(long n) {
+        if(n<=0) return 0;
+        long odd = n/2;
+        long even = (n+1)/2;
+        return (int)(((recurPow(5,even,1)) * (recurPow(4,odd,1) )% 1_000_000_007));
+    }
+        private long recurPow(long x, long n, long ans) {
+        //Base
+        if(n==0) return ans%1_000_000_007;
+        //Recursive case
+        if(n%2==0){
+            return recurPow(x*x%1_000_000_007, n/2, ans%1_000_000_007)%1_000_000_007;
+        }
+        else{
+            return recurPow(x%1_000_000_007, n-1, ans*x%1_000_000_007)%1_000_000_007;
+        }
+    }
+    // lc submission, works well, cleaner too
+    // class Solution {
+    //     //works now
+    //     //just added %10^9+7 everywhere to avoid overflow at all cost
+    //     public int countGoodNumbers(long n) {
+    //         if(n<=0) return 0;
+    //         long odd = n/2;
+    //         long even = (n+1)/2;
+    //         return (int)(((recurPow(5,even,1)) * (recurPow(4,odd,1) )% 1_000_000_007));
+    //     }
+    //         private long recurPow(long x, long n, long ans) {
+    //         //Base
+    //         if(n==0) return ans;
+    //         //Recursive case
+    //         if(n%2==0){
+    //             return recurPow(x*x%1_000_000_007, n/2, ans);
+    //         }
+    //         else{
+    //             return recurPow(x, n-1, ans*x%1_000_000_007);
+    //         }
+    //     }
+    // }
+
+    // A clean code that works, kept here for reference
+    // private static final int MOD = 1_000_000_007;
+
+    // public int countGoodNumbers(long n) {
+    //     if (n <= 0) return 0;
+    //     long odd = n / 2;
+    //     long even = (n + 1) / 2;
+    //     long evenPow = recurPow(5, even);
+    //     long oddPow = recurPow(4, odd);
+    //     return (int) ((evenPow * oddPow) % MOD);
+    // }
+
+    // private long recurPow(long x, long n) {
+    //     if (n == 0) return 1;
+    //     long half = recurPow(x, n / 2);
+    //     long halfSquare = (half * half) % MOD;
+    //     if (n % 2 == 0) {
+    //         return halfSquare;
+    //     } else {
+    //         return (halfSquare * x) % MOD;
+    //     }
+    // }
+
+    public static void main(String[] args) {
+        CountGoodNos solution = new CountGoodNos();
+        System.out.println(solution.countGoodNumbers(1)); // Output: 5
+        System.out.println(solution.countGoodNumbers(4)); // Output: 400
+        System.out.println(solution.countGoodNumbers(50)); // Output: 564908303
+        System.out.println(solution.countGoodNumbers(1924)); // Output: 805821919
+
+    }
+    // almost works, except n>=500
+    // public int countGoodNumbers(long n) {
+    //     if(n<=0) return 0;
+    //     long odd = n/2;
+    //     long even = (n+1)/2;
+    //     return (int)(recurPow(5,even,1) * recurPow(4,odd,1) % 1_000_000_007);
+    // }
+    //     private long recurPow(long x, long n, long ans) {
+    //     //Base
+    //     if(n==0) return ans%1_000_000_007;
+    //     //Recursive case
+    //     if(n%2==0){
+    //         return recurPow(x*x, n/2, ans)%1_000_000_007;
+    //     }
+    //     else{
+    //         return recurPow(x, n-1, ans*x)%1_000_000_007;
+    //     }
+    // }
+}
+/*//Works for small cases, upto n=29, breaks for larger ones
+public int countGoodNumbers(long n) {
+        if(n<=0) return 0;
+        double ans=1;
+        ans=(int)recurGN(n,ans)%((Math.pow(10, 9)+7));
+        return (int)ans;
+    }
+
+    private double recurGN(long n, double ans) {
+        if(n==0) return ans;
+        if(n%2==0){
+            return recurGN(n-1, 5*ans);
+        }
+        else{
+            return recurGN(n-1, 4*ans);
+        }
+    }
+ */
+
+ package Recursion_Pattern_Wise;
+/*Q4 Sort a stack
+MediumAccuracy: 69.19%Submissions: 111K+Points: 4
+Given a stack, the task is to sort it such that the top of the stack has the greatest element.
+
+Example 1:
+
+Input:
+Stack: 3 2 1
+Output: 3 2 1
+Example 2:
+
+Input:
+Stack: 11 2 32 3 41
+Output: 41 32 11 3 2
+Your Task: 
+You don't have to read input or print anything. Your task is to complete the function sort() which sorts the elements present in the given stack. (The sorted stack is printed by the driver's code by popping the elements of the stack.)
+
+Expected Time Complexity: O(N*N)
+Expected Auxilliary Space: O(N) recursive.
+
+Constraints:
+1<=N<=100
+
+ */
+import java.util.Stack;
+
+public class SortAStack {
+    public Stack<Integer> sort(Stack<Integer> s) {
+        if (s.isEmpty()||s.size()==1) return s; // Base case
+        int var = s.pop();
+        sort(s); // Inductive Hypothesis: smaller stack is sorted
+        sortedInsert(s, var); // Inductive Step: way to insert a var in correct place in stack 
+        return s;
+    }
+    private void sortedInsert(Stack<Integer> s, int var) {
+        if (s.isEmpty() || s.peek() <= var) {
+            //Base case
+            s.push(var);
+            return;
+        }
+        //Hypothesis: will insertion of var in smaller stack, so remove top  
+        //cuz top is bigger than var, var correct pos is deeper in stack, so keep popping
+        int top = s.pop(); 
+        sortedInsert(s, var);
+        // Inductive Step: way to insert top(that was removed to make stack smaller for Hypothesis step) 
+        // back in correct place in stack
+        s.push(top);
+    }
+
+    // First attempt, very wrong
+    //     public Stack<Integer> sort(Stack<Integer> s) {
+    //         if(s.size()==1) return s;
+    //         int var=s.pop();
+    //         sort(s);
+    //         if(s.peek()>var){
+    //             int top=s.pop();
+    //             s.push(var);
+    //             s.push(top);
+    //         } else s.push(var);
+    //         return s;
+    // }
+
+    public static void main(String[] args) {
+        SortAStack solution = new SortAStack();
+        
+        Stack<Integer> stack1 = new Stack<>();
+        stack1.push(3);
+        stack1.push(2);
+        stack1.push(1);
+        Stack<Integer> sortedStack1 = solution.sort(stack1);
+        System.out.println("Sorted Stack 1: " + sortedStack1); // Output: [3, 2, 1]
+
+        Stack<Integer> stack2 = new Stack<>();
+        stack2.push(11);
+        stack2.push(2);
+        stack2.push(32);
+        stack2.push(3);
+        stack2.push(41);
+        Stack<Integer> sortedStack2 = solution.sort(stack2);
+        System.out.println("Sorted Stack 2: " + sortedStack2); // Output: [41, 32, 11, 3, 2]
+    }
+
+}
+package Recursion_Pattern_Wise;
+/*Q5  Reverse a Stack
+MediumAccuracy: 80.5%Submissions: 71K+Points: 4
+You are given a stack St. You have to reverse the stack using recursion.
+
+Example 1:
+
+Input:
+St = {3,2,1,7,6}
+Output:
+{6,7,1,2,3}
+Explanation:
+Input stack after reversing will look like the stack in the output.
+Example 2:
+
+Input:
+St = {4,3,9,6}
+Output:
+{6,9,3,4}
+Explanation:
+Input stack after reversing will look like the stack in the output.
+Your Task:
+
+You don't need to read input or print anything. Your task is to complete the function Reverse() which takes the stack St as input and reverses the given stack.
+
+Expected Time Complexity: O(N2)
+Expected Auxiliary Space: O(1)
+
+Constraints:
+1 <= size of the stack <= 104
+-109 <= Each element of the stack <= 109
+Sum of N over all test cases doesn't exceeds 106
+Array may contain duplicate elements. 
+
+*/
+import java.util.Stack;
+
+public class ReverseAStack {
+    static void reverse(Stack<Integer> s)
+    {
+        if(s.size()==1) return;
+        int var = s.pop();
+        reverse(s);
+        insert(s,var);
+        return;
+    }
+
+    private static void insert(Stack<Integer> s, int var) {
+        if(s.isEmpty()) {
+            s.push(var); 
+            return;
+        }
+        int top=s.pop();
+        insert(s, var);
+        s.push(top);
+        return;
+    }
+
+    public static void main(String[] args) {
+        Stack<Integer> stack1 = new Stack<>();
+        stack1.push(3);
+        stack1.push(2);
+        stack1.push(1);
+        stack1.push(7);
+        stack1.push(6);
+
+        System.out.println("Original Stack: " + stack1);
+        reverse(stack1);
+        System.out.println("Reversed Stack: " + stack1);
+
+        Stack<Integer> stack2 = new Stack<>();
+        stack2.push(4);
+        stack2.push(3);
+        stack2.push(9);
+        stack2.push(6);
+
+        System.out.println("Original Stack: " + stack2);
+        reverse(stack2);
+        System.out.println("Reversed Stack: " + stack2);
+    }
+}

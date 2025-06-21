@@ -1,0 +1,1748 @@
+/**
+ * Q1
+ * Program to generate Pascal's Triangle
+
+
+55
+
+1
+Problem Statement: This problem has 3 variations. They are stated below:
+
+Variation 1: Given row number r and column number c. Print the element at position (r, c) in Pascal’s triangle.
+
+Variation 2: Given the row number n. Print the n-th row of Pascal’s triangle.
+
+Variation 3: Given the number of rows n. Print the first n rows of Pascal’s triangle.
+ */
+
+package Arrays.Hard;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class pascalTri {
+
+    public static List<List<Integer>> pascalTriangle(int n) {
+        List<List<Integer>> A = new ArrayList<>();
+
+        //store whole pascal's triangle:
+        for (int row = 1; row <= n; row++) {
+            //generate each row
+            A.add(generateRow(row));
+        }
+        return A;
+    }
+
+    public static List<Integer> generateRow(int row) {
+        //generate current row
+        long a = 1;
+        List<Integer> aRow = new ArrayList<>();
+        aRow.add(1); //insert 1st elem
+
+        //calc. the rest of the elems.
+        for (int col = 1; col < row; col++) {
+            a = a * (row - col);
+            a = a / col;
+            aRow.add((int)a);
+        }
+        return aRow;
+    }
+
+    public static void main(String[] args) {
+        int n = 5;
+        List<List<Integer>> ans = pascalTriangle(n);
+        for (List<Integer> l : ans) {
+            for (int e : l) {
+                System.out.print(e + " ");
+            }
+            System.out.println();
+        }
+}
+
+// //lc submission
+// public List<List<Integer>> generate(int n) {
+//     List<List<Integer>> A = new ArrayList<>();
+
+//     //store whole pascal's triangle:
+//     for (int row = 1; row <= n; row++) {
+//         //generate each row
+//         A.add(generateRow(row));
+//     }
+//     return A;
+// }
+
+// public List<Integer> generateRow(int row) {
+//     //generate current row
+//     long a = 1;
+//     List<Integer> ansRow = new ArrayList<>();
+//     ansRow.add(1); //insert 1st elem
+
+//     //calc. the rest of the elems.
+//     for (int col = 1; col < row; col++) {
+//         a = a * (row - col);
+//         a = a / col;
+//         ansRow.add((int)a);
+//     }
+//     return ansRow;
+// }
+
+------------------------------------------------------------------------------
+
+package Arrays.Hard;
+/*Q2
+ * Majority Elements(&gt;N/3 times) | Find the elements that appears more than N/3 times in the array
+
+
+34
+
+1
+Problem Statement: Given an array of N integers. 
+Find the elements that appear more than N/3 times in the array. 
+If no such element exists, return an empty vector.
+
+Pre-requisite: Majority Element(>N/2 times)
+
+Examples
+Example 1:
+Input Format
+: N = 5, array[] = {1,2,2,3,2}
+Result
+: 2
+Explanation:
+ Here we can see that the Count(1) = 1, Count(2) = 3 and Count(3) = 1.
+ Therefore, the count of 2 is greater than N/3 times. Hence, 2 is the answer.
+
+Example 2:
+Input Format
+:  N = 6, array[] = {11,33,33,11,33,11}
+Result:
+ 11 33
+Explanation:
+ Here we can see that the Count(11) = 3 and Count(33) = 3. 
+ Therefore, the count of both 11 and 33 is greater than N/3 times. Hence, 11 and 33 is the answer.
+ */
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class Majority2 {
+
+    public static List<Integer> majorityElement(int[] nums) {
+        int n = nums.length; 
+        int cnt1 = 0, cnt2 = 0; 
+        int e1 = Integer.MIN_VALUE; 
+        int e2 = Integer.MIN_VALUE; 
+        //int i;
+        for (int i = 0; i < n; i++) {
+            if (cnt1 == 0 && e2 != nums[i]) {
+                cnt1 = 1;
+                e1 = nums[i];
+            } else if (cnt2 == 0 && e1 != nums[i]) {
+                cnt2 = 1;
+                e2 = nums[i];
+            } else if (nums[i] == e1) cnt1++;
+            else if (nums[i] == e2) cnt2++;
+            else {
+                cnt1--; cnt2--;
+            }
+        }
+
+        List<Integer> L = new ArrayList<>(); 
+
+        cnt1 = 0; cnt2 = 0;
+        for (int i = 0; i < n; i++) {
+            if (nums[i] == e1) cnt1++;
+            if (nums[i] == e2) cnt2++;
+        }
+
+        if (cnt1 > n/3) L.add(e1);
+        if (cnt2 > n/3) L.add(e2);
+
+        Collections.sort(L); //if require in sorted order
+        return L;
+    }
+    public static void main(String args[]) {
+        int[] arr = {1,1,1,1,1,1,3,3,3,3,3,4,4,4,4,4,1,1,1,1,3,3,3,3,3,3};
+        List<Integer> majors = majorityElement(arr);
+        //simple way to print arraylist using toString()
+        System.out.print("Majority elems: " + majors);
+
+        // a way to print list
+        // for (int i = 0; i < majors.size(); i++) {
+        //     System.out.print(majors.get(i) + " ");
+        // }
+        System.out.println();
+    }
+    
+}
+// // lc submission
+// class Solution {
+//     public List<Integer> majorityElement(int[] nums) {
+//         int n = nums.length; 
+//         int cnt1 = 0, cnt2 = 0; 
+//         int e1 = Integer.MIN_VALUE; 
+//         int e2 = Integer.MIN_VALUE; 
+//         //int i;
+//         for (int i = 0; i < n; i++) {
+//             if (cnt1 == 0 && e2 != nums[i]) {
+//                 cnt1 = 1;
+//                 e1 = nums[i];
+//             } else if (cnt2 == 0 && e1 != nums[i]) {
+//                 cnt2 = 1;
+//                 e2 = nums[i];
+//             } else if (nums[i] == e1) cnt1++;
+//             else if (nums[i] == e2) cnt2++;
+//             else {
+//                 cnt1--; cnt2--;
+//             }
+//         }
+
+//         List<Integer> L = new ArrayList<>(); 
+
+//         cnt1 = 0; cnt2 = 0;
+//         for (int i = 0; i < n; i++) {
+//             if (nums[i] == e1) cnt1++;
+//             if (nums[i] == e2) cnt2++;
+//         }
+
+//         if (cnt1 > n/3) L.add(e1);
+//         if (cnt2 > n/3) L.add(e2);
+
+//         Collections.sort(L); 
+
+//         return L;
+//     }
+// }
+
+----------------------------------------------------
+
+package Arrays.Hard;
+/*
+ * q3
+ * 15. 3Sum
+Solved
+Medium
+Topics
+Companies
+Hint
+Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] such that i != j, i != k, and j != k, and nums[i] + nums[j] + nums[k] == 0.
+
+Notice that the solution set must not contain duplicate triplets.
+
+ 
+
+Example 1:
+
+Input: nums = [-1,0,1,2,-1,-4]
+Output: [[-1,-1,2],[-1,0,1]]
+Explanation: 
+nums[0] + nums[1] + nums[2] = (-1) + 0 + 1 = 0.
+nums[1] + nums[2] + nums[4] = 0 + 1 + (-1) = 0.
+nums[0] + nums[3] + nums[4] = (-1) + 2 + (-1) = 0.
+The distinct triplets are [-1,0,1] and [-1,-1,2].
+Notice that the order of the output and the order of the triplets does not matter.
+Example 2:
+
+Input: nums = [0,1,1]
+Output: []
+Explanation: The only possible triplet does not sum up to 0.
+Example 3:
+
+Input: nums = [0,0,0]
+Output: [[0,0,0]]
+Explanation: The only possible triplet sums up to 0.
+ 
+
+Constraints:
+
+3 <= nums.length <= 3000
+-105 <= nums[i] <= 105
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+3.5M
+Submissions
+10.2M
+Acceptance Rate
+34.6%
+ * 
+ */
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+class threeSum{
+
+    public static List<List<Integer>> threeSumI(int a[]){
+        int n=a.length;
+        if(a==null||n<3) return new ArrayList<>();
+        //sort for 2 ptr tech. to work
+        Arrays.sort(a);
+        Set<List<Integer>> rslt=new HashSet<>();
+        Map<Integer,Integer> HM=new HashMap<>(); // to check if -sum exists
+        Map<Integer,Integer> RevHM=new HashMap<>(); // to check if L<M<R, M is index of -sum
+        //Itr. to set up HMs
+        for(int i=0;i<n;i++){
+            HM.put(i,a[i]);
+            RevHM.put(a[i],i);
+        }
+        //Apply 2 ptr. tech.
+        int L=0;
+        int R=n-1;
+        //random ini. for below 2, update in loop anyway
+        int M=0;
+        int sum=0;
+
+        while(L<R){
+            sum=a[L]+a[R];
+            
+            if(HM.containsValue(0-sum)){
+                 M = RevHM.get(0-sum);
+                if(M>L && M <R) {
+                    rslt.add(Arrays.asList(a[L],0-sum,a[R]));
+                    L++;
+                    R--;
+                }
+            }else if(sum<0) L++;
+            else if(sum>0) R--;
+        }
+        return new ArrayList<>(rslt);
+    }
+    public static void main(String[] args) {
+        int[] arr = { -1, 0, 1, 2, -1, -4};
+        int n = arr.length;
+        List<List<Integer>> ans = threeSumI(arr);
+        for (List<Integer> it : ans) {
+            System.out.print("[");
+            for (Integer i : it) {
+                System.out.print(i + " ");
+            }
+            System.out.print("] ");
+        }
+        System.out.println();
+    }
+ }
+
+//  //lc submission 1, directly done there, works
+//  class Solution {
+//     public List<List<Integer>> threeSum(int[] a) {
+//         int n=a.length;
+//         List<List<Integer>> B = new ArrayList<>();
+//         Arrays.sort(a);
+//         int L=0,M=1,R=n-1;
+//         // always do ptr checking before value checking to avoid L==-1 error
+//         for (L = 0; L < n; L++) {
+//             if (L>0 && a[L] == a[L - 1]) continue;
+//             M = L + 1;
+//             R = n - 1;
+//             while (M < R) {
+//                 int sum = a[L] + a[M] + a[R];
+//                 if (sum < 0) {
+//                     M++;
+//                 } else if (sum > 0) {
+//                     R--;
+//                 } else {
+//                     List<Integer> temp = Arrays.asList(a[L], a[M], a[R]);
+//                     B.add(temp);
+//                     M++;
+//                     R--;
+//                     while (M<R && a[M] == a[M - 1]) M++;
+//                     while (R>M && a[R] == a[R + 1]) R--;
+//                 }
+//             }
+//         }
+
+//         return B;
+//     }
+// }
+
+----------------------------------------------------------------------------
+
+package Arrays.Hard;
+/*
+ * Q4
+ * 4 Sum | Find Quads that add up to a target value
+
+
+11
+
+0
+Problem Statement: Given an array of N integers, your task is to find unique quads that add up to give a target value. In short, you need to return an array of all the unique quadruplets [arr[a], arr[b], arr[c], arr[d]] such that their sum is equal to a given target.
+
+Pre-req: 3-sum problem and 2-sum problem
+
+Note:
+
+0 <= a, b, c, d < n
+a, b, c, and d are distinct.
+arr[a] + arr[b] + arr[c] + arr[d] == target
+
+Examples
+Example 1:
+Input Format:
+ arr[] = [1,0,-1,0,-2,2], target = 0
+Result:
+ [[-2,-1,1,2],[-2,0,0,2],[-1,0,0,1]]
+Explanation:
+ We have to find unique quadruplets from the array such that the sum of those elements is equal to the target sum given that is 0. The result obtained is such that the sum of the quadruplets yields 0.
+
+Example 2:
+Input Format:
+ arr[] = [4,3,3,4,4,2,1,2,1,1], target = 9
+Result:
+ [[1,1,3,4],[1,2,2,4],[1,2,3,3]]
+Explanation:
+ The sum of all the quadruplets is equal to the target i.e. 9.
+ * 
+ */
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+public class fourSum {
+    
+
+    public static void main(String[] args) {
+        int[] nums = {4, 3, 3, 4, 4, 2, 1, 2, 1, 1};
+        int target = 9;
+        List<List<Integer>> ans = fourSumI(nums, target);
+        System.out.println("The quadruplets are: ");
+        for (List<Integer> it : ans) {
+            System.out.print("[");
+            for (int ele : it) {
+                System.out.print(ele + " ");
+            }
+            System.out.print("] ");
+        }
+        System.out.println();
+    }
+
+    private static List<List<Integer>> fourSumI(int[] a, int k) {
+        // // TODO Auto-generated method stub
+        // throw new UnsupportedOperationException("Unimplemented method 'fourSumI'");
+        int n=a.length;
+        List<List<Integer>> al=new ArrayList<>();
+        Arrays.sort(a);
+        int fl,fr,ml,mr,s=0;//fixed left and right, moving left and right
+        for(fl=0;fl<n;fl++){
+            if(fl>0 && a[fl]==a[fl-1]) continue;//fl++;--> cause repetition if reps are >1
+            for(fr=fl+1;fr<n;fr++){
+                if(fr>fl+1 && a[fr]==a[fr-1]) continue;//fr++;--> cause repetition if reps are >1
+
+                //2 ptr. tech.
+                ml=fr+1;
+                mr=n-1;
+
+                while(mr>ml){
+                    s=a[fl]+a[fr]+a[ml]+a[mr];
+                    if(s<k) ml++;
+                    else if(s>k) mr--;
+                    else if(s==k) {
+                        al.add(Arrays.asList(a[fl],a[fr],a[ml],a[mr]));
+                        mr--;ml++;
+                        if(ml<mr && a[ml]==a[ml-1]) ml++;//being not at head, but tail, correct here, continue won't do anything here
+                        if(mr>ml && a[mr]==a[mr+1]) mr--;//being not at head, but tail, correct here, continue won't do anything here
+
+                    }
+                }
+            }
+        }
+
+        return al;
+
+    }
+}
+
+// //lc submission 1, not work for only 1 case
+// class Solution {
+//     public List<List<Integer>> fourSum(int[] a, int k) {
+//                 int n=a.length;
+//         List<List<Integer>> al=new ArrayList<>();
+//         Arrays.sort(a);
+//         int fl,fr,ml,mr,s=0;//fixed left and right, moving left and right
+//         for(fl=0;fl<n;fl++){
+//             if(fl>0 && a[fl]==a[fl-1]) continue;//fl++;--> cause repetition if reps are >1
+//             for(fr=fl+1;fr<n;fr++){
+//                 if(fr>fl+1 && a[fr]==a[fr-1]) continue;//fr++;--> cause repetition if reps are >1
+
+//                 //2 ptr. tech.
+//                 ml=fr+1;
+//                 mr=n-1;
+
+//                 while(mr>ml){
+//                     s=a[fl]+a[fr]+a[ml]+a[mr];
+//                     if(s<k) ml++;
+//                     else if(s>k) mr--;
+//                     else if(s==k) {
+//                         al.add(Arrays.asList(a[fl],a[fr],a[ml],a[mr]));
+//                         mr--;ml++;
+//                         while(ml<mr && a[ml]==a[ml-1]) ml++;//use while,not if, and being not at head, but tail, correct here, continue won't do anything here
+//                         while(mr>ml && a[mr]==a[mr+1]) mr--;//being not at head, but tail, correct here, continue won't do anything here
+
+//                     }
+//                 }
+//             }
+//         }
+
+//         return al;
+
+//     }
+// }
+
+//lc submission 2, works
+// class Solution {
+//     public List<List<Integer>> fourSum(int[] a, int k) {
+//         int n = a.length;
+//         List<List<Integer>> al = new ArrayList<>();
+//         if (n < 4) return al;  // Early return if there are fewer than 4 elements
+
+//         Arrays.sort(a);
+//         int fl, fr, ml, mr;
+
+//         for (fl = 0; fl < n - 3; fl++) {
+//             if (fl > 0 && a[fl] == a[fl - 1]) continue;  // Avoid duplicates for fl
+
+//             for (fr = fl + 1; fr < n - 2; fr++) {
+//                 if (fr > fl + 1 && a[fr] == a[fr - 1]) continue;  // Avoid duplicates for fr
+
+//                 // 2-pointer technique
+//                 ml = fr + 1;
+//                 mr = n - 1;
+
+//                 while (mr > ml) {
+//                     long s = (long) a[fl] + (long) a[fr] + (long) a[ml] + (long) a[mr];
+//                     if (s < k) {
+//                         ml++;
+//                     } else if (s > k) {
+//                         mr--;
+//                     } else {
+//                         al.add(Arrays.asList(a[fl], a[fr], a[ml], a[mr]));
+//                         ml++;
+//                         mr--;
+//                         // Skip duplicates for ml and mr
+//                         while (ml < mr && a[ml] == a[ml - 1]) ml++;
+//                         while (ml < mr && a[mr] == a[mr + 1]) mr--;
+//                     }
+//                 }
+//             }
+//         }
+
+//         return al;
+//     }
+// }
+
+
+-----------------------------------------------------------------------------------
+
+package Arrays.Hard;
+// //q5
+// Largest subarray with 0 sum
+// MediumAccuracy: 41.84%Submissions: 277K+Points: 4
+// Find better job opportunities this summer via Job-A-Thon Hiring Challenge!
+
+import java.util.Arrays;
+
+// banner
+// Given an array having both positive and negative integers. The task is to compute the length of the largest subarray with sum 0.
+
+// Example 1:
+
+// Input:
+// N = 8
+// A[] = {15,-2,2,-8,1,7,10,23}
+// Output: 5
+// Explanation: The largest subarray with
+// sum 0 will be -2 2 -8 1 7.
+// Your Task:
+// You just have to complete the function maxLen() which takes two arguments an array A and n, where n is the size of the array A and returns the length of the largest subarray with 0 sum.
+
+// Expected Time Complexity: O(N).
+// Expected Auxiliary Space: O(N).
+
+// Constraints:
+// 1 <= N <= 105
+// -1000 <= A[i] <= 1000, for each valid i
+import java.util.HashMap;
+
+public class maxLenSubarrSum0 {
+    public static int maxLen(int a[], int n)
+    {
+        HashMap<Integer,Integer> historyS=new HashMap<>();
+        int max=0; int s=0; historyS.put(0,-1);// for if(s==0) max=i+1;
+        int i=0;int p=0;//any val, change anyway in loop
+        while(i<n){
+            s+=a[i]; 
+            if(historyS.get(s)==null) historyS.put(s,i);
+            else {
+                p=i-historyS.get(s);
+                max=(max<p)? p:max;
+            }i++;
+        }return max;
+    }
+
+    public static void maxLenSubarrSum0Print(int[] a, int n){//no need if commented code
+        HashMap<Integer,Integer> historyS=new HashMap<>();// store s:i pair
+        // HashMap<Integer,Integer> RevhistoryS=new HashMap<>();// store i:s pair
+        // HashMap<Integer,Integer> Ltrack=new HashMap<>();// store L:s pair
+        int max=0; int s=0; historyS.put(0,-1); //RevhistoryS.put(-1,0);// for if(s==0) max=i+1;
+        int i=0;int p=0;//any val, change anyway in loop
+        int maxL=0,maxR=0;
+        while(i<n){
+            s+=a[i]; 
+            if(historyS.get(s)==null) historyS.put(s,i);
+            else {
+                p=i-historyS.get(s);// curr i - earliest same s
+                if(max<p){
+                    max=p;
+                    maxR=i;
+                    maxL=historyS.get(s)+1;
+
+                }
+            }i++;
+        }
+        //int[] subarray = Arrays.copyOfRange(arr, start, end + 1); // end is exclusive, be careful to ++
+        //System.out.println(Arrays.toString(subarray));
+
+        int[] subarray = Arrays.copyOfRange(a, maxL, maxR+1);
+        System.out.println("Subarray with sum=0 : "+Arrays.toString(subarray));
+    }
+
+    public static void main(String[] args) {
+        int[] a={7,1,-1,3,2,-2,-8,1,7,10,23};
+        System.out.println("Original array: " + Arrays.toString(a));
+        System.out.println("max subarr len with sum =0 : "+maxLenSubarrSum0.maxLen(a, a.length));
+        maxLenSubarrSum0.maxLenSubarrSum0Print(a, a.length);
+    }
+}
+//gfg submission
+// class GfG
+// {
+//     int maxLen(int a[], int n)
+//     {
+//         HashMap<Integer,Integer> historyS=new HashMap<>();
+//         int max=0; int s=0; historyS.put(0,-1);// for if(s==0) max=i+1;
+//         int i=0;
+//         while(i<n){
+//             s+=a[i];
+//             if(historyS.get(s)==null) historyS.put(s,i);
+//             else {
+//                 //int p=i-historyS.get(s);
+//                 max=(max<i-historyS.get(s))? i-historyS.get(s):max;
+//             }i++;
+//         }return max;
+//     }
+    
+// }
+
+------------------------------
+
+package Arrays.Hard;
+// //q6
+// Count the number of subarrays with given xor K
+
+
+// 15
+
+// 1
+// Problem Statement: Given an array of integers A and an integer B. Find the total number of subarrays having bitwise XOR of all elements equal to k.
+
+// Pre-requisite: Find the number of subarrays with the sum K
+
+// Examples
+// Example 1:
+// Input Format:
+//  A = [4, 2, 2, 6, 4] , k = 6
+// Result:
+//  4
+// Explanation:
+//  The subarrays having XOR of their elements as 6 are  [4, 2], [4, 2, 2, 6, 4], [2, 2, 6], [6]
+
+// Example 2:
+// Input Format:
+//  A = [5, 6, 7, 8, 9], k = 5
+// Result:
+//  2
+// Explanation:
+//  The subarrays having XOR of their elements as 5 are [5] and [5, 6, 7, 8, 9]
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
+public class XORsubarrK {
+    public static int subarraysWithXorK(int []a, int k) {
+        int n = a.length; 
+        int x0r = 0; int cnt = 0;
+        Map<Integer, Integer> preXORhistory = new HashMap<>();
+        // Insert  (0,1) in HM to detect cases where prefix XOR == k directly
+        preXORhistory.put(0, 1); 
+        int x;
+        for (int i = 0; i < n; i++) {
+            // current prefix XOR till i
+            x0r = x0r ^ a[i];
+
+            x = x0r ^ k;
+
+             cnt+=(preXORhistory.containsKey(x))?preXORhistory.get(x):0; //works, but not easily understandable 
+            // if (preXORhistory.containsKey(x)) {
+            //     cnt += preXORhistory.get(x);
+            // }
+
+            // Insert the prefix XOR till i, with curr_freq= prev_freq + 1
+            preXORhistory.put(x0r, preXORhistory.getOrDefault(x0r,0) + 1);
+            
+        }return cnt;
+    }
+
+    public static void main(String[] args) {
+        int[] a = {4, 2, 2, 6, 4};
+        int k = 6;
+        System.out.println("Original array: " + Arrays.toString(a));
+        int ans = subarraysWithXorK(a, k);
+        System.out.println("The number of subarrays with XOR k is: " + ans);
+    }
+}
+
+//code 360 submission
+
+// import java.io.*;
+// import java.util.* ;
+
+// import java.util.ArrayList;
+
+// public class Solution {
+// 	public static int subarraysXor(ArrayList<Integer> a, int k) {
+// 		// Write your code here.
+// 		        int n = a.size(); 
+//         int x0r = 0; int cnt = 0;
+//         Map<Integer, Integer> preXORhistory = new HashMap<>();
+//         // Insert  (0,1) in HM to detect cases where prefix XOR == k directly
+//         preXORhistory.put(0, 1); 
+//         int x=0;
+//         for (int i = 0; i < n; i++) {
+//             // current prefix XOR till i
+//             x0r = x0r ^ a.get(i);
+
+//             x = x0r ^ k;
+
+//              cnt+=(preXORhistory.containsKey(x))?preXORhistory.get(x):0; //works, but not easily understandable 
+//             // if (preXORhistory.containsKey(x)) {
+//             //     cnt += preXORhistory.get(x);
+//             // }
+
+//             // Insert the prefix XOR till i, with curr_freq= prev_freq + 1
+//             preXORhistory.put(x0r, preXORhistory.getOrDefault(x0r,0) + 1);
+            
+//         }return cnt;
+
+// 	}
+// }
+
+-------------------------------------------------------
+
+package Arrays.Hard;
+// // q7
+// Merge Overlapping Sub-intervals
+
+
+// 26
+
+// 0
+// Problem Statement: Given an array of intervals, merge all the overlapping intervals and return an array of non-overlapping intervals.
+
+// Examples
+// Example 1:
+// Example 1:
+// Input:
+//  intervals=[[1,3],[2,6],[8,10],[15,18]]
+
+// Output:
+//  [[1,6],[8,10],[15,18]]
+
+// Explanation:
+//  Since intervals [1,3] and [2,6] are overlapping we can merge them to form [1,6]
+//  intervals.
+
+// Example 2:
+// Input:
+//  [[1,4],[4,5]]
+
+// Output:
+//  [[1,5]]
+
+// Explanation:
+//  Since intervals [1,4] and [4,5] are overlapping we can merge them to form [1,5].
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+
+public class OverlappingIntervalMerging {
+    public static List<List<Integer>> mergeOverlappingIntervals(int[][] A) {
+        int n = A.length; // size of the array
+        //sort the given intervals, by giving own implementation of -
+        // that is overriding comparator fn, via anonymous inner class
+        Arrays.sort(A, new Comparator<int[]>() {
+            @Override
+            public int compare(int[] a, int[] b) {
+                return a[0] - b[0];
+            }
+        });
+
+        List<List<Integer>> AL = new ArrayList<>();
+        AL.add(Arrays.asList(A[0][0],A[0][1]));
+        for (int i = 1; i < n; i++) {
+            int lastelem=AL.size() - 1;
+            // if no overlap b/w end of last elem of AL and start of A[i](i.e., A[i][0])
+            if (AL.isEmpty() || A[i][0] > AL.get(lastelem).get(1)) {
+                AL.add(Arrays.asList(A[i][0], A[i][1]));
+            }
+            // if overlap, update end to whichever greater, it itself currently or end ofA[i](i.e., A[i][1])
+            else {
+                AL.get(lastelem).set(1,Math.max(AL.get(lastelem).get(1), A[i][1]));
+            }
+        }
+        return AL; //in case ask ans in matrix form use ALto2DmatrixSize2(AL)
+    }
+    public static int[][] ALto2DmatrixSize2(List<List<Integer>> AL){
+        int l=AL.size();
+        int [][]A =new int[l][2];
+        for(int i=0;i<l;i++){
+            A[i][0]=AL.get(i).get(0);
+            A[i][1]=AL.get(i).get(1);
+        }
+
+        return A;
+    }
+    public static void main(String[] args) {
+        int[][] arr = {{1, 3}, {8, 10}, {2, 6}, {15, 18}};
+        List<List<Integer>> ansAL = mergeOverlappingIntervals(arr);
+        System.out.print("The merged intervals are: \n");
+        for (List<Integer> it : ansAL) {
+            System.out.print("[" + it.get(0) + ", " + it.get(1) + "] ");
+        }
+        System.out.println();
+    }
+}
+
+// //lc submission
+// class Solution {
+//     public int[][] merge(int[][] A) {
+//          int n = A.length; // size of the array
+//         //sort the given intervals, by giving own implementation of -
+//         // that is overriding comparator fn, via anonymous inner class
+//         Arrays.sort(A, new Comparator<int[]>() {
+//             @Override
+//             public int compare(int[] a, int[] b) {
+//                 return a[0] - b[0];
+//             }
+//         });
+
+//         List<List<Integer>> AL = new ArrayList<>();
+//         AL.add(Arrays.asList(A[0][0],A[0][1]));
+//         for (int i = 1; i < n; i++) {
+//             int lastelem=AL.size() - 1;
+//             // if no overlap b/w end of last elem of AL and start of A[i](i.e., A[i][0])
+//             if (AL.isEmpty() || A[i][0] > AL.get(lastelem).get(1)) {
+//                 AL.add(Arrays.asList(A[i][0], A[i][1]));
+//             }
+//             // if overlap, update end to whichever greater, it itself currently or end ofA[i](i.e., A[i][1])
+//             else {
+//                 AL.get(lastelem).set(1,Math.max(AL.get(lastelem).get(1), A[i][1]));
+//             }
+//         }
+//         return ALto2DmatrixSize2(AL);
+//     }
+
+//     public static int[][] ALto2DmatrixSize2(List<List<Integer>> AL){
+//         int l=AL.size();
+//         int [][]A =new int[l][2];
+//         for(int i=0;i<l;i++){
+//             A[i][0]=AL.get(i).get(0);
+//             A[i][1]=AL.get(i).get(1);
+//         }
+
+//         return A;
+//     }
+// }
+
+---------------------------------------------------------
+
+package Arrays.Hard;
+// //q8
+// Merge two Sorted Arrays Without Extra Space
+
+
+// 22
+
+// 1
+// Problem statement: Given two sorted arrays arr1[] and arr2[] of sizes n and m in non-decreasing order. Merge them in sorted order. Modify arr1 so that it contains the first N elements and modify arr2 so that it contains the last M elements.
+
+// Examples
+// Example 1:
+// Input:
+ 
+// n = 4, arr1[] = [1 4 8 10] 
+// m = 5, arr2[] = [2 3 9]
+
+// Output:
+ 
+// arr1[] = [1 2 3 4]
+// arr2[] = [8 9 10]
+
+// Explanation:
+
+// After merging the two non-decreasing arrays, we get, 1,2,3,4,8,9,10.
+
+// Example2:
+// Input:
+ 
+// n = 4, arr1[] = [1 3 5 7] 
+// m = 5, arr2[] = [0 2 6 8 9]
+
+// Output:
+ 
+// arr1[] = [0 1 2 3]
+// arr2[] = [5 6 7 8 9]
+
+// Explanation:
+
+// After merging the two non-decreasing arrays, we get, 0 1 2 3 5 6 7 8 9.
+import java.util.Arrays;
+
+public class merge2arr {
+    // will do way 2: gap method later
+    //way 1: general soln
+    public static void merge(int[] nums1, int m, int[] nums2, int n) {
+        int l2=0;
+        int r1=m-1;
+        while(m!=0 && n!=0 && nums1[r1]>nums2[l2] && l2 < n && r1>=0)
+        {
+            int temp=nums1[r1];
+            nums1[r1]=nums2[l2];
+            nums2[l2]=temp;
+            r1--;
+            l2++;
+        }
+
+        Arrays.sort(nums1);
+        Arrays.sort(nums2);
+    }
+     public static void main(String[] args) {
+        int[] a1 = {1, 8, 7, 56, 90}; Arrays.sort(a1);
+        int[] a2 = {3, 4, 5, 1, 2}; Arrays.sort(a2);
+        
+        System.out.println("Original array1: " + Arrays.toString(a1));
+
+        System.out.println("Original array2: " + Arrays.toString(a2));
+        
+
+        merge(a1, a1.length, a2, a2.length);
+
+        System.out.println("Sorted array1: " + Arrays.toString(a1));
+
+        System.out.println("Sorted array2: " + Arrays.toString(a2));
+
+
+    }
+    
+    
+}
+// //lc88 optimized submission
+// class Solution {
+//     public void merge(int[] num1, int m, int[] num2, int n) {
+//     int l=m-1; int r=n-1; int p=m+n-1;
+//     //run loop until a2 exhausted
+//     //that is r becomes <0
+//     // or p goes == l
+//     while(r>=0||p>l){
+//         // when a1 has elems and a1[l] is more than a2[r]
+//         if(l>=0 && num1[l]>=num2[r]){
+//             num1[p--]=num1[l--];
+//         }
+//         //when either a1 got no elems or a1[l] is more than a2[r]
+//         else if(l==-1||num1[l]<num2[r])
+//         {
+//             num1[p--]=num2[r--];
+//         }
+//         // //can skip
+//         // if(l==p) break;// it's over when l==p, but that only happens when a2 exhausted
+        
+//     }
+
+//     }    
+// }
+
+// shorter lc88 soln
+// class Solution {
+//     public void merge(int[] num1, int m, int[] num2, int n) {
+//     int l=m-1; int r=n-1; int p=m+n-1;
+//     while(r>=0 && p>=0){
+//         if(l>=0 && num1[l]>num2[r]){
+//             num1[p--]=num1[l--];
+//         }else
+//         {
+//             num1[p--]=num2[r--];
+//         }
+//     }
+
+//     }    
+// }
+
+----------------------------------------------
+
+package Arrays.Hard;
+// //q9
+// Find the repeating and missing numbers
+
+
+// 32
+
+// 0
+// Problem Statement: You are given a read-only array of N integers with values also in the range [1, N] both inclusive. Each integer appears exactly once except A which appears twice and B which is missing. The task is to find the repeating and missing numbers A and B where A repeats twice and B is missing.
+
+// Examples
+// Example 1:
+// Input Format
+// :  array[] = {3,1,2,5,3}
+// Result
+// : {3,4)
+// Explanation
+// : A = 3 , B = 4 
+// Since 3 is appearing twice and 4 is missing
+
+// Example 2:
+// Input Format
+// : array[] = {3,1,2,5,4,6,7,5}
+// Result
+// : {5,8)
+// Explanation
+// : A = 5 , B = 8 
+// Since 5 is appearing twice and 8 is missing
+
+public class RepeaterMissing {
+    // applying idea 4
+    public static int[] findMissingRepeatingNumbers(int a[], int n) {
+        int g=n*(n+1)/2; int s=0;
+        int c=1; int p=1;
+        for (int i=0;i<n;i++){
+            c*=(i+1);
+            s+=a[i];
+            p*=a[i];
+        }
+        int y=p*(g-s)/(c-p); //repeating elem
+        int x=g-s+y; //missing elem
+
+        int[]b={y,x};
+        return b;
+    }
+// idea 5
+    public static int[] findTwoElement(int a[], int n) {
+        long s=0; long i=0; long g=n*(n+1)/2; long q=g*(2*n+1)/3;
+        for(int j=0;j<n;j++){
+            s+=a[j];
+            i+=(long)a[j]*a[j];
+        }
+        long v1=g-s;
+        long v3=q-i;
+        long v4= v3/v1;
+        int x= (int) ((v1+v4)/2);//Missing
+        int y= (int) ((v4-v1)/2);//Repeater
+        int[] b={y,x};
+        return b;
+    }
+    public static void main(String[] args) {
+        int[] a = {3, 1, 2, 5, 4, 6, 7, 5};
+        int[] ans1 = findMissingRepeatingNumbers(a,a.length);
+        System.out.println("The repeating and missing numbers are: {"
+                           + ans1[0] + ", " + ans1[1] + "}");
+    }
+
+
+}
+
+// gfg submission 1
+// fails because n can be as big as 10^5 and even 100! exeeds long
+// int[] findTwoElement(int a[], int n) {
+//     long  g=n*(n+1)/2; long  s=0;
+//     long  c=1; long  p=1;
+//     for (int i=0;i<n;i++){
+//         c*=(i+1);
+//         s+=a[i];
+//         p*=a[i];
+//     }
+//     long  y=(p*(g-s)/(c-p)); //repeating elem
+//     long  x=(g-s+y); //missing elem
+
+//     int[]b={(int)y,(int)x};
+//     return b;
+
+// }
+
+//gfg submissions 2, passed 330/340 TCs
+// int[] findTwoElement(int a[], int n) {
+//     long s=0; long i=0; long g=n*(n+1)/2; long q=g*(2*n+1)/3;
+//     for(int j=0;j<n;j++){
+//         s+=a[j];
+//         i+=(long)a[j] * (long)a[j];
+//     }
+//     long v1=g-s;
+//     long v3=q-i;
+//     long v4= v3/v1;
+//     int x= (int) ((v1+v4)/2);//Missing
+//     int y= (int) ((v4-v1)/2);//Repeater
+//     int[] b={y,x};
+//     return b;
+
+// }
+
+//gfg submission 3, xor soln idea 6
+// int[] findTwoElement(int a[], int n) {
+//     int xor = 0;
+
+//     // XOR all array elements and numbers from 1 to n
+//     for (int i = 0; i < n; i++) {
+//         xor ^= a[i];
+//     }
+//     for (int i = 1; i <= n; i++) {
+//         xor ^= i;
+//     }
+
+//     // Get the rightmost set bit in xor
+//     int set_bit_no = xor & ~(xor - 1);
+
+//     // Initialize missing and repeating numbers
+//     int x = 0, y = 0;
+
+//     // Divide elements into two sets by comparing the rightmost set bit
+//     // and perform XOR in both sets
+//     for (int i = 0; i < n; i++) {
+//         if ((a[i] & set_bit_no) != 0) {
+//             x ^= a[i];
+//         } else {
+//             y ^= a[i];
+//         }
+//     }
+//     for (int i = 1; i <= n; i++) {
+//         if ((i & set_bit_no) != 0) {
+//             x ^= i;
+//         } else {
+//             y ^= i;
+//         }
+//     }
+
+//     // Determine which is the missing number and which is the repeating one
+//     int missing = 0, repeating = 0;
+//     for (int i = 0; i < n; i++) {
+//         if (a[i] == x) {
+//             repeating = x;
+//             missing = y;
+//             break;
+//         } else if (a[i] == y) {
+//             repeating = y;
+//             missing = x;
+//             break;
+//         }
+//     }
+
+//     int[] result = {repeating, missing};
+//     return result;
+// }
+
+
+_----------------------------------
+package Arrays.Hard;
+// //q10
+// Count inversions in an array
+
+import java.util.ArrayList;
+
+// 26
+
+// 0
+// Problem Statement: Given an array of N integers, count the inversion of the array (using merge-sort).
+
+// What is an inversion of an array? Definition: for all i & j < size of array, if i < j then you have to find pair (A[i],A[j]) such that A[j] < A[i].
+
+// Examples
+// Example 1:
+// Input Format
+// : N = 5, array[] = {1,2,3,4,5}
+// Result
+// : 0
+// Explanation
+// : we have a sorted array and the sorted array has 0 inversions as 
+// for i < j you will never find a pair such that A[j] < A[i]. 
+// More clear example: 2 has index 1 and 5 has index 4 now 1 < 5 but 2 < 5 so this is not an inversion.
+
+// Example 2:
+// Input Format
+// : N = 5, array[] = {5,4,3,2,1}
+// Result
+// : 10
+// Explanation
+// : we have a reverse sorted array and we will get the maximum inversions 
+// as for i < j we will always find a pair such that A[j] < A[i]. 
+// Example: 5 has index 0 and 3 has index 2 now (5,3) pair 
+// is inversion as 0 < 2 and 5 > 3 which will satisfy out conditions 
+// and for reverse sorted array we will get maximum inversions and 
+// that is (n)*(n-1) / 2.For above given array there is 4 + 3 + 2 + 1 = 10 inversions.
+
+// Example 3:
+// Input Format
+// : N = 5, array[] = {5,3,2,1,4}
+// Result
+// : 7
+// Explanation
+// : There are 7 pairs (5,1), (5,3), (5,2), (5,4),(3,2), (3,1), (2,1) 
+// and we have Lft 2 pairs (2,4) and (1,4) as both are not satisfy our condition. 
+public class countInversions {
+    private static int merge(int[] A, int LO, int MID, int HI) {
+        ArrayList<Integer> AL = new ArrayList<>(); 
+        int Lft = LO;      // start i of Lft half of subarr
+        int Rit = MID + 1;   // start i of Rit half of subarr
+
+        //MOD 1: cnt variable to keep track of #inversions
+        int cnt = 0;
+
+        //storing elems in the AL arraylist in a sorted manner
+
+        while (Lft <= MID && Rit <= HI) {
+             if(A[Lft]>A[Rit]) // condn. for Inversion pair
+             {
+                AL.add(A[Rit]);
+                cnt += (MID - Lft + 1); //MOD 2 - take advantage of sorted Lft subarr to update cnt+= |>= +1|, on avg
+                Rit++;
+            }
+            else if (A[Lft] <= A[Rit]) // condn. for Non-Inversion pair
+            {
+                AL.add(A[Lft]);
+                Lft++;
+            }
+        }
+
+        // if elems on the Lft half still remaining
+
+        while (Lft <= MID) {
+            AL.add(A[Lft]);
+            Lft++;
+        }
+
+        //  if elems on the Rit half are still remaining
+        while (Rit <= HI) {
+            AL.add(A[Rit]);
+            Rit++;
+        }
+
+        // transfer all elems from AL to A //
+        for (int i = LO; i <= HI; i++) {
+            A[i] = AL.get(i - LO);
+        }
+        return cnt; // MOD 3
+    }
+
+    public static int mergeSort(int[] A, int LO, int HI) {
+        int cnt = 0;
+        if (LO >= HI) return cnt;
+        int MID = (LO + HI) / 2 ;
+        cnt += mergeSort(A, LO, MID);  // Lft half
+        cnt += mergeSort(A, MID + 1, HI); // Rit half
+        cnt += merge(A, LO, MID, HI);  // merging sorted halves
+        return cnt;
+    }
+
+    public static int numberOfInversions(int[] a, int n) {
+        // Count no. of Inversion pairs
+        return mergeSort(a, 0, n - 1);
+    }
+
+
+    public static void main(String[] args) {
+        int[] a = {5, 4, 3, 2, 1};
+        int n = 5;
+        int cnt = numberOfInversions(a, n);
+        System.out.println("The number of inversions are: " + cnt);
+    }
+}
+
+
+// gfg submission 2, 1 failed because of I learnt gfg compiler is ancient with lethargy for Arraylist
+// changed to array insted of Arraylist because Long wrapper class, I didn't want to get into it now
+// will learn later
+// import java.util.ArrayList;
+
+// class Solution {
+//     // arr[]: Input Array
+//     // N : Size of the Array arr[]
+//     // Function to count inversions in the array.
+//     static long inversionCount(long arr[], long N) {
+//         return mergeSort(arr, 0, (int) N - 1);
+//     }
+
+//     public static long mergeSort(long[] A, int LO, int HI) {
+//         long cnt = 0;
+//         if (LO >= HI) return cnt;
+//         int MID = (LO + HI) / 2;
+//         cnt += mergeSort(A, LO, MID);  // Left half
+//         cnt += mergeSort(A, MID + 1, HI); // Right half
+//         cnt += merge(A, LO, MID, HI);  // merging sorted halves
+//         return cnt;
+//     }
+
+//     private static long merge(long[] A, int LO, int MID, int HI) {
+//         long[] temp = new long[HI - LO + 1];
+//         int Lft = LO; // start index of Left half of subarray
+//         int Rit = MID + 1; // start index of Right half of subarray
+
+//         // Count variable to keep track of number of inversions
+//         long cnt = 0;
+//         int k = 0;
+
+//         // Storing elements in the temp array in a sorted manner
+//         while (Lft <= MID && Rit <= HI) {
+//             if (A[Lft] <= A[Rit]) {
+//                 temp[k++] = A[Lft++];
+//             } else {
+//                 temp[k++] = A[Rit++];
+//                 cnt += (MID - Lft + 1); // Count inversions
+//             }
+//         }
+
+//         // If elements on the Left half are still remaining
+//         while (Lft <= MID) {
+//             temp[k++] = A[Lft++];
+//         }
+
+//         // If elements on the Right half are still remaining
+//         while (Rit <= HI) {
+//             temp[k++] = A[Rit++];
+//         }
+
+//         // Transfer all elements from temp to A
+//         for (int i = 0; i < temp.length; i++) {
+//             A[LO + i] = temp[i];
+//         }
+//         return cnt;
+//     }
+// }
+-----------------------------------------------------------------
+package Arrays.Hard;
+
+// //q11
+// 493. Reverse Pairs
+// Solved
+// Hard
+// Topics
+// Companies
+// Hint
+// Given an integer array nums, return the number of reverse pairs in the array.
+
+// A reverse pair is a pair (i, j) where:
+
+// 0 <= i < j < nums.length and
+// nums[i] > 2 * nums[j].
+ 
+
+// Example 1:
+
+// Input: nums = [1,3,2,3,1]
+// Output: 2
+// Explanation: The reverse pairs are:
+// (1, 4) --> nums[1] = 3, nums[4] = 1, 3 > 2 * 1
+// (3, 4) --> nums[3] = 3, nums[4] = 1, 3 > 2 * 1
+// Example 2:
+
+// Input: nums = [2,4,3,5,1]
+// Output: 3
+// Explanation: The reverse pairs are:
+// (1, 4) --> nums[1] = 4, nums[4] = 1, 4 > 2 * 1
+// (2, 4) --> nums[2] = 3, nums[4] = 1, 3 > 2 * 1
+// (3, 4) --> nums[3] = 5, nums[4] = 1, 5 > 2 * 1
+ 
+
+// Constraints:
+
+// 1 <= nums.length <= 5 * 104
+// -231 <= nums[i] <= 231 - 1
+// Seen this question in a real interview before?
+// 1/5
+// Yes
+// No
+// Accepted
+// 175.8K
+// Submissions
+// 574.3K
+// Acceptance Rate
+// 30.6%
+
+import java.util.ArrayList;
+
+public class ReversePairs {
+    public static int countRevPairs(int[] A, int LO, int MID, int HI) {
+        int LFT =LO;
+        int RIT = MID + 1;
+        int cnt = 0;
+        while (LFT <= MID) {
+            while (RIT <= HI && A[LFT] > 2L * A[RIT]) RIT++;
+            cnt += (RIT - (MID + 1));
+            LFT++;
+        }
+        return cnt;
+    }
+
+    public static int mergeSort(int[] A, int LO, int HI) {
+        int cnt = 0;
+        if (LO >= HI) return cnt;
+        int MID = (LO + HI) / 2 ;
+        cnt += mergeSort(A, LO, MID);  // LFT subarray
+        cnt += mergeSort(A, MID + 1, HI); // RIT subarray
+        cnt += countRevPairs(A, LO, MID, HI); //MOD
+        merge(A, LO, MID, HI);  // merging sorted halves
+        return cnt;
+    }
+
+    private static void merge(int[] A, int LO, int MID, int HI) {
+        ArrayList<Integer> AL = new ArrayList<>(); // for temp storage
+        int LFT = LO;      // start i of LFT subarray
+        int RIT = MID + 1;   // start i of RIT subarray
+
+        //storing elems in sorted way in AL
+
+        while (LFT <= MID && RIT <= HI) {
+            if (A[LFT] <= A[RIT]) {
+                AL.add(A[LFT]);
+                LFT++;
+            } else {
+                AL.add(A[RIT]);
+                RIT++;
+            }
+        }
+
+        // if elems on LFT subarray are still remaining
+
+        while (LFT <= MID) {
+            AL.add(A[LFT]);
+            LFT++;
+        }
+
+        //  if elems on RIT subarray are still remaining
+        while (RIT <= HI) {
+            AL.add(A[RIT]);
+            RIT++;
+        }
+
+        // transfer all elems from AL to A[] 
+        for (int i = LO; i <= HI; i++) {
+            A[i] = AL.get(i - LO);
+        }
+    }
+
+    public static void main(String[] args) {
+        int[] a = {7, 4, 9, 1, 6, 2, 5, 3, 11, 1};
+        int cnt = mergeSort(a, 0, a.length - 1);
+        System.out.println("The number of reverse pair is: " + cnt);
+    }
+}
+
+//LC submission 2, 1 failed cuz of TC = [2147483647,2147483647,2147483647,2147483647,2147483647,2147483647]
+// just modified to do mult of 2*A[RIT] in long to 2L*A[RIT] for implicit typecast to handle big nos. like above
+// used temp[] over AL cuz a little faster I heard, took 42secs
+// class Solution {
+//     public int reversePairs(int[] a) {
+//         return mergeSort(a, 0, a.length - 1);
+//     }
+
+//     public static int countRevPairs(int[] A, int LO, int MID, int HI) {
+//         int LFT = LO;
+//         int RIT = MID + 1;
+//         int cnt = 0;
+//         while (LFT <= MID) {
+//             while (RIT <= HI && A[LFT] > 2L * A[RIT]) RIT++; //MOD 2 to 2L for implicit type
+//             cnt += (RIT - (MID + 1));
+//             LFT++;
+//         }
+//         return cnt;
+//     }
+
+//     public static int mergeSort(int[] A, int LO, int HI) {
+//         int cnt = 0;
+//         if (LO >= HI) return cnt;
+//         int MID = (LO + HI) / 2;
+//         cnt += mergeSort(A, LO, MID);  
+//         cnt += mergeSort(A, MID + 1, HI); 
+//         cnt += countRevPairs(A, LO, MID, HI); 
+//         merge(A, LO, MID, HI);  
+//         return cnt;
+//     }
+
+//     private static void merge(int[] A, int LO, int MID, int HI) {
+//         int[] temp = new int[HI - LO + 1];
+//         int LFT = LO; 
+//         int RIT = MID + 1; 
+//         int k = 0;
+
+//         while (LFT <= MID && RIT <= HI) {
+//             if (A[LFT] <= A[RIT]) {
+//                 temp[k++] = A[LFT++];
+//             } else {
+//                 temp[k++] = A[RIT++];
+//             }
+//         }
+
+//         while (LFT <= MID) {
+//             temp[k++] = A[LFT++];
+//         }
+
+//         while (RIT <= HI) {
+//             temp[k++] = A[RIT++];
+//         }
+
+//         for (int i = 0; i < temp.length; i++) {
+//             A[LO + i] = temp[i];
+//         }
+//     }
+// }
+
+// //LC submission 3 with arraylist, took 79sec
+// class Solution {
+//     public int reversePairs(int[] a) {
+//         return mergeSort(a, 0, a.length - 1);
+//     }
+
+//     public static int countRevPairs(int[] A, int LO, int MID, int HI) {
+//         int LFT =LO;
+//         int RIT = MID + 1;
+//         int cnt = 0;
+//         while (LFT <= MID) {
+//             while (RIT <= HI && A[LFT] > 2L * A[RIT]) RIT++;
+//             cnt += (RIT - (MID + 1));
+//             LFT++;
+//         }
+//         return cnt;
+//     }
+
+//     public static int mergeSort(int[] A, int LO, int HI) {
+//         int cnt = 0;
+//         if (LO >= HI) return cnt;
+//         int MID = (LO + HI) / 2 ;
+//         cnt += mergeSort(A, LO, MID);  // LFT subarray
+//         cnt += mergeSort(A, MID + 1, HI); // RIT subarray
+//         cnt += countRevPairs(A, LO, MID, HI); //MOD
+//         merge(A, LO, MID, HI);  // merging sorted halves
+//         return cnt;
+//     }
+
+//     private static void merge(int[] A, int LO, int MID, int HI) {
+//         ArrayList<Integer> AL = new ArrayList<>(); // for temp storage
+//         int LFT = LO;      // start i of LFT subarray
+//         int RIT = MID + 1;   // start i of RIT subarray
+
+//         //storing elems in sorted way in AL
+
+//         while (LFT <= MID && RIT <= HI) {
+//             if (A[LFT] <= A[RIT]) {
+//                 AL.add(A[LFT]);
+//                 LFT++;
+//             } else {
+//                 AL.add(A[RIT]);
+//                 RIT++;
+//             }
+//         }
+
+//         // if elems on LFT subarray are still remaining
+
+//         while (LFT <= MID) {
+//             AL.add(A[LFT]);
+//             LFT++;
+//         }
+
+//         //  if elems on RIT subarray are still remaining
+//         while (RIT <= HI) {
+//             AL.add(A[RIT]);
+//             RIT++;
+//         }
+
+//         // transfer all elems from AL to A[] 
+//         for (int i = LO; i <= HI; i++) {
+//             A[i] = AL.get(i - LO);
+//         }
+//     }
+// }
+
+------------------------------------------------------------------------------------
+
+package Arrays.Hard;
+// //q12
+// 152. Maximum Product Subarray
+// Solved
+// Medium
+// Topics
+// Companies
+// Given an integer array nums, find a 
+// subarray
+//  that has the largest product, and return the product.
+
+// The test cases are generated so that the answer will fit in a 32-bit integer.
+
+ 
+
+// Example 1:
+
+// Input: nums = [2,3,-2,4]
+// Output: 6
+// Explanation: [2,3] has the largest product 6.
+// Example 2:
+
+// Input: nums = [-2,0,-1]
+// Output: 0
+// Explanation: The result cannot be 2, because [-2,-1] is not a subarray.
+ 
+
+// Constraints:
+
+// 1 <= nums.length <= 2 * 104
+// -10 <= nums[i] <= 10
+// The product of any prefix or suffix of nums is guaranteed to fit in a 32-bit integer.
+// Seen this question in a real interview before?
+// 1/5
+// Yes
+// No
+// Accepted
+// 1.3M
+// Submissions
+// 3.6M
+// Acceptance Rate
+// 35.1%
+public class MaxProductSubarray {
+    //way 2 - using prefix pdt and suffix pdt around 0s
+    public static int maxProductSubArray(int[] A) {
+        int n = A.length; 
+        int pre = 1, suff = 1;
+        int max = Integer.MIN_VALUE;
+        for (int i = 0; i < n; i++) {
+            //re-set pre and suff to 1 if encountered zero in prev iteration
+            if (pre == 0) pre = 1;
+            if (suff == 0) suff = 1;
+            pre *= A[i];
+            suff *= A[n - i - 1];
+            // update max to pre or suff or max, whichever is greatest
+            max = (max>pre)? (max>suff)? max:suff : (pre>suff)? pre:suff;
+            // or just use --> max = Math.max(max, Math.max(pre, suff));
+        }
+        return max;
+    }
+
+    //way 3 - using modified Kadane's algo
+    static int maxProductSubArray2(int A[]) {
+        int max=A[0];
+        int currMax=A[0];
+        int currMin=A[0];
+        for(int i=1; i < A.length; i++){
+            // //turns out code works w/o this if too, which makes sense given conditional update of currMax  & currMin
+            // if(A[i]==0) { // actually gibs wrong for some cases
+            //     currMax=1;
+            //     currMin=1;
+            //     continue;//skip iteration updates
+            // }
+            int tmp1 = currMax * A[i]; int tmp2 = currMin * A[i]; //store in temp vars for comparison & readability
+            currMax = (A[i]>tmp1)? (A[i]>tmp2)? A[i]:tmp2 : (tmp1>tmp2)? tmp1:tmp2;
+            // or just use --> currMax = Math.max(currMax, Math.max(tmp1, tmp2));
+            currMin = (A[i]<tmp1)? (A[i]<tmp2)? A[i]:tmp2 : (tmp1<tmp2)? tmp1:tmp2;
+            // or just use --> currMin = Math.min(currMin, Math.min(tmp1, tmp2));
+
+            max=(max>currMax)? max:currMax;
+        } return max;
+    }
+    
+
+    public static void main(String[] args) {
+        int[] A = {1, 2, -3, 0, -4, -5};
+        int maximum = maxProductSubArray(A);
+        System.out.println("The maximum product subarray is: " + maximum);
+    }
+    
+}
+
+// lc submission 1
+// public int maxProduct(int[] A) {
+//     int n = A.length; 
+//     int pre = 1, suff = 1;
+//     int max = Integer.MIN_VALUE;
+//     for (int i = 0; i < n; i++) {
+//         if (pre == 0) pre = 1;
+//         if (suff == 0) suff = 1;
+//         pre *= A[i];
+//         suff *= A[n - i - 1];
+//         max = (max>pre)? (max>suff)? max:suff : (pre>suff)? pre:suff;
+//     }
+//     return max;
+// }
+
+//lc submission 2, best soln
+// class Solution {
+//     public int maxProduct(int[] A) {
+//         int max=A[0];
+//         int currMax=A[0];
+//         int currMin=A[0];
+//         for(int i=1; i < A.length; i++){
+            
+//             int tmp1 = currMax * A[i]; int tmp2 = currMin * A[i]; //store in temp vars for comparison & readability
+//             currMax = (A[i]>tmp1)? (A[i]>tmp2)? A[i]:tmp2 : (tmp1>tmp2)? tmp1:tmp2;
+//             // or just use --> currMax = Math.max(currMax, Math.max(tmp1, tmp2));
+//             currMin = (A[i]<tmp1)? (A[i]<tmp2)? A[i]:tmp2 : (tmp1<tmp2)? tmp1:tmp2;
+//             // or just use --> currMin = Math.min(currMin, Math.min(tmp1, tmp2));
+
+//             max=(max>currMax)? max:currMax;
+//         } return max;
+//     }
+// }
+
+// //lc submission 3
+// class Solution {
+//     public int maxProduct(int[] A) {
+//         if (A == null || A.length == 0) {
+//             return 0;
+//         } // to improve some best cases
+
+//         int maxProduct = A[0];
+//         int currMax = A[0];
+//         int currMin = A[0];
+            // beauty of this soln. is the recognition that we can just swap currMin and currMax when encounter -ve A[i]
+//         for (int i = 1; i < A.length; i++) {
+//             if (A[i] < 0) {
+//                 // Swap currMax and currMin when encountering a negative number
+//                 int temp = currMax;
+//                 currMax = currMin;
+//                 currMin = temp;
+//             }
+//             int tmp1 = currMax * A[i]; int tmp2 = currMin * A[i];
+//             currMax = (A[i]>tmp1)? A[i]:tmp1;
+//             currMin = (A[i]<tmp2)? A[i]:tmp2;
+
+//             maxProduct = Math.max(maxProduct, currMax);
+//         }
+
+//         return maxProduct;
+//     }
+// }
+
+// ANother way to write, actually same way 3
+    // static int maxProductSubArray2(int A[]) {
+    //     int P1 = A[0], P2 = A[0], result = A[0];
+        
+    //     for(int i=1;i<A.length;i++) {
+    //         int tmp = Math.max(A[i], Math.max(P1*A[i], P2*A[i]));
+    //         P2 = Math.min(A[i], Math.min(P1*A[i], P2*A[i]));
+    //         P1 = temp;
+            
+    //         result = Math.max(result, P1);
+    //     }
+        
+    //     return result;
+    //     }

@@ -1,0 +1,722 @@
+package StackAndQueue.Lec2_Prefix_Infix_PostFix_Conversion;
+import java.util.Stack;
+/*Q1 Infix to Postfix 
+Problem Statement: Given an infix expression, Your task is to convert the given infix expression to a postfix expression.
+
+Examples:
+
+Example 1:
+Input: a+b*(c^d-e)^(f+g*h)-i
+Output: abcd^e-fgh*+^*+i-
+Explanation: Infix to postfix
+
+Example 2:
+Input: (p+q)*(m-n)
+Output: pq+mn-*
+Explanation: Infix to postfix
+*/
+public class infixToPostFix {
+    // all the sopln statemnts sre for debugging
+    static String infixToPostfix(String exp) {
+        // Use StringBuilder for efficient string concatenation
+        StringBuilder sbAns = new StringBuilder();
+    
+        // Stack for operators
+        Stack<Character> stack = new Stack<>();
+        char[] ch = exp.toCharArray();
+        for (char c: ch) {    
+            // If c is an operand, add it to output
+            if (Character.isLetterOrDigit(c)) {
+                //System.out.println("before:     "+c+"   "+((!stack.isEmpty())?stack.peek():"-")+"   "+sbAns);
+                sbAns.append(c);
+                //System.out.println("after:     "+c+"   "+((!stack.isEmpty())?stack.peek():"-")+"   "+sbAns);
+            }
+            // If c is '(', push it to the stack
+            else if (c == '(') {
+                //System.out.println("before:     "+c+"   "+((!stack.isEmpty())?stack.peek():"-")+"   "+sbAns);
+                stack.push(c);
+                //System.out.println("after:     "+c+"   "+((!stack.isEmpty())?stack.peek():"-")+"   "+sbAns);
+            }
+            // If c is ')', pop and output from the stack
+            // until an '(' is encountered
+            else if (c == ')') {
+                while (!stack.isEmpty() && stack.peek() != '(') {
+                    //System.out.println("before:     "+c+"   "+((!stack.isEmpty())?stack.peek():"-")+"   "+sbAns);
+                    sbAns.append(stack.pop());
+                    //System.out.println("after:     "+c+"   "+((!stack.isEmpty())?stack.peek():"-")+"   "+sbAns);
+                }
+                stack.pop(); // Remove '(' from the stack
+            }
+            // An operator is encountered
+            else {
+                while (!stack.isEmpty() && precedence(c) <= precedence(stack.peek())) {
+                    //System.out.println("before:     "+c+"   "+((!stack.isEmpty())?stack.peek():"-")+"   "+sbAns);
+                    sbAns.append(stack.pop());
+                    //System.out.println("after:     "+c+"   "+((!stack.isEmpty())?stack.peek():"-")+"   "+sbAns);
+                }
+                //System.out.println("before:     "+c+"   "+((!stack.isEmpty())?stack.peek():"-")+"   "+sbAns);
+                stack.push(c);
+                //System.out.println("after:     "+c+"   "+((!stack.isEmpty())?stack.peek():"-")+"   "+sbAns);
+
+            }
+        }
+    
+        // Pop all the operators from the stack
+        while (!stack.isEmpty()) {
+            if (stack.peek() == '(') {
+                return "Invalid Expression"; // Mismatched parentheses
+            }
+            sbAns.append(stack.pop());
+        }
+        return sbAns.toString();
+    }
+    
+    // Method to return precedence of operators
+    static int precedence(char ch) {
+        switch (ch) {
+            case '+':
+            case '-':
+                return 1;
+            case '*':
+            case '/':
+                return 2;
+            case '^':
+                return 3;
+        }
+        return -1;
+    }
+    
+    // Driver method - main () is aka driver method
+    public static void main(String[] args) {
+        String exp = "(p+q)*(m-n)";
+        System.out.println("Infix expression: " + exp);
+        System.out.println("Postfix expression: " + infixToPostfix(exp));
+    }
+}
+/*//FOund a even better reference code, more readable and faster due to switch case
+static String infixToPostfix(String exp) {
+        // Use StringBuilder for efficient string concatenation
+        StringBuilder result = new StringBuilder();
+    
+        // Stack for operators
+        Stack<Character> stack = new Stack<>();
+    
+        for (int i = 0; i < exp.length(); ++i) {
+            char c = exp.charAt(i);
+    
+            switch (c) {
+                // If the scanned character is an operand, add it to output
+                case '+':
+                case '-':
+                case '*':
+                case '/':
+                case '^':
+                    while (!stack.isEmpty() && precedence(c) <= precedence(stack.peek())) {
+                        result.append(stack.pop());
+                    }
+                    stack.push(c);
+                    break;
+    
+                // If the scanned character is '('
+                case '(':
+                    stack.push(c);
+                    break;
+    
+                // If the scanned character is ')'
+                case ')':
+                    while (!stack.isEmpty() && stack.peek() != '(') {
+                        result.append(stack.pop());
+                    }
+                    stack.pop(); // Remove '(' from the stack
+                    break;
+    
+                default: // If the scanned character is an operand
+                    if (Character.isLetterOrDigit(c)) {
+                        result.append(c);
+                    }
+                    break;
+            }
+        }
+    
+        // Pop all the operators from the stack
+        while (!stack.isEmpty()) {
+            if (stack.peek() == '(') {
+                return "Invalid Expression"; // Mismatched parentheses
+            }
+            result.append(stack.pop());
+        }
+        return result.toString();
+    }
+    
+    // Method to return precedence of operators
+    static int precedence(char ch) {
+        switch (ch) {
+            case '+':
+            case '-':
+                return 1;
+            case '*':
+            case '/':
+                return 2;
+            case '^':
+                return 3;
+            default:
+                return -1;
+        }
+    }
+ */
+ package StackAndQueue.Lec2_Prefix_Infix_PostFix_Conversion;
+/*Q2 */
+import java.util.Stack;
+
+public class PrefixToInfix {
+    static String prefixToInfix(String exp) {
+        Stack<String> st = new Stack<>();
+        char[] CE = exp.toCharArray();
+        // Read the prefix exprsn in reverse order
+        for (int i = (CE.length - 1); i >= 0; i--) {
+            char c = CE[i];
+    
+            // If the c is an operator
+            if (isOperator(c)) {
+                // Pop two oprnds from st
+                String oprnd1 = st.pop();
+                String oprnd2 = st.pop();
+    
+                // Concat the oprnds and operator in infix style
+                //String subExpr = "(" + oprnd1 + c + oprnd2 + ")"; // Still faster cuz short
+                StringBuilder subExpr = new StringBuilder("(");
+                subExpr.append(oprnd1);
+                subExpr.append(c);
+                subExpr.append(oprnd2);
+                subExpr.append(')');
+                // Push the resultant sub-exprsn back to st
+                //st.push(subExpr);
+                st.push(subExpr.toString());
+
+            } else { // If the c is an oprnd
+                // Push oprnd to st
+                //st.push((String)(c-'0'));
+                st.push(String.valueOf(c));
+            }
+        }
+    
+        // The only elem. of the st will be the infix exprsn
+        return st.pop();
+    }
+    
+    static boolean isOperator(char c) {
+        //always better to use switch case instead of if-else when possible, but too lazy rn
+        return ((c == '+') || (c == '-') || (c == '*') || (c == '/') || (c == '^'));
+    }
+    
+    // Driver method - main () is aka driver method
+    public static void main(String[] args) {
+        String exp = "*-A/BC-/AKL";
+        System.out.println("Prefix expression: " + exp);
+        System.out.println("Infix expression: " + prefixToInfix(exp));
+    }
+}
+package StackAndQueue.Lec2_Prefix_Infix_PostFix_Conversion;
+/*Q3 */
+import java.util.Stack;
+
+public class PrefixToPostfix {
+    static String prefixToPostfix(String exp) {
+        Stack<String> st = new Stack<>();
+    
+        char[] CE = exp.toCharArray();
+        // Read the postfix exprsn in reverse order
+        for (int i = (CE.length - 1); i >= 0; i--) {
+            char c = CE[i];
+    
+            // If the c is an operator
+            if (isOperator(c)) {
+                // Pop two oprnds from st
+                String oprnd1 = st.pop();
+                String oprnd2 = st.pop();
+    
+                // Concat the oprnds and operator in postfix style
+                String subExpr = oprnd1 + oprnd2 + c;
+    
+                // Push the resultant sub-exprsn back to st
+                st.push(subExpr);
+            } else { // If the c is an oprnd
+                // Push oprnd to st
+                st.push(String.valueOf(c));
+                //st.push((String)(c-'0'));
+            }
+        }
+    
+        // The only elem. of the st will be the postfix exprsn
+        return st.pop();
+    }
+    
+    static boolean isOperator(char c) {
+        //always better to use switch case instead of if-else when possible, but too lazy rn
+        return ((c == '+') || (c == '-') || (c == '*') || (c == '/') || (c == '^'));
+    }
+    
+    // Driver method - main () is aka driver method
+    public static void main(String[] args) {
+        String exp = "*-A/BC-/AKL";
+        System.out.println("Prefix expression: " + exp);
+        System.out.println("Postfix expression: " + prefixToPostfix(exp));
+    }
+}
+package StackAndQueue.Lec2_Prefix_Infix_PostFix_Conversion;
+/*Q4 */
+import java.util.Stack;
+
+public class PostfixToPrefix {
+    static String postfixToPrefix(String exp) {
+        Stack<String> st = new Stack<>();
+
+        // Convert the exprsn to a c array
+        char[] chars = exp.toCharArray();
+
+        // Read the postfix exprsn from left to right
+        for (char c: chars) {
+            // If the c is an operator
+            if (isOperator(c)) {
+                // Pop two oprnds from st
+                String oprnd1 = st.pop();
+                String oprnd2 = st.pop();
+
+                // Concat the operator and oprnds in prefix style
+                String subExpr = c + oprnd2 + oprnd1;
+
+                // Push the resultant sub-exprsn back to st
+                st.push(subExpr);
+            } else { // If the c is an oprnd
+                // Push oprnd to st
+                st.push(String.valueOf(c));
+            }
+        }
+
+        // The only elem. of the st will be the prefix exprsn
+        return st.pop();
+    }
+
+    static boolean isOperator(char c) {
+        switch (c) {
+            case '+':
+            case '-':
+            case '*':
+            case '/':
+            case '^':
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    // Driver method
+    public static void main(String[] args) {
+        String exp = "ABC/-AK/L-*";
+        System.out.println("Postfix expression: " + exp);
+        System.out.println("Prefix expression: " + postfixToPrefix(exp));
+    }
+}
+package StackAndQueue.Lec2_Prefix_Infix_PostFix_Conversion;
+/*Q5 */
+import java.util.Stack;
+
+public class PostfixToInfix {
+    static String postfixToInfix(String exp) {
+        Stack<String> st = new Stack<>();
+
+        // Convert the exprsn to a char array
+        char[] chars = exp.toCharArray();
+
+        // Read the postfix exprsn from left to right
+        for (char c : chars) {
+            // If the c is an operator
+            if (isOperator(c)) {
+                // Pop two oprnds from st
+                String oprnd1 = st.pop();
+                String oprnd2 = st.pop();
+
+                // Concat the oprnds and operator in infix style
+                String subExpr = "(" + oprnd2 + c + oprnd1 + ")";
+
+                // Push the resultant sub-exprsn back to st
+                st.push(subExpr);
+            } else { // If the c is an oprnd
+                // Push oprnd to st
+                st.push(String.valueOf(c));
+            }
+        }
+
+        // The only elem. of the st will be the infix exprsn
+        return st.pop();
+    }
+
+    static boolean isOperator(char c) {
+        switch (c) {
+            case '+':
+            case '-':
+            case '*':
+            case '/':
+            case '^':
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    // Driver method
+    public static void main(String[] args) {
+        String exp = "ABC/-AK/L-*";
+        System.out.println("Postfix expression: " + exp);
+        System.out.println("Infix expression: " + postfixToInfix(exp));
+    }
+}
+package StackAndQueue.Lec2_Prefix_Infix_PostFix_Conversion;
+
+import java.util.Stack;
+
+/*Q6 */
+public class InfixToPrefix {
+    //4th attempt, perfect O(N)
+    static String infixToPrefix(String exp) {
+        Stack<Character> st = new Stack<>();
+        char[] CE = exp.toCharArray();
+        StringBuilder sb = new StringBuilder("");
+
+        for (int i = CE.length - 1; i >= 0; i--) {
+            char c = CE[i];
+
+            if (isOperator(c)) {
+                //FIgured I can merge a bunch of situations together
+                while (!st.isEmpty() && Prec(c) < Prec(st.peek())) {
+                    sb.insert(0, st.pop());
+                }
+                st.push(c);
+            } else if (c == '(') {
+                while (!st.isEmpty() && st.peek() != ')') {
+                    sb.insert(0, st.pop());
+                }
+                //Somehow, code works w/o below as well
+                //WHy? I think trailing ')' being not operator causes that
+                if (!st.isEmpty() && st.peek() == ')') {
+                    st.pop(); // pop the ')' encountered
+                }
+            } else if (c == ')') {
+                st.push(c);
+            } else { //if c is oprnd
+                sb.insert(0, c);
+            }
+        }
+
+        while (!st.isEmpty() && isOperator(st.peek())) {
+            sb.insert(0, st.pop());
+        }
+
+        return sb.toString();
+    }
+
+    //3rd attempt, almost owrks except trailing ')', man debugging is so hard
+    //when it encounters a ')', it simply pushes it onto the stack and doesn't 
+    //remove it later. This causes the ) to remain on the stack
+    // static String infixToPrefix(String exp){
+    //     Stack<Character> st = new Stack<>();
+    //     char[] CE = exp.toCharArray();
+    //     StringBuilder sb = new StringBuilder("");
+    //     for(int i = CE.length-1; i>=0; i--){
+    //         char c= CE[i];
+    //         if(isOperator(c)){
+
+    //             if(st.isEmpty())//||st.peek()==')'){
+    //             {    
+    //                 st.push(c);
+    //                 //continue;
+    //             }
+    //             else if(c=='^' && st.peek()=='^'){
+    //                 while(!st.isEmpty() && c=='^' && st.peek()=='^'){
+    //                     sb.insert(0,st.pop());
+    //                 }
+    //                 st.push(c);
+    //             }
+    //             else if(Prec(c)>=Prec(st.peek())){
+    //                 st.push(c);
+    //                 //continue;
+    //             }
+    //             else{
+    //                 while(!st.isEmpty() && Prec(c) < Prec(st.peek())){
+    //                     sb.insert(0,st.pop());
+    //                 }
+    //                 st.push(c);
+    //             }
+    //         }
+    //         else if(c=='('){
+    //             while(!st.isEmpty() && st.peek()!=')'){
+    //                 sb.insert(0,st.pop());
+    //             }
+    //             if(!(st.isEmpty()) && (st.peek()==')')) st.pop(); // pop the ')' encountered
+    //         }
+    //         else{
+    //             //if c is oprnd //or ')' --> problem with this code, finaaly
+    //             sb.insert(0,c);
+    //         }
+    //     }
+    //     while(!st.isEmpty() && isOperator(st.peek())) 
+    //     {
+    //         sb.insert(0,st.pop());
+    //     }
+    //     return sb.toString();
+        
+
+    // }
+
+    //2nd attempt, works if no brackets
+    // static String infixToPrefix(String exp){
+    //     Stack<String> st = new Stack<>();
+    //     char[] CE = exp.toCharArray();
+    //     StringBuilder sb = new StringBuilder("");
+    //     for(int i = CE.length-1; i>=0; i--){
+    //         char c= CE[i];
+    //         if(isOperator(c)){
+    //             if(st.isEmpty()||st.peek().charAt(0)==')'){
+    //                 st.push(String.valueOf(c));
+    //                 //continue;
+    //             }
+
+    //             else if(Prec(c)>=Prec(st.peek().charAt(0))){
+    //                 st.push(String.valueOf(c));
+    //                 //continue;
+    //             }
+    //             else{
+    //                 while(!st.isEmpty() && Prec(c) < Prec(st.peek().charAt(0))){
+    //                     sb.append(st.pop());
+    //                 }
+    //                 st.push(String.valueOf(c));
+    //             }
+    //         }
+    //         else if(c=='('){
+    //             while(!st.isEmpty() && st.peek().charAt(0)!=')'){
+    //                 sb.append(st.pop());
+    //             }
+    //         }
+    //         else{
+    //             //if c is oprnd or ')'
+    //             sb.append(c);
+    //         }
+    //     }
+    //     while(!st.isEmpty()) sb.append(st.pop());
+    //     return sb.reverse().toString();
+        
+
+    // }
+    
+    static int Prec(char ch) {
+        switch (ch) {
+            case '+':
+            case '-':
+                return 1;
+            case '*':
+            case '/':
+                return 2;
+            case '^':
+                return 3;
+        }
+        return -1;
+    }
+    static boolean isOperator(char c) {
+        switch (c) {
+            case '+':
+            case '-':
+            case '*':
+            case '/':
+            case '^':
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    //1st attempt, wrong, learnt a lot tho
+    // static String infixToPrefix(String exp){
+    //     Stack<String> st = new Stack<>();
+    //     char[] chars = exp.toCharArray();
+    //     //r to l
+    //     for(int i= chars.length-1; i>=0; i--){
+    //         char c = chars[i];
+    //         if(isOperator(String.valueOf(c))){
+    //             //if(stack.pe)
+    //             st.push(String.valueOf(c));
+    //         }
+    //         else{
+    //             if(!st.isEmpty() && isOperator(st.peek())){
+    //                 //c is oprnd1
+    //                 String operator = st.pop();
+    //                 String oprnd2 = st.pop();
+    //                 String sub = operator + c + oprnd2;
+    //                 st.push(sub);
+    //             }else{
+    //                 st.push(String.valueOf(c));
+    //             }
+    //         }
+    //     } return st.pop();
+    // }
+    // static boolean isOperator(String c) {
+    //     switch (c) {
+    //         case "+":
+    //         case "-":
+    //         case "*":
+    //         case "/":
+    //         case "^":
+    //             return true;
+    //         default:
+    //             return false;
+    //     }
+    // }
+
+    public static void main(String[] args) {
+        String exp1 = "(A-B/C)*(A/K-L)";
+        System.out.println("Infix expression: " + exp1);
+        System.out.println("Prefix expression: " + infixToPrefix(exp1));
+        //String exp = "A-B/C";//*A/K-L";
+        //String exp = "A-B/C*A/K-L";
+        String exp = "x+y*z/w+u";
+        System.out.println("Infix expression: " + exp);
+        System.out.println("Prefix expression: " + infixToPrefix(exp));
+
+        String exp2 = "(y^(f*e^x))";
+
+        System.out.println("Infix expression: " + exp2);
+        System.out.println("Prefix expression: " + infixToPrefix(exp2));
+    }
+}
+/*
+// AI code for reference, too many unnecessary ops imo, O(5n)
+StackAndQueue.Lec2_Prefix_Infix_PostFix_Conversion;
+
+import java.util.Stack;
+
+public class InfixToPrefix {
+    
+    // Method to convert an infix expression to prefix
+    static String infixToPrefix(String exp) {
+        // Reverse the infix expression
+        String reversedInfix = new StringBuilder(exp).reverse().toString();
+        
+        // Replace '(' with ')' and vice versa
+        char[] chars = reversedInfix.toCharArray();
+        for (int i = 0; i < chars.length; i++) {
+            if (chars[i] == '(') {
+                chars[i] = ')';
+            } else if (chars[i] == ')') {
+                chars[i] = '(';
+            }
+        }
+        
+        // Get the postfix expression of the modified infix expression
+        String postfix = infixToPostfix(new String(chars));
+        
+        // Reverse the postfix expression to get the prefix expression
+        return new StringBuilder(postfix).reverse().toString();
+    }
+
+    // Method to convert an infix expression to postfix
+    static String infixToPostfix(String exp) {
+        // Initializing empty string for result
+        String result = new String("");
+
+        // Initializing empty stack
+        Stack<Character> stack = new Stack<>();
+
+        for (int i = 0; i < exp.length(); ++i) {
+            char c = exp.charAt(i);
+
+            // If the scanned character is an operand, add it to output.
+            if (Character.isLetterOrDigit(c)) {
+                result += c;
+            }
+            // If the scanned character is '(', push it to the stack.
+            else if (c == '(') {
+                stack.push(c);
+            }
+            // If the scanned character is ')', pop and output from the stack until '(' is encountered.
+            else if (c == ')') {
+                while (!stack.isEmpty() && stack.peek() != '(') {
+                    result += stack.pop();
+                }
+                stack.pop();
+            } else { // an operator is encountered
+                while (!stack.isEmpty() && Prec(c) <= Prec(stack.peek())) {
+                    result += stack.pop();
+                }
+                stack.push(c);
+            }
+        }
+
+        // Pop all the operators from the stack
+        while (!stack.isEmpty()) {
+            if (stack.peek() == '(') {
+                return "Invalid Expression";
+            }
+            result += stack.pop();
+        }
+
+        return result;
+    }
+
+    // Method to return precedence of operators
+    static int Prec(char ch) {
+        switch (ch) {
+            case '+':
+            case '-':
+                return 1;
+            case '*':
+            case '/':
+                return 2;
+            case '^':
+                return 3;
+        }
+        return -1;
+    }
+
+    // Driver method
+    public static void main(String[] args) {
+        String exp = "(A-B/C)*(A/K-L)";
+        System.out.println("Infix expression: " + exp);
+        System.out.println("Prefix expression: " + infixToPrefix(exp));
+    }
+}
+ */
+/*//From TUF site
+Approach:
+First, reverse the infix expression given in the problem.
+Scan the expression from left to right.
+Whenever the operands arrive, print them.
+
+If the operator arrives and the stack is found to be empty, 
+then simply push the operator into the stack.
+
+If the incoming operator has higher precedence than the TOP 
+of the stack, push the incoming operator into the stack.
+
+If the incoming operator has the same precedence with a TOP 
+of the stack, push the incoming operator into the stack.
+
+If the incoming operator has lower precedence than the TOP of 
+the stack, pop, and print the top of the stack. 
+Test the incoming operator against the top of the stack again and 
+pop the operator from the stack till it finds the operator 
+of lower precedence or same precedence.
+
+If the incoming operator has the same precedence with the top of 
+the stack and the incoming operator is ^, then pop the top of the 
+stack till the condition is true. If the condition is not true, 
+push the ^ operator.
+
+When we reach the end of the expression, pop, and print all the 
+operators from the top of the stack.
+
+If the operator is ')', then push it into the stack.
+If the operator is '(', then pop all the operators from the stack 
+till it finds the ‘)’ bracket in the stack.
+
+If the top of the stack is ')', push the operator on the stack.
+In the end, reverse the output. And print it.
+ */

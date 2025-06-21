@@ -1,0 +1,736 @@
+package Two_Pointer_and_Sliding_Window.java.Lec1_MediumQ;
+
+import java.util.HashMap;
+
+/*Q1 3. Longest Substring Without Repeating Characters
+Medium
+Topics
+Companies
+Hint
+Given a string s, find the length of the longest 
+substring
+ without repeating characters.
+
+ 
+
+Example 1:
+
+Input: s = "abcabcbb"
+Output: 3
+Explanation: The answer is "abc", with the length of 3.
+Example 2:
+
+Input: s = "bbbbb"
+Output: 1
+Explanation: The answer is "b", with the length of 1.
+Example 3:
+
+Input: s = "pwwkew"
+Output: 3
+Explanation: The answer is "wke", with the length of 3.
+Notice that the answer must be a substring, "pwke" is a subsequence and not a substring.
+ 
+
+Constraints:
+
+0 <= s.length <= 5 * 104
+s consists of English letters, digits, symbols and spaces.
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+6M
+Submissions
+17M
+Acceptance Rate
+35.0% */
+public class Longest_Substring_Without_Repeating_Characters {
+    // 1st attempt, works, cleaner soln.
+    // public int lengthOfLongestSubstring(String s) {
+    //     HashMap <Character,Integer> hmap = new HashMap<>();
+    //     //StringBuilder sb = new StringBuilder();
+    //     char c[] = s.toCharArray();
+    //     int n = c.length;
+    //     int l=0; int r=0; int maxL=0;
+    //     while(r<n){
+            
+    //         if(hmap.containsKey(c[r])){
+    //             hmap.remove(c[l]);
+    //             l++;
+    //             continue;
+    //             //l++;
+    //         }
+    //         int currL= r-l+1;
+    //         maxL = Math.max(maxL, currL);
+    //         r++;
+    //         hmap.put(c[r-1], 1);
+    //     }
+    //     return maxL;
+    //     //StringBuilder sb = new StringBuilder(s.substring(l, r+1));
+    //     //return sb;
+    // }
+    // faster soln., using array to cache instead of hashmap
+    public int lengthOfLongestSubstring(String s) {
+        //HashMap <Character,Integer> hmap = new HashMap<>();
+        int cache[] = new int[256];
+        char c[] = s.toCharArray();
+        int n = c.length;
+        int l=0; int r=0; int maxL=0;
+        while(r<n){
+            if(cache[c[r]]==1){
+                cache[c[l]]=0;
+                l++;
+                continue;
+            }
+            int currL= r-l+1;
+            maxL = Math.max(maxL, currL);
+            cache[c[r]]=1;
+            r++;
+        }
+        return maxL;
+    }
+}
+// //found on lc forum, hashset soln
+// public int lengthOfLongestSubstring(String s) {
+//     Set<Character> set = new HashSet();
+//     int max = 0;
+//     int left = 0;
+//     for (int right = 0; right < s.length(); right++) {
+//         while(!set.add(s.charAt(right))) {
+//             set.remove(s.charAt(left++));
+//         }
+//         max = Math.max(max, right - left + 1);
+//     }
+//     return max;
+// }
+// }
+/*By using a HashSet you are increasing the time complexity compared 
+to the fastest solution which uses a HashMap. 
+You are performing a while loop within a for loop that could be 
+avoided if you store the index of the character found (the reason why HashMap is needed) 
+and place the left pointer to the character found index + 1 = O(1). 
+I still would say that there is a tradeoff between space and time complexity 
+(this solution has the potential to require less memory as values are added and 
+removed from the HashSet compared to storing all characters in the HashMap), 
+so it really comes down to understanding which one we give priority in a given context. */
+
+package Two_Pointer_and_Sliding_Window.java.Lec1_MediumQ;
+/*Q2 1004. Max Consecutive Ones III
+Medium
+Topics
+Companies
+Hint
+Given a binary array nums and an integer k, return the maximum number of consecutive 1's in the array if you can flip at most k 0's.
+
+ 
+
+Example 1:
+
+Input: nums = [1,1,1,0,0,0,1,1,1,1,0], k = 2
+Output: 6
+Explanation: [1,1,1,0,0,1,1,1,1,1,1]
+Bolded numbers were flipped from 0 to 1. The longest subarray is underlined.
+Example 2:
+
+Input: nums = [0,0,1,1,0,0,1,1,1,0,1,1,0,0,0,1,1,1,1], k = 3
+Output: 10
+Explanation: [0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1]
+Bolded numbers were flipped from 0 to 1. The longest subarray is underlined.
+ 
+
+Constraints:
+
+1 <= nums.length <= 105
+nums[i] is either 0 or 1.
+0 <= k <= nums.length
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+580.6K
+Submissions
+914.9K
+Acceptance Rate
+63.5% */
+public class Max_Consecutive_Ones_III {
+    public int longestOnes(int[] a, int k) {
+        int maxL=0;
+        int r=0,l=0,z=0;
+        while(r<a.length){
+            if(a[r]==0) z++;
+            if(z>k){
+                if(a[l]==0) z--;
+                l++;
+            }
+            if(z<=k){
+                int currL=r-l+1;
+                maxL = Math.max(maxL, currL); //==// maxL = (maxL > currL) ? maxL : currL;
+            }
+            r++;
+        } return maxL;
+    }
+}
+/*//similar soln. on LC forum
+Explanation
+For each A[j], try to find the longest subarray.
+If A[i] ~ A[j] has zeros <= K, we continue to increment j.
+If A[i] ~ A[j] has zeros > K, we increment i (as well as j).
+
+
+Java:
+
+    public int longestOnes(int[] A, int K) {
+        int i = 0, j;
+        for (j = 0; j < A.length; ++j) {
+            if (A[j] == 0) K--;
+            if (K < 0 && A[i++] == 0) K++;
+        }
+        return j - i;
+    }
+ */
+
+ package Two_Pointer_and_Sliding_Window.java.Lec1_MediumQ;
+
+import java.util.HashMap;
+
+/*Q3 904. Fruit Into Baskets
+Medium
+Topics
+Companies
+You are visiting a farm that has a single row of fruit trees arranged from left to right. The trees are represented by an integer array fruits where fruits[i] is the type of fruit the ith tree produces.
+
+You want to collect as much fruit as possible. However, the owner has some strict rules that you must follow:
+
+You only have two baskets, and each basket can only hold a single type of fruit. There is no limit on the amount of fruit each basket can hold.
+Starting from any tree of your choice, you must pick exactly one fruit from every tree (including the start tree) while moving to the right. The picked fruits must fit in one of your baskets.
+Once you reach a tree with fruit that cannot fit in your baskets, you must stop.
+Given the integer array fruits, return the maximum number of fruits you can pick.
+
+ 
+
+Example 1:
+
+Input: fruits = [1,2,1]
+Output: 3
+Explanation: We can pick from all 3 trees.
+Example 2:
+
+Input: fruits = [0,1,2,2]
+Output: 3
+Explanation: We can pick from trees [1,2,2].
+If we had started at the first tree, we would only pick from trees [0,1].
+Example 3:
+
+Input: fruits = [1,2,3,2,2]
+Output: 4
+Explanation: We can pick from trees [2,3,2,2].
+If we had started at the first tree, we would only pick from trees [1,2].
+ 
+
+Constraints:
+
+1 <= fruits.length <= 105
+0 <= fruits[i] < fruits.length
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+416.3K
+Submissions
+934.9K
+Acceptance Rate
+44.5% */
+public class Fruit_Into_Baskets {
+    public int totalFruit(int[] fruits) {
+        int maxL=0; int l=0,r=0;
+        HashMap<Integer, Integer> hmap=new HashMap<>();
+        while(r<fruits.length){
+            hmap.put(fruits[r], (hmap.getOrDefault(fruits[r], 0)+1));
+            if(hmap.size()>2){
+                hmap.put(fruits[l], (hmap.getOrDefault(fruits[l], 0)-1));
+                if(hmap.get(fruits[l])==0) hmap.remove(fruits[l]);
+                l++;
+            }
+            maxL = Math.max(maxL, (r-l+1));
+            r++;
+        } return maxL;
+    }
+}
+/*
+//Compact Soln.
+Java:
+
+    public int totalFruit(int[] tree) {
+        Map<Integer, Integer> count = new HashMap<>();
+        int i = 0, j;
+        for (j = 0; j < tree.length; ++j) {
+            count.put(tree[j], count.getOrDefault(tree[j], 0) + 1);
+            if (count.size() > 2) {
+                count.put(tree[i], count.get(tree[i]) - 1);
+                count.remove(tree[i++], 0);
+            }
+        }
+        return j - i;
+    }
+Java
+
+    public int totalFruit2(int[] tree) {
+        Map<Integer, Integer> count = new HashMap<Integer, Integer>();
+        int res = 0, i = 0;
+        for (int j = 0; j < tree.length; ++j) {
+            count.put(tree[j], count.getOrDefault(tree[j], 0) + 1);
+            while (count.size() > 2) {
+                count.put(tree[i], count.get(tree[i]) - 1);
+                if (count.get(tree[i]) == 0) count.remove(tree[i]);
+                i++;
+            }
+            res = Math.max(res, j - i + 1);
+        }
+        return res;
+    }
+
+    class Solution {
+    public int totalFruit(int[] tree) {
+        int start = 0;
+        int n = tree.length;
+        int maxLength = 0;
+        HashMap<Integer, Integer> map = new HashMap<>();
+        for (int end = 0; end < n; end++) {
+            map.put(tree[end], end);
+            if (map.size() > 2) {
+                int minIndex = Collections.min(map.values());
+                map.remove(tree[minIndex]);
+                start = minIndex + 1;
+            }
+            maxLength = Math.max(maxLength, end - start + 1);
+        }
+        return maxLength;
+    }
+}
+ */
+
+ package Two_Pointer_and_Sliding_Window.java.Lec1_MediumQ;
+
+import java.util.HashMap;
+
+/*Q4 424. Longest Repeating Character Replacement
+Medium
+Topics
+Companies
+You are given a string s and an integer k. You can choose any character of the string and change it to any other uppercase English character. You can perform this operation at most k times.
+
+Return the length of the longest substring containing the same letter you can get after performing the above operations.
+
+ 
+
+Example 1:
+
+Input: s = "ABAB", k = 2
+Output: 4
+Explanation: Replace the two 'A's with two 'B's or vice versa.
+Example 2:
+
+Input: s = "AABABBA", k = 1
+Output: 4
+Explanation: Replace the one 'A' in the middle with 'B' and form "AABBBBA".
+The substring "BBBB" has the longest repeating letters, which is 4.
+There may exists other ways to achieve this answer too.
+ 
+
+Constraints:
+
+1 <= s.length <= 105
+s consists of only uppercase English letters.
+0 <= k <= s.length
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+777K
+Submissions
+1.4M
+Acceptance Rate
+54.4% */
+public class Longest_Repeating_Character_Replacement {
+    public int characterReplacement(String s, int k) {
+        HashMap <Character,Integer> hmap = new HashMap<>();
+        int maxL=0; int r=0,l=0,maxf=0;
+        //Can make algo faster using cache[] of freq. for each alphabet, to ease char freq. retrieval, but too lazy
+        char[] c = s.toCharArray();
+        while(r<c.length){
+            int currL= r-l+1;
+            int v = hmap.getOrDefault(c[r],0);
+            hmap.put(c[r], (v+1));
+            maxf= Math.max((v+1) , maxf);
+            int changes = currL - maxf;
+            if(changes>k){
+                hmap.put(c[l], (hmap.get(c[l])-1));
+                if(hmap.get(c[l])==0) hmap.remove(c[l]);
+                l++;
+            }
+            currL=r-l+1;
+            changes = currL - maxf;
+            if(changes <=k) maxL = Math.max(maxf, currL);
+            r++;
+        } return maxL;
+    }
+}
+// //1st LC submission
+// class Solution {
+//     public int characterReplacement(String s, int k) {
+//         HashMap <Character,Integer> hmap = new HashMap<>();
+//         int maxL=0; int r=0,l=0,maxf=0;
+//         char[] c = s.toCharArray();
+//         while(r<c.length){
+//             int currL= r-l+1;
+//             hmap.put(c[r], (hmap.getOrDefault(c[r], 0)+1));
+//             maxf= Math.max(hmap.get(c[r]) , maxf);
+//             int changes = currL - maxf;
+//             if(changes>k){
+//                 hmap.put(c[l], (hmap.get(c[l])-1));
+//                 if(hmap.get(c[l])==0) hmap.remove(c[l]);
+//                 l++;
+//             }
+//             currL=r-l+1;
+//             changes = currL - maxf;
+//             if(changes <=k) maxL = Math.max(maxf, currL);
+//             r++;
+//         } return maxL;
+//     }
+// }
+
+// //Using count[26]
+// public int characterReplacement(String s, int k) {
+//     int len = s.length();
+//     int[] count = new int[26];
+//     int start = 0, maxCount = 0, maxLength = 0;
+//     for (int end = 0; end < len; end++) {
+//         maxCount = Math.max(maxCount, ++count[s.charAt(end) - 'A']);
+//         if (end - start + 1 - maxCount > k) {
+//             count[s.charAt(start) - 'A']--;
+//             start++;
+//         }
+//         maxLength = Math.max(maxLength, end - start + 1);
+//     }
+//     return maxLength;
+// }
+
+package Two_Pointer_and_Sliding_Window.java.Lec1_MediumQ;
+/*Q5 930. Binary Subarrays With Sum
+Medium
+Topics
+Companies
+Given a binary array nums and an integer goal, return the number of non-empty subarrays with a sum goal.
+
+A subarray is a contiguous part of the array.
+
+ 
+
+Example 1:
+
+Input: nums = [1,0,1,0,1], goal = 2
+Output: 4
+Explanation: The 4 subarrays are bolded and underlined below:
+[1,0,1,0,1]
+[1,0,1,0,1]
+[1,0,1,0,1]
+[1,0,1,0,1]
+Example 2:
+
+Input: nums = [0,0,0,0,0], goal = 0
+Output: 15
+ 
+
+Constraints:
+
+1 <= nums.length <= 3 * 104
+nums[i] is either 0 or 1.
+0 <= goal <= nums.length
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+249.3K
+Submissions
+395.3K
+Acceptance Rate
+63.1% */
+public class Binary_Subarrays_With_Sum {
+    //way 1, very general
+    public int numSubarraysWithSum(int[] a, int goal) {
+        return countSubarrSumLessThanEqualToGoal(a, a.length, goal) - countSubarrSumLessThanEqualToGoal(a, a.length, (goal-1));
+    }
+
+    private int countSubarrSumLessThanEqualToGoal(int[] a, int n, int goal) {
+        if(goal<0) return 0;
+        int l=0,r=0,cnt=0,sum=0;
+        while(r<n){
+            sum+=a[r];
+            while(sum>goal){
+                sum-=a[l];
+                l++; //shrink
+            }
+            int subArrWithSameEndR= r-l+1; 
+            cnt+=subArrWithSameEndR;
+            r++;//expand
+        } return cnt;
+    }
+}
+// // LC submission way 2, more specific way due to binary nature of a[]
+// class Solution {
+//     public int numSubarraysWithSum(int[] a, int goal) {
+//         int prefix_zeros = 0;
+//         int window_sum = 0;
+//         int cnt = 0;
+        
+//         int L = 0, R = 0;
+        
+//         while(R < a.length) {
+//             window_sum += a[R];
+            
+//             // main modification from normal sliding winodw
+//             while (L < R && (a[L] == 0 || window_sum > goal)) {
+//                 if (a[L] == 1) {
+//                     prefix_zeros = 0;
+//                 } else {
+//                     prefix_zeros += 1;
+//                 }
+                
+//                 window_sum -= a[L];
+//                 L++;
+//             }
+            
+//             if (window_sum == goal) {
+//                 cnt += 1 + prefix_zeros;
+//             }
+//             R++;
+//         }
+        
+//         return cnt;
+//     }
+// }
+
+package Two_Pointer_and_Sliding_Window.java.Lec1_MediumQ;
+/*Q6 1248. Count Number of Nice Subarrays
+Medium
+Topics
+Companies
+Hint
+Given an array of integers nums and an integer k. A continuous subarray is called nice if there are k odd numbers on it.
+
+Return the number of nice sub-arrays.
+
+ 
+
+Example 1:
+
+Input: nums = [1,1,2,1,1], k = 3
+Output: 2
+Explanation: The only sub-arrays with 3 odd numbers are [1,1,2,1] and [1,2,1,1].
+Example 2:
+
+Input: nums = [2,4,6], k = 1
+Output: 0
+Explanation: There are no odd numbers in the array.
+Example 3:
+
+Input: nums = [2,2,2,1,2,2,1,2,2,2], k = 2
+Output: 16
+ 
+
+Constraints:
+
+1 <= nums.length <= 50000
+1 <= nums[i] <= 10^5
+1 <= k <= nums.length
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+252K
+Submissions
+354.9K
+Acceptance Rate
+71.0% */
+public class Count_Number_of_Nice_Subarrays {
+    // generic way1, 4 pass soln.
+    public int numberOfSubarrays(int[] a, int k) {
+        return countSubarrSumLessThanEqualToGoal(a, a.length, k) - countSubarrSumLessThanEqualToGoal(a, a.length, (k-1));
+    }
+    private int countSubarrSumLessThanEqualToGoal(int[] a, int n, int k) {
+        if(k<0) return 0;
+        int l=0,r=0,cnt=0,sum=0; 
+        while(r<n){
+            sum+=a[r]%2;
+            while(sum>k){
+                sum-=a[l]%2;
+                l++; //shrink
+            }
+            int subArrWithSameEndR= r-l+1; 
+            cnt+=subArrWithSameEndR;
+            r++;//expand
+        } return cnt;
+    }
+}
+// //Lc submission 2, way 2, more specific method, 2 pass
+// class Solution {
+//     public int numberOfSubarrays(int[] A, int k) {
+//         //cnt == preceeding Even Nos Before Block With Sum == k
+//         int ans = 0, L = 0, R = 0, cnt = 0, sum =0;
+//         while(R < A.length) {
+//             if (A[R] % 2 == 1) {
+//                 sum++;
+//                 cnt = 0;
+//             }
+//             while (sum==k) {     
+//                 if(A[L] % 2 == 1) sum--; //==sum -= A[L++] & 1; 
+//                 cnt++;
+//                 L++;
+//             }
+//             R++;
+//             ans += cnt;
+//         }
+//         return ans;
+//     }
+// }
+
+package Two_Pointer_and_Sliding_Window.java.Lec1_MediumQ;
+/*Q7 1358. Number of Substrings Containing All Three Characters
+Medium
+Topics
+Companies
+Hint
+Given a string s consisting only of characters a, b and c.
+
+Return the number of substrings containing at least one occurrence of all these characters a, b and c.
+
+ 
+
+Example 1:
+
+Input: s = "abcabc"
+Output: 10
+Explanation: The substrings containing at least one occurrence of the characters a, b and c are "abc", "abca", "abcab", "abcabc", "bca", "bcab", "bcabc", "cab", "cabc" and "abc" (again). 
+Example 2:
+
+Input: s = "aaacb"
+Output: 3
+Explanation: The substrings containing at least one occurrence of the characters a, b and c are "aaacb", "aacb" and "acb". 
+Example 3:
+
+Input: s = "abc"
+Output: 1
+ 
+
+Constraints:
+
+3 <= s.length <= 5 x 10^4
+s only consists of a, b or c characters.
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+113.7K
+Submissions
+169.3K
+Acceptance Rate
+67.2% */
+public class Number_of_Substrings_Containing_All_Three_Characters {
+    //submission 1
+    public int numberOfSubstrings(String s) {
+        int lastSeen[] = {-1,-1,-1};
+        int cnt=0;
+        char[] c = s.toCharArray();
+        for(int i=0; i<c.length; i++){
+            lastSeen[c[i]-'a']=i;
+            if(lastSeen[0] !=-1 && lastSeen[1] !=-1 && lastSeen[1] !=-1)
+            {
+                cnt+=1+Math.min(Math.min(lastSeen[0], lastSeen[1]),lastSeen[2]);
+            }
+        } return cnt;
+    }
+}
+//submission 2
+// class Solution {
+//     public int numberOfSubstrings(String s) {
+//     // j-(length of min. substring with all 3 chars)-i counts no. of substrings we can form from front->reach with i++
+//     int count[] = {0, 0, 0}, cnt = 0 , i = 0, n = s.length();
+//     char c[] = s.toCharArray();
+//     for (int j = 0; j < n; ++j) {
+//         ++count[c[j] - 'a'];
+//         while (count[0] > 0 && count[1] > 0 && count[2] > 0) --count[c[i++] - 'a'];
+//         cnt += i;
+//     }
+//     return cnt;
+// }
+// }
+
+package Two_Pointer_and_Sliding_Window.java.Lec1_MediumQ;
+/*Q8 1423. Maximum Points You Can Obtain from Cards
+Medium
+Topics
+Companies
+Hint
+There are several cards arranged in a row, and each card has an associated number of points. The points are given in the integer array cardPoints.
+
+In one step, you can take one card from the beginning or from the end of the row. You have to take exactly k cards.
+
+Your score is the sum of the points of the cards you have taken.
+
+Given the integer array cardPoints and the integer k, return the maximum score you can obtain.
+
+ 
+
+Example 1:
+
+Input: cardPoints = [1,2,3,4,5,6,1], k = 3
+Output: 12
+Explanation: After the first step, your score will always be 1. However, choosing the rightmost card first will maximize your total score. The optimal strategy is to take the three cards on the right, giving a final score of 1 + 6 + 5 = 12.
+Example 2:
+
+Input: cardPoints = [2,2,2], k = 2
+Output: 4
+Explanation: Regardless of which two cards you take, your score will always be 4.
+Example 3:
+
+Input: cardPoints = [9,7,7,9,7,7,9], k = 7
+Output: 55
+Explanation: You have to take all the cards. Your score is the sum of points of all cards.
+ 
+
+Constraints:
+
+1 <= cardPoints.length <= 105
+1 <= cardPoints[i] <= 104
+1 <= k <= cardPoints.length
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+281.1K
+Submissions
+528.3K
+Acceptance Rate
+53.2% */
+public class Maximum_Points_You_Can_Obtain_from_Cards {
+    public int maxScore(int[] a, int k) {
+        int n =a.length;
+        int lsum=0, rsum=0, maxsum, lind=k-1;
+        for(int i=0; i<k;i++) lsum+=a[i];
+        for(int i=n-1; i>=n-k;i--){
+            rsum+=a[i];
+            lsum-=a[lind];
+            lind--;
+            maxsum = Math.max(maxsum, (lsum+rsum));
+        } return maxsum;
+    }
+}
+

@@ -1,0 +1,1069 @@
+package StackAndQueue.Lec1_Learning;
+/*Q1 Stack using Arrays */
+// Comments were told to be added by AI
+public class Stack {
+    private int[] stackArray;
+    private int top;
+    private int maxSize;
+
+    // Constructor to initialize stack
+    public Stack(int size) {
+        maxSize = size;
+        stackArray = new int[maxSize];
+        top = -1; // indicates the stack is empty
+    }
+
+    // Push method to add an element to the stack
+    public void push(int value) {
+        if (isFull()) {
+            System.out.println("Stack is full. Cannot push " + value);
+            return;
+        }
+        stackArray[++top] = value;
+    }
+
+
+    // Pop method to remove and return the top element from the stack
+    public int pop() {
+        if (isEmpty()) {
+            System.out.println("Stack is empty. Cannot pop");
+            return -1; // indicates the stack is empty
+        }
+        return stackArray[top--];
+    }
+
+    // Peek method to return the top element without removing it
+    public int peek() {
+        if (isEmpty()) {
+            System.out.println("Stack is empty. Cannot peek");
+            return Integer.MIN_VALUE; // indicates the stack is empty
+        }
+        return stackArray[top];
+    }
+
+    // Method to check if the stack is empty
+    public boolean isEmpty() {
+        return (top == -1);
+    }
+
+    // Method to check if the stack is full
+    public boolean isFull() {
+        return (top == maxSize - 1);
+    }
+
+    public static void main(String[] args) {
+        Stack stack = new Stack(5);
+
+        stack.push(10);
+        stack.push(20);
+        stack.push(30);
+        stack.push(40);
+        stack.push(50);
+
+        System.out.println("Top element is: " + stack.peek()); // should print 50
+
+        stack.push(60); // should print "Stack is full. Cannot push 60"
+
+        while (!stack.isEmpty()) {
+            System.out.println("Popped element is: " + stack.pop());
+        }
+
+        System.out.println("Stack empty: " + stack.isEmpty()); // should print true
+    }
+}
+/*//GFG submission
+class MyStack
+{
+    int top;
+	int arr[] = new int[1000];
+
+    MyStack()
+	{
+		top = -1;
+	}
+	
+	//Function to push an integer into the stack.
+    void push(int v)
+	{
+	    // Your code here
+	   if (isFull()) return;
+	   this.top = this.top+1;
+	   arr[this.top]=v;
+	} 
+	
+    //Function to remove an item from top of the stack.
+	int pop()
+	{
+        // Your code here
+        if (isEmpty()) return -1;
+        return arr[top--];
+	}
+	
+	public boolean isEmpty() {
+        return (top == -1);
+    }
+    
+    public boolean isFull() {
+        return (top == 1000 - 1);
+    }
+    
+} */ // this is not needed
+
+package StackAndQueue.Lec1_Learning;
+/*Q2 Queue using Arrays */
+// Some Comments added by AI 
+// Assuming Queue is circular, which is generally the case
+public class Queue {
+    private int[] queueArray;
+    private int front;
+    private int rear;
+    private int size;
+    private int maxSize;
+
+    // Constructor to initialize the queue
+    public Queue(int maxSize) {
+        this.maxSize = maxSize;
+        queueArray = new int[maxSize];
+        front = 0;
+        rear = -1;
+        size = 0;
+    }
+
+    // Enqueue method to add an element to the queue
+    public void enqueue(int value) {
+        if (isFull()) {
+            System.out.println("Queue is full. Cannot enqueue " + value);
+            return;
+        }
+        rear = (rear + 1) % maxSize; // Circular increment
+        queueArray[rear] = value;
+        size++;
+    }
+
+    // Dequeue method to remove and return the front element from the queue
+    public int dequeue() {
+        if (isEmpty()) {
+            System.out.println("Queue is empty. Cannot dequeue");
+            return -Integer.MAX_VALUE; // Indicates the queue is empty
+        }
+        int dequeuedValue = queueArray[front];
+        front = (front + 1) % maxSize; // Circular increment
+        size--;
+        return dequeuedValue;
+    }
+
+    // Peek method to return the front element without removing it
+    public int peek() {
+        if (isEmpty()) {
+            System.out.println("Queue is empty. Cannot peek");
+            return -1; // Indicates the queue is empty
+        }
+        return queueArray[front];
+    }
+
+    // Method to check if the queue is empty
+    public boolean isEmpty() {
+        return (size == 0);
+    }
+
+    // Method to check if the queue is full
+    public boolean isFull() {
+        return (size == maxSize);
+    }
+
+    public static void main(String[] args) {
+        Queue queue = new Queue(5);
+
+        queue.enqueue(10);
+        queue.enqueue(20);
+        queue.enqueue(30);
+        queue.enqueue(40);
+        queue.enqueue(50);
+
+        System.out.println("Front element is: " + queue.peek()); // should print 10
+
+        queue.enqueue(60); // should print "Queue is full. Cannot enqueue 60"
+
+        while (!queue.isEmpty()) {
+            System.out.println("Dequeued element is: " + queue.dequeue());
+        }
+
+        System.out.println("Queue empty: " + queue.isEmpty()); // should print true
+    }
+}
+
+/*//GFG soln.
+class MyQueue {
+
+    int front, rear;
+	int arr[] = new int[100005];
+
+    MyQueue()
+	{
+		front=0;
+		rear=0;
+	}
+    
+	
+	//Function to push an element x in a queue.
+    void push(int x)
+    	{
+    	    if(rear == arr.length) {
+            //shift back all (front to rear elems.)
+                for(int i=front;i<rear;i++) {
+    	            arr[i-front] = arr[i];
+    	        }
+    	        front = 0;
+    	        rear -= front;
+    	    }
+    	    arr[rear++] = x;
+    	}
+
+    //Function to pop an element from queue and return that element.
+	int pop()
+	{
+	    if(front == rear) return -1;
+	    return arr[front++];
+	} 
+    
+}
+ */
+
+ package StackAndQueue.Lec1_Learning;
+/*Q3 Queue Using 2 Stack */
+/*
+// LC submission 1 - 2 stacks soln.
+class MyQueue {
+    Stack<Integer> s1 = new Stack();
+    Stack<Integer> s2 = new Stack();
+
+    public MyQueue() {
+        
+    }
+    
+    public void push(int x) {
+        s1.push(x);
+    }
+    
+    public int pop() {
+        while(!s1.isEmpty()){
+            s2.push(s1.pop());
+        }
+        int v = s2.pop();
+        while(!s2.isEmpty()){
+            s1.push(s2.pop());
+        }
+        return v;
+    }
+    
+    public int peek() {
+        while(!s1.isEmpty()){
+            s2.push(s1.pop());
+        }
+        int v = s2.peek();
+        while(!s2.isEmpty()){
+            s1.push(s2.pop());
+        }
+        return v;
+    }
+    
+    public boolean empty() {
+        return s1.isEmpty();
+    }
+}
+    
+// LC submission 2 - Recursive 1 stack soln.
+class MyQueue {
+
+    Stack<Integer> stack;
+
+    public MyQueue() {
+        stack = new Stack<Integer>();
+    }
+    
+    public void push(int x) {
+        if(stack.isEmpty()){
+            stack.push(x);
+            return;
+        }
+        int pop = stack.pop();
+        push(x);
+        stack.push(pop);
+    }
+
+    public int pop() {
+        return stack.pop();
+    }
+    
+    public int peek() {
+        return stack.peek();
+    }
+    
+    public boolean empty() {
+        return stack.isEmpty();
+    }
+}
+
+/**
+ * Your MyQueue object will be instantiated and called as such:
+ * MyQueue obj = new MyQueue();
+ * obj.push(x);
+ * int param_2 = obj.pop();
+ * int param_3 = obj.peek();
+ * boolean param_4 = obj.empty();
+ */
+// */
+
+import java.util.Stack;
+
+public class QueueUsingStacks {
+    private Stack<Integer> stack1;
+    private Stack<Integer> stack2;
+
+    // Constructor to initialize the stacks
+    public QueueUsingStacks() {
+        stack1 = new Stack<>();
+        stack2 = new Stack<>();
+    }
+
+    // Enqueue operation to add an element to the queue
+    public void enqueue(int x) {
+        stack1.push(x);
+    }
+
+    // Dequeue operation to remove the front element from the queue
+    public int dequeue() {
+        if (stack2.isEmpty()) {
+            if (stack1.isEmpty()) {
+                System.out.println("Queue is empty. Cannot dequeue");
+                return -1; // Indicates the queue is empty
+            }
+            // Move all elements from stack1 to stack2
+            while (!stack1.isEmpty()) {
+                stack2.push(stack1.pop());
+            }
+        }
+        return stack2.pop();
+    }
+
+    // Peek operation to return the front element without removing it
+    public int peek() {
+        if (stack2.isEmpty()) {
+            if (stack1.isEmpty()) {
+                System.out.println("Queue is empty. Cannot peek");
+                return -1; // Indicates the queue is empty
+            }
+            // Move all elements from stack1 to stack2
+            while (!stack1.isEmpty()) {
+                stack2.push(stack1.pop());
+            }
+        }
+        return stack2.peek();
+    }
+
+    // Method to check if the queue is empty
+    public boolean isEmpty() {
+        return stack1.isEmpty() && stack2.isEmpty();
+    }
+
+    public static void main(String[] args) {
+        QueueUsingStacks queue = new QueueUsingStacks();
+
+        queue.enqueue(10);
+        queue.enqueue(20);
+        queue.enqueue(30);
+
+        System.out.println("Front element is: " + queue.peek()); // should print 10
+
+        System.out.println("Dequeued element is: " + queue.dequeue()); // should print 10
+        System.out.println("Dequeued element is: " + queue.dequeue()); // should print 20
+        System.out.println("Dequeued element is: " + queue.dequeue()); // should print 30
+
+        System.out.println("Queue empty: " + queue.isEmpty()); // should print true
+
+        queue.dequeue(); // should print "Queue is empty. Cannot dequeue"
+    }
+}
+package StackAndQueue.Lec1_Learning;
+/*Q4 Stack Using 2 Queues */
+/*//LC submission 1 - 2 stack iterative
+class MyStack {
+    Queue<Integer> q1;
+    Queue<Integer> q2;
+    int top;
+
+    public MyStack() {
+        q1 = new LinkedList<>();
+        q2 = new LinkedList<>();
+    }
+    
+    public void push(int x) {
+        q1.add(x);
+        top=x;
+    }
+    
+    public int pop() {
+        int lastPop;
+        while(q1.size()>1){
+            q2.add(q1.remove());
+            //top = q1.remove();
+            //q2.add(top);
+        }
+        lastPop = q1.remove();
+        while(!q2.isEmpty()){
+            //q1.add(q2.remove());
+            top = q2.remove(); //Updating top imp. here
+            q1.add(top);
+        }
+        // Queue<Integer> temp = q1;
+        // q1 = q2;
+        // q2 = temp;
+        return lastPop;
+    }
+    
+    public int top() {
+        if (q1.isEmpty()) {
+            return -1; 
+        }
+        return top;
+    }
+    
+    public boolean empty() {
+        return q1.isEmpty();
+    }
+}
+
+// LC submission 2 - 1 stack only, via rotating queue during enqueue
+class MyStack {
+    Queue<Integer> q1;
+    int top;
+
+    public MyStack() {
+        q1 = new LinkedList<>();
+    }
+    
+    public void push(int v) {
+        q1.add(v);
+        top = v;
+        int size = q1.size();
+        // Rotate the queue to move the newly added elem. to the front
+        for (int i = 1; i < size; i++) {
+            q1.add(q1.remove());
+        }
+        // Wrong Way, fail to see the gestalt
+        // found out after dry run after pushing 3+ elems.
+        // if(q1.isEmpty()){
+        //     top =v;
+        //     q1.add(v);
+        //     return;
+        // }
+        // int lastPop=q1.remove();
+        // push(v);
+        // q1.add(lastPop);//Backtrack
+    }
+    
+    public int pop() {
+        int lastPop = q1.remove();
+        if(!q1.isEmpty()) top = q1.peek();
+        return lastPop;
+    }
+    
+    public int top() {
+        if (q1.isEmpty()) {
+            return -1; 
+        }
+        return top;
+    }
+    
+    public boolean empty() {
+        return q1.isEmpty();
+    }
+}
+
+/**
+ * Your MyStack object will be instantiated and called as such:
+ * MyStack obj = new MyStack();
+ * obj.push(x);
+ * int param_2 = obj.pop();
+ * int param_3 = obj.top();
+ * boolean param_4 = obj.empty();
+ */
+
+/**
+ * Your MyStack object will be instantiated and called as such:
+ * MyStack obj = new MyStack();
+ * obj.push(x);
+ * int param_2 = obj.pop();
+ * int param_3 = obj.top();
+ * boolean param_4 = obj.empty();
+ */
+//*/
+
+
+import java.util.LinkedList;
+import java.util.Queue;
+
+public class StackUsingQueues {
+    private Queue<Integer> q1;
+    private Queue<Integer> q2;
+    private int top;
+
+    // Constructor to initialize the queues
+    public StackUsingQueues() {
+        q1 = new LinkedList<>();
+        q2 = new LinkedList<>();
+    }
+
+    // Push operation to add an element to the stack
+    public void push(int x) {
+        q1.add(x);
+        top = x;
+    }
+
+    // Pop operation to remove the top element from the stack
+    public int pop() {
+        if (q1.isEmpty()) {
+            System.out.println("Stack is empty. Cannot pop");
+            return -1; // Indicates the stack is empty
+        }
+        // Move all elements except the last one from q1 to q2
+        while (q1.size() > 1) {
+            top = q1.remove();
+            q2.add(top); 
+        }
+        // The last element in q1 is the top element of the stack
+        int poppedValue = q1.remove();
+
+        // Swap the names of q1 and q2
+        Queue<Integer> temp = q1;
+        q1 = q2;
+        q2 = temp;
+
+        return poppedValue;
+    }
+
+    // Peek operation to return the top element without removing it
+    public int top() {
+        if (q1.isEmpty()) {
+            System.out.println("Stack is empty. Cannot peek");
+            return -1; // Indicates the stack is empty
+        }
+        return top;
+    }
+
+    // Method to check if the stack is empty
+    public boolean isEmpty() {
+        return q1.isEmpty();
+    }
+
+    public static void main(String[] args) {
+        StackUsingQueues stack = new StackUsingQueues();
+
+        stack.push(10);
+        stack.push(20);
+        stack.push(30);
+
+        System.out.println("Top element is: " + stack.top()); // should print 30
+
+        System.out.println("Popped element is: " + stack.pop()); // should print 30
+        System.out.println("Popped element is: " + stack.pop()); // should print 20
+        System.out.println("Popped element is: " + stack.pop()); // should print 10
+
+        System.out.println("Stack empty: " + stack.isEmpty()); // should print true
+
+        stack.pop(); // should print "Stack is empty. Cannot pop"
+    }
+}
+package StackAndQueue.Lec1_Learning;
+/*Q5 Stack using SLL */
+import Linked_Lists.Singly_Linked_List.LinkedList.Node;
+
+public class StackSLL {
+    private Node top;
+
+    // Constructor to initialize the stack
+    public StackSLL() {
+        this.top = null;
+    }
+
+    // Push method to add an element to the stack
+    public void push(int value) {
+        Node newNode = new Node(value);
+        newNode.next = top;
+        top = newNode;
+    }
+
+    // Pop method to remove and return the top element from the stack
+    public int pop() {
+        if (isEmpty()) {
+            System.out.println("Stack is empty. Cannot pop");
+            return -1; // Indicates the stack is empty
+        }
+        int poppedValue = top.value;
+        top = top.next;
+        return poppedValue;
+    }
+
+    // Peek method to return the top element without removing it
+    public int peek() {
+        if (isEmpty()) {
+            System.out.println("Stack is empty. Cannot peek");
+            return -1; // Indicates the stack is empty
+        }
+        return top.value;
+    }
+
+    // Method to check if the stack is empty
+    public boolean isEmpty() {
+        return top == null;
+    }
+
+    public static void main(String[] args) {
+        StackSLL stack = new StackSLL();
+
+        stack.push(10);
+        stack.push(20);
+        stack.push(30);
+
+        System.out.println("Top element is: " + stack.peek()); // should print 30
+
+        System.out.println("Popped element is: " + stack.pop()); // should print 30
+        System.out.println("Popped element is: " + stack.pop()); // should print 20
+        System.out.println("Popped element is: " + stack.pop()); // should print 10
+
+        System.out.println("Stack empty: " + stack.isEmpty()); // should print true
+
+        stack.pop(); // should print "Stack is empty. Cannot pop"
+    }
+}
+/*//GFG submission
+class MyStack 
+{
+    // class StackNode {
+    //     int data;
+    //     StackNode next;
+    //     StackNode(int a) {
+    //         data = a;
+    //         next = null;
+    //     }
+    // }   
+    StackNode top;
+    
+    //Function to push an integer into the stack.
+    void push(int a) 
+    {
+        // Add your code here
+        StackNode newNode = new StackNode(a);
+        newNode.next = top;
+        top = newNode;
+    }
+    
+    //Function to remove an item from top of the stack.
+    int pop() 
+    {
+        // Add your code here
+        if(top==null) return -1;
+        int poppedValue = top.data;
+        top = top.next;
+        return poppedValue;
+    }
+}
+ */
+ package StackAndQueue.Lec1_Learning;
+
+import Linked_Lists.Singly_Linked_List.LinkedList.Node;
+
+/*Q6 Queue using SLL */
+public class QueueSLL {
+    private Node front;
+    private Node rear;
+
+    // Constructor to initialize the queue
+    public QueueSLL() {
+        this.front = null;
+        this.rear = null;
+    }
+
+    // Enqueue method to add an element to the end of the queue
+    public void enqueue(int value) {
+        Node newNode = new Node(value);
+        if (rear == null) {// When 1st node, put both F and R on it
+            front = rear = newNode;
+            return;
+        }
+        rear.next = newNode;
+        rear = newNode;
+    }
+
+    // Dequeue method to remove and return the front element from the queue
+    public int dequeue() {
+        if (isEmpty()) {
+            System.out.println("Queue is empty. Cannot dequeue");
+            return -1; // Indicates the queue is empty
+        }
+        int dequeuedValue = front.value;
+        front = front.next;
+        if (front == null) {
+            rear = null; // When Queue emptied
+        }
+        return dequeuedValue;
+    }
+
+    // Peek method to return the front element without removing it
+    public int peek() {
+        if (isEmpty()) {
+            System.out.println("Queue is empty. Cannot peek");
+            return -1; // Indicates the queue is empty
+        }
+        return front.value;
+    }
+
+    // Method to check if the queue is empty
+    public boolean isEmpty() {
+        return front == null;
+    }
+
+    public static void main(String[] args) {
+        QueueSLL queue = new QueueSLL();
+
+        queue.enqueue(10);
+        queue.enqueue(20);
+        queue.enqueue(30);
+
+        System.out.println("Front element is: " + queue.peek()); // should print 10
+
+        System.out.println("Dequeued element is: " + queue.dequeue()); // should print 10
+        System.out.println("Dequeued element is: " + queue.dequeue()); // should print 20
+        System.out.println("Dequeued element is: " + queue.dequeue()); // should print 30
+
+        System.out.println("Queue empty: " + queue.isEmpty()); // should print true
+
+        queue.dequeue(); // should print "Queue is empty. Cannot dequeue"
+    }
+}
+/*//GFG submission
+class MyQueue
+{
+    QueueNode front, rear;
+    
+    //Function to push an element into the queue.
+	void push(int a)
+	{
+        // Your code here
+        QueueNode newNode = new QueueNode(a);
+        if (rear == null) {
+            front = rear = newNode;
+            return;
+        }
+        rear.next = newNode;
+        rear = newNode;
+        
+	}
+	
+    //Function to pop front element from the queue.
+	int pop()
+	{
+        // Your code here
+        if (front == null) return -1; 
+        
+        int dequeuedValue = front.data;
+        front = front.next;
+        if (front == null) {
+            rear = null;
+        }
+        return dequeuedValue;
+	}
+}
+ */
+ package StackAndQueue.Lec1_Learning;
+import java.util.Stack;
+/*Q7 20. Valid Parentheses
+Easy
+Topics
+Companies
+Hint
+Given a string s containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid.
+
+An input string is valid if:
+
+Open brackets must be closed by the same type of brackets.
+Open brackets must be closed in the correct order.
+Every close bracket has a corresponding open bracket of the same type.
+ 
+
+Example 1:
+
+Input: s = "()"
+Output: true
+Example 2:
+
+Input: s = "()[]{}"
+Output: true
+Example 3:
+
+Input: s = "(]"
+Output: false
+ 
+
+Constraints:
+
+1 <= s.length <= 104
+s consists of parentheses only '()[]{}'.
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+4.7M
+Submissions
+11.6M
+Acceptance Rate
+40.7% */
+public class ValidParenthesis {
+    public boolean isValid(String s) {
+        Stack<Character> st = new Stack<Character>();
+        char[] ch = s.toCharArray();
+        for (char c: ch) {
+            if (c == '(' || c == '[' || c == '{')
+                st.push(c);
+            else {
+                if(st.isEmpty()) return false;
+                char top = st.pop(); 
+                if((c == ')' && top != '(') ||  (c == ']' && top != '[') || (c == '}' && top != '{')) return false;
+            }
+        }
+        return st.isEmpty();
+    }
+}
+/*Time complexity: O(n) where n = length of string.
+Space complexity: O(n) */
+/*//clean HM soln
+class Solution {
+    public boolean isValid(String s) {
+        
+        Stack<Character> stack = new Stack<Character>();
+        HashMap<Character, Character> complement = 
+            new HashMap<Character, Character>();
+
+        complement.put(')', '(');
+        complement.put(']', '[');
+        complement.put('}', '{');
+
+        for (Character c : s.toCharArray()) {
+            switch(c) {
+                case '(':
+                case '{':
+                case '[':
+                    stack.push(c);
+                    break;
+                case ')':
+                case '}':
+                case ']':
+                    if (stack.isEmpty() || stack.pop() != complement.get(c)) {
+                        return false;
+                    }
+            }
+        }
+
+        return stack.isEmpty();
+    }
+}
+    // another way to write cleanly, switch case
+    class Solution {
+    public boolean isValid(String s) {
+
+
+        // Create a new stack to store the characters.
+        Stack<Character> stack = new Stack<>();
+
+
+        // convert string into char array and access the characters using for each loop.
+        for(char ch: s.toCharArray())
+        {
+            // check ch
+            switch (ch)
+            {
+                // open bracket then push it in stack.
+                // close bracket then pop the item and compare.
+                case '(':
+                case '{':
+                case '[':
+                    stack.push(ch);
+                    break;
+                case ')':
+                    if(stack.isEmpty() || stack.pop() != '(')
+
+                    // if the stack is empty then it means string have no open bracket.
+                        // hence it is invalid.
+                    {
+                        return false;
+                    }
+                    break;
+                case '}':
+                    if(stack.isEmpty() || stack.pop() != '{')
+                    {
+                        return false;
+                    }
+                    break;
+                case ']':
+                    if(stack.isEmpty() || stack.pop() != '[')
+                    {
+                        return false;
+                    }
+                    break;
+            }
+        }
+
+
+        // After the loop we have to check one more condition.
+        // return true only if the stack is empty.
+        // if stack is not empty that means we have unused brackets.
+
+        return stack.isEmpty();
+        
+    }
+}
+//From - https://leetcode.com/problems/valid-parentheses/solutions/2986468/simple-java-beats-100-runtime-easy-to-understand/ */
+package StackAndQueue.Lec1_Learning;
+/*Q8 155. Min Stack
+Solved
+Medium
+Topics
+Companies
+Hint
+Design a stack that supports push, pop, top, and retrieving the minimum element in constant time.
+
+Implement the MinStack class:
+
+MinStack() initializes the stack object.
+void push(int val) pushes the element val onto the stack.
+void pop() removes the element on the top of the stack.
+int top() gets the top element of the stack.
+int getMin() retrieves the minimum element in the stack.
+You must implement a solution with O(1) time complexity for each function.
+
+ 
+
+Example 1:
+
+Input
+["MinStack","push","push","push","getMin","pop","top","getMin"]
+[[],[-2],[0],[-3],[],[],[],[]]
+
+Output
+[null,null,null,null,-3,null,0,-2]
+
+Explanation
+MinStack minStack = new MinStack();
+minStack.push(-2);
+minStack.push(0);
+minStack.push(-3);
+minStack.getMin(); // return -3
+minStack.pop();
+minStack.top();    // return 0
+minStack.getMin(); // return -2
+ 
+
+Constraints:
+
+-231 <= val <= 231 - 1
+Methods pop, top and getMin operations will always be called on non-empty stacks.
+At most 3 * 104 calls will be made to push, pop, top, and getMin.
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+1.7M
+Submissions
+3.1M
+Acceptance Rate
+54.4%*/
+import java.util.Stack;
+
+public class MinStackConstantTime {
+    //Way 3 - refer notes for intuition
+    Stack <Long> st = new Stack <Long> ();
+    Long Min=Long.MAX_VALUE;
+
+    // No need for explicit constructor, java makes default constructor that does nothing automaticcalyy
+    // public MinStack() {
+    // }
+
+    public void push(int v) {
+        Long val = Long.valueOf(v);
+        if (st.isEmpty()) {
+            Min = val;
+            st.push(val);
+        } 
+        else if (val < Min) {
+            st.push(2*val - Min);
+            Min = val;
+        } 
+        else st.push(val);
+        
+    }
+
+    public void pop() {
+        if (st.isEmpty()) return;
+
+        Long val = st.pop();
+        if (val < Min) Min = 2*Min - val;
+    }
+
+    public int top() {
+        Long val = st.peek();
+        if (val < Min) return Min.intValue();
+        return val.intValue();
+    }
+
+    public int getMin() {
+        return Min.intValue();
+    }
+}
+/*//LC submission with way 1
+class MinStack {
+    private class Node {
+        int val;
+        int min;
+        Node next;
+            
+        private Node(int val, int min, Node next) {
+            this.val = val;
+            this.min = min;
+            this.next = next;
+        }
+    }
+    private Node top;
+    //No need  for constructor here, still can use;
+    public MinStack() {
+        this.top=null;
+    }
+    
+    public void push(int val) {
+        if(top==null) top = new Node(val, val, null);//1st node
+        else top = new Node(val, Math.min(val, top.min), top);
+    }
+    
+    public void pop() {
+        top = top.next;
+    }
+    
+    public int top() {
+        return top.val;
+    }
+    
+    public int getMin() {
+        return top.min;
+    }
+}
+
+/**
+ * Your MinStack object will be instantiated and called as such:
+ * MinStack obj = new MinStack();
+ * obj.push(val);
+ * obj.pop();
+ * int param_3 = obj.top();
+ * int param_4 = obj.getMin();
+ */
+// */

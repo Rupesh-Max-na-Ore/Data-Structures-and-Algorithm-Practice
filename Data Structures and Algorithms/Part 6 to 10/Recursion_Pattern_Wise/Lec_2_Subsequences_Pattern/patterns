@@ -1,0 +1,870 @@
+A general approach to backtracking questions in Java (Subsets, Permutations, Combination Sum, Palind...
+
+issac3
+18788
+369968
+May 23, 2016
+Java
+Backtracking
+This structure might apply to many other backtracking questions, but here I am just going to demonstrate Subsets, Permutations, and Combination Sum.
+
+Subsets : https://leetcode.com/problems/subsets/
+
+public List<List<Integer>> subsets(int[] nums) {
+    List<List<Integer>> list = new ArrayList<>();
+    Arrays.sort(nums);
+    backtrack(list, new ArrayList<>(), nums, 0);
+    return list;
+}
+
+private void backtrack(List<List<Integer>> list , List<Integer> tempList, int [] nums, int start){
+    list.add(new ArrayList<>(tempList));
+    for(int i = start; i < nums.length; i++){
+        tempList.add(nums[i]);
+        backtrack(list, tempList, nums, i + 1);
+        tempList.remove(tempList.size() - 1);
+    }
+}
+Subsets II (contains duplicates) : https://leetcode.com/problems/subsets-ii/
+
+public List<List<Integer>> subsetsWithDup(int[] nums) {
+    List<List<Integer>> list = new ArrayList<>();
+    Arrays.sort(nums);
+    backtrack(list, new ArrayList<>(), nums, 0);
+    return list;
+}
+
+private void backtrack(List<List<Integer>> list, List<Integer> tempList, int [] nums, int start){
+    list.add(new ArrayList<>(tempList));
+    for(int i = start; i < nums.length; i++){
+        if(i > start && nums[i] == nums[i-1]) continue; // skip duplicates
+        tempList.add(nums[i]);
+        backtrack(list, tempList, nums, i + 1);
+        tempList.remove(tempList.size() - 1);
+    }
+} 
+Permutations : https://leetcode.com/problems/permutations/
+
+public List<List<Integer>> permute(int[] nums) {
+   List<List<Integer>> list = new ArrayList<>();
+   // Arrays.sort(nums); // not necessary
+   backtrack(list, new ArrayList<>(), nums);
+   return list;
+}
+
+private void backtrack(List<List<Integer>> list, List<Integer> tempList, int [] nums){
+   if(tempList.size() == nums.length){
+      list.add(new ArrayList<>(tempList));
+   } else{
+      for(int i = 0; i < nums.length; i++){ 
+         if(tempList.contains(nums[i])) continue; // element already exists, skip
+         tempList.add(nums[i]);
+         backtrack(list, tempList, nums);
+         tempList.remove(tempList.size() - 1);
+      }
+   }
+} 
+Permutations II (contains duplicates) : https://leetcode.com/problems/permutations-ii/
+
+public List<List<Integer>> permuteUnique(int[] nums) {
+    List<List<Integer>> list = new ArrayList<>();
+    Arrays.sort(nums);
+    backtrack(list, new ArrayList<>(), nums, new boolean[nums.length]);
+    return list;
+}
+
+private void backtrack(List<List<Integer>> list, List<Integer> tempList, int [] nums, boolean [] used){
+    if(tempList.size() == nums.length){
+        list.add(new ArrayList<>(tempList));
+    } else{
+        for(int i = 0; i < nums.length; i++){
+            if(used[i] || i > 0 && nums[i] == nums[i-1] && !used[i - 1]) continue;
+            used[i] = true; 
+            tempList.add(nums[i]);
+            backtrack(list, tempList, nums, used);
+            used[i] = false; 
+            tempList.remove(tempList.size() - 1);
+        }
+    }
+}
+Combination Sum : https://leetcode.com/problems/combination-sum/
+
+public List<List<Integer>> combinationSum(int[] nums, int target) {
+    List<List<Integer>> list = new ArrayList<>();
+    Arrays.sort(nums);
+    backtrack(list, new ArrayList<>(), nums, target, 0);
+    return list;
+}
+
+private void backtrack(List<List<Integer>> list, List<Integer> tempList, int [] nums, int remain, int start){
+    if(remain < 0) return;
+    else if(remain == 0) list.add(new ArrayList<>(tempList));
+    else{ 
+        for(int i = start; i < nums.length; i++){
+            tempList.add(nums[i]);
+            backtrack(list, tempList, nums, remain - nums[i], i); // not i + 1 because we can reuse same elements
+            tempList.remove(tempList.size() - 1);
+        }
+    }
+}
+Combination Sum II (can't reuse same element) : https://leetcode.com/problems/combination-sum-ii/
+
+public List<List<Integer>> combinationSum2(int[] nums, int target) {
+    List<List<Integer>> list = new ArrayList<>();
+    Arrays.sort(nums);
+    backtrack(list, new ArrayList<>(), nums, target, 0);
+    return list;
+    
+}
+
+private void backtrack(List<List<Integer>> list, List<Integer> tempList, int [] nums, int remain, int start){
+    if(remain < 0) return;
+    else if(remain == 0) list.add(new ArrayList<>(tempList));
+    else{
+        for(int i = start; i < nums.length; i++){
+            if(i > start && nums[i] == nums[i-1]) continue; // skip duplicates
+            tempList.add(nums[i]);
+            backtrack(list, tempList, nums, remain - nums[i], i + 1);
+            tempList.remove(tempList.size() - 1); 
+        }
+    }
+} 
+Palindrome Partitioning : https://leetcode.com/problems/palindrome-partitioning/
+
+public List<List<String>> partition(String s) {
+   List<List<String>> list = new ArrayList<>();
+   backtrack(list, new ArrayList<>(), s, 0);
+   return list;
+}
+
+public void backtrack(List<List<String>> list, List<String> tempList, String s, int start){
+   if(start == s.length())
+      list.add(new ArrayList<>(tempList));
+   else{
+      for(int i = start; i < s.length(); i++){
+         if(isPalindrome(s, start, i)){
+            tempList.add(s.substring(start, i + 1));
+            backtrack(list, tempList, s, i + 1);
+            tempList.remove(tempList.size() - 1);
+         }
+      }
+   }
+}
+
+public boolean isPalindrome(String s, int low, int high){
+   while(low < high)
+      if(s.charAt(low++) != s.charAt(high--)) return false;
+   return true;
+} 
+Next
+🚀FULL EXPLANATION WITH STATE SPACE TREE || Recursion and Backtracking || Well Explained || C++
+Comments (234)
+
+Sort by:Best
+Type comment here... (Markdown supported)
+Preview
+Comment
+
+shahdadpuri03
+Jun 10, 2018
+This is the best one stop solution for all recursive backtracking problems in general. Reading this once and then trying it on your own should make you comfortable for all backtracking questions in interviews. I suggest print this entire solution and stick it your desk and keep revising it once a week. :)
+
+637
+Show 5 Replies
+Reply
+
+Ginshord
+Oct 10, 2018
+(1) Why use sort() & (2) Why pass start arugument & (3) what is tempList.remove(tempList.size() - 1) used for?
+(1)sort() method is to check duplicates for convinence.
+Like [2,2,3], target 5. Step by step like below:
+2,2,2 -1 return -> 2,2,2 -1 return -> 2,2,3...
+Clearly, it calls 2,2,2 twice.
+In this case (without duplicates), not using it is better.
+
+(2)passing argument 'start' will make sure each combination of num run once.
+I think combined with sort() method to explain it will be easy to understand.
+e.g. Like [3,2,4], after sorted, turn to [2,3,4]. (ignore target, just look for what's going on)
+First reached list will be 2,2,2 return --> 2,2,3 return--> 2,2,4 return--> 2,3,3 ...
+After 2,2,4 return, it should go to 2,3,3 (due to arg start) instead of 2,3,2. Because 2,2,3 we already reached.
+
+(3)tempList.remove(tempList.size() - 1) do like a pop()
+Imagine a recursion tree.
+Node1 adds num1 to tempList, and calls backtrack() to go into its child Node2. Once this child return to its parent Node1, tempList.remove() will pop out the num1 it added before, and adds num2 to tempList and call backtrack() again.
+
+102
+Hide Replies
+Reply
+
+Foul_Tarnished
+Oct 14, 2023
+Thanks. Helped.
+
+0
+Reply
+
+yo-mama
+50 Days Badge 2023
+Aug 13, 2023
+@newbiecoder1 So the start method being passed shouldn't work when the nums array isn't sorted, right? But it does work. That's what I don't understand. Otherwise I was ready to take it as a weird "trick" that just works.
+
+Edit: On second thought it should work when it isn't sorted. Cuz we are just skipping the combos we've already found. So I guess it's just a fancy trick that just works. I have no idea how it doesn't skip anything else rather than what we've checked but eh... MAGIC
+
+0
+Reply
+
+perfactmistake
+Apr 20, 2021
+Thank you so much @Gnishord :)
+
+2
+Reply
+
+nareshvishram
+Aug 05, 2020
+I think for 'start' variable there will be a separate copy in recursion stack for each call. So for each stage there will be a 'start' variable with some value. And when we backtrack during returning call of recursion , we can use that stored 'start' variable that have some previous value. So we can prevent from going again stage zero due to start.
+Correct me I am wrong?
+
+0
+Reply
+
+newbiecoder1
+Annual Medal 2021
+Apr 18, 2020
+Thanks so much for your explanations. It took me quite a while to figure out why a start index is needed. The purpose is to avoid duplicate combinations.
+
+image
+
+27
+Reply
+
+amitmandliyancsu
+50 Days Badge 2022
+Jan 19, 2020
+for 3rd => Why does it pop "num1"? "num1" should be at the index 0 because it was added first. Why is it getting removed at last index.
+
+1
+Reply
+
+eric0831
+Dec 14, 2019
+@WindsOfChange You delete the element you just added for backtracking
+
+0
+Reply
+
+WindsOfChange
+Nov 21, 2019
+how does this work like pop()? ArrayList doesn't remain sorted so how does this guarantee that last added element is removed from the templist
+
+0
+Reply
+Hide
+
+popeye_the_sailort
+Sep 09, 2018
+Here is the order that the elements get added to the list
+[]
+[1]
+[1,2]
+[1,2,3]
+[1,3]
+[2]
+[2,3]
+[3]
+It is important to visual this order for easy understanding of the code.
+
+73
+Show 4 Replies
+Reply
+
+wenhaocreepy
+Oct 22, 2018
+Time complexity please ?
+
+106
+Hide Replies
+Reply
+
+saarthak08
+Apr 24, 2024
+@lordsakai It's because the recursion stack will max go until the target. Let's say you have target = 4 and candidates = [1,2,3]. So, for the case where you take all 1s, the recursion goes 4 times i.e. until the target. i.e. [1,1,1,1]. This is the worst case. So, the space complexity would be O(target).
+
+0
+Reply
+
+aka2810
+50 Days Badge 2022
+Apr 18, 2024
+@aloginov Thats great. One addition:
+Slightly more accurate complexity will be:
+
+target* O(N^target)
+
+Additional target is added for copying the list whenever we reach target.
+
+0
+Reply
+
+lordsakai
+May 22, 2021
+@aloginov Why is space O(target) and not O(candidates)? Since our maximum solution could include all the candidates.
+
+1
+Reply
+
+kandikatla
+May 17, 2021
+What's the time complexity for DP solution? Is backtracking better than DP?
+
+0
+Reply
+
+5vasanth20
+Nov 04, 2020
+To calculate the time complexity of each - https://medium.com/@vasanths294/permutation-combination-subset-time-complexity-eca924e00071
+
+-24
+Reply
+
+aiayumi
+100 Days Badge 2022
+Aug 11, 2020
+@chimao Hmm I think you are getting this mixed up with Subsets. It's not a take/no-take. Every step is "taking" every element and running until it hits a deadend (based on the solution posted). In effect (N^target) like of someone posted above.
+
+6
+Reply
+
+Sumesh_s30
+Jun 27, 2020
+@john221 Space complexity will be O(N) where n is the length of the candidate's array.
+
+-54
+Reply
+
+john221
+Apr 16, 2020
+@aloginov Thanks for sharing. So are you eliminating the final solution when calculating the space complexity? To me, image worst case the solution is return n copies of the input (target = n), then space complexity should be O(N^target) as well
+
+3
+Reply
+
+RockyLiChamp
+Apr 12, 2020
+@chimao I thought time complexity is 2^target, space time complexity is 2^target. Correct me
+
+-2
+Reply
+
+yhcddup
+Feb 10, 2020
+Every time you have N choice (since you can use number repeatedly), and you can choose at most target times (actually it's smaller than target), so we can assume the worst-case time complexity is O(N^target).
+
+39
+Reply
+
+chimao
+Jan 26, 2020
+For time complexity, we should not consider the if-else return condition, because we want the worse case.
+So we should consider two things. 1. number of the candidates 2. how we reach the nodes.
+
+E.g. candidates = [1, 2, 3]. And we only have two choices take or not take = how we reach the nodes.
+graph: (sorry consider ___ as whitespace)
+candidate______________"" ("") ( X= not take, O = take)
+____________________ /__ \
+1__________________X_____O( 1)
+__________________ /__ \ ___ /__ \
+2________________X__O___X___O ( 2, 12)
+________________ /_ \ / \ / \ _ / ___ \
+3______________X__OX_OXOX O(3, 23, 13, 123)
+
+The Os are the node that we created.
+So that is why 2^n. The 2 is "take" or "not take".
+
+-10
+Reply
+
+aloginov
+Aug 13, 2019
+Time complexity is O(N^target) where N is a length of candidates array.
+Space complexity is O(target).
+This is worst case and without any optimization, like moving position forward and sorting to stop early.
+Just assuming that each recursive step we go over all existing candidates, so base N.
+And go as deep as target in our recursive calls (if candidates are close to 1), so power of target.
+You can mention that this is worst case and optimizations can make time complexity a little better, for interview I think this should be enough.
+
+102
+Reply
+
+CominBuck
+Jul 09, 2019
+O(2 ^n) in worst case
+
+-3
+Reply
+Hide
+
+l78
+Nov 15, 2016
+Hi, in the first one, list.add(new ArrayList<>(tempList));
+If I use list.add(templist); directly, then it's emptly. But if I print the elements, they are in the templist. Why this happens? Thanks.
+
+Got it. The templist will change later.
+
+42
+Show 6 Replies
+Reply
+
+hide
+Jun 30, 2016
+I don't think sorting the nums array is useful in your Combination Sum solution. Your for loop condition should also contain '&& nums[i] <= remain'
+
+82
+Show 7 Replies
+Reply
+
+yrzhou01
+Jun 20, 2018
+What are the time complexity and space complexity?
+
+22
+Show 4 Replies
+Reply
+
+bumblecode
+Jan 02, 2019
+There is no need to sort in Combination Sum
+
+13
+Show 8 Replies
+Reply
+
+codeconcepts
+Apr 25, 2024
+Hello every one i have created a video solution for this problem and solved this video by developing intutition for backtracking (its in hindi), i am pretty sure you will never have to look for solution for this video ever again after watching this, just make sure you have your concepts cleared from subset.
+
+Here i have used 2 approaches:
+
+without for loop
+with for loop
+This video is the part of my playlist "Master backtracking".
+Video link:
+
+Video link for subsets:
+
+Playlist link: https://www.youtube.com/playlist?list=PLICVjZ3X1AcY5ai7at5OvS4ckXiMbWxCa
+
+Read more
+
+Iterative Java DP solution
+
+shpolsky
+5390
+63276
+Jan 31, 2015
+Java
+Hi guys!
+
+The main idea reminds an approach for solving coins/knapsack problem - to store the result for all i < target and create the solution from them. For that for each t from 1 to our target we try every candidate which is less or equal to t in ascending order. For each candidate "c" we run through all combinations for target t-c starting with the value greater or equal than c to avoid duplicates and store only ordered combinations.
+
+public class Solution {
+    public List<List<Integer>> combinationSum(int[] cands, int t) {
+        Arrays.sort(cands); // sort candidates to try them in asc order
+        List<List<List<Integer>>> dp = new ArrayList<>();
+        for (int i = 1; i <= t; i++) { // run through all targets from 1 to t
+            List<List<Integer>> newList = new ArrayList(); // combs for curr i
+            // run through all candidates <= i
+            for (int j = 0; j < cands.length && cands[j] <= i; j++) {
+                // special case when curr target is equal to curr candidate
+                if (i == cands[j]) newList.add(Arrays.asList(cands[j]));
+                // if current candidate is less than the target use prev results
+                else for (List<Integer> l : dp.get(i-cands[j]-1)) {
+                    if (cands[j] <= l.get(0)) {
+                        List cl = new ArrayList<>();
+                        cl.add(cands[j]); cl.addAll(l);
+                        newList.add(cl);
+                    }
+                }
+            }
+            dp.add(newList);
+        }
+        return dp.get(t-1);
+    }
+}
+Hope it helps!
+
+Previous
+General Backtracking questions solutions in Python for reference :
+Next
+Python 3 | DFS/Backtracking & Two DP methods | Explanations
+Comments (30)
+
+Sort by:Best
+Type comment here... (Markdown supported)
+Preview
+Comment
+
+Cowbell123
+Jan 09, 2019
+Based on your idea, I rewrite it with some inline comments. Hope this help some for understanding.
+
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        // sort candidates to try them in asc order
+        Arrays.sort(candidates); 
+        // dp[t] stores all combinations that add up to t
+        List<List<Integer>>[] dp = new ArrayList[target+1];
+        
+        
+        // build up dp
+        for(int t=0; t<=target; t++) {
+            // initialize
+            dp[t] = new ArrayList();
+            // initialize
+            List<List<Integer>> combList = new ArrayList();
+            
+            // for each t, find possible combinations
+            for(int j=0; j<candidates.length && candidates[j] <= t; j++) {
+                if(candidates[j] == t) {
+                    combList.add(Arrays.asList(candidates[j])); // itself can form a list
+                } else {
+                    for(List<Integer> prevlist: dp[t-candidates[j]]) { // here use our dp definition
+                        // i thought it makes more sense to compare with the last element
+                        // only add to list when the candidates[j] >= the last element
+                        // so the list remains ascending order, can prevent duplicate (ex. has [2 3 3], no [3 2 3])
+                        // equal is needed since we can choose the same element many times   
+                        if(candidates[j] >= prevlist.get(prevlist.size()-1)){
+                            List temp = new ArrayList(prevlist); // temp is needed since 
+                            temp.add(candidates[j]); // cannot edit prevlist inside 4eeach looop
+                            combList.add(temp);
+                        }
+                    }
+                }
+            }
+            dp[t] = combList;
+        }
+        return dp[target];
+    }    
+77
+Show 10 Replies
+Reply
+
+annieqt
+Sep 24, 2015
+It seems a typical dp question. But why are the top answers using backtracking?...
+
+28
+Hide Replies
+Reply
+
+brtwang
+100 Days Badge 2022
+Jul 13, 2022
+@ztztzt8888 thanks for sharing. This seems a typical backtracking code. but I just wonder why it remove the duplicated combinations?
+like if numbers are [2,3,6,7], and target is 7. combinations [2,2,3] and [3,2,2] are the same.
+
+0
+Reply
+
+Courageiberg
+100 Days Badge 2022
+Mar 30, 2022
+DP tabulation is too complicated to implement, but make sure you must be able to show the interviewers how the idea of tabulation would look like for this problem
+
+0
+Reply
+
+kandikatla
+May 17, 2021
+What's the time complexity for DP and backtracking?
+
+0
+Reply
+
+IfStatements
+Aug 04, 2020
+this isn't really meant for dp. this dp solution involves finding EVERY possible way of getting EVERY number between 0 and t, with the given set of numbers and dp table. Time complexity is exponential. Whereas with backtracking, you can almost picture a tree; by subtracting what you know from the list, the only nodes you have would be t - something in the list.
+
+16
+Reply
+
+ztztzt8888
+Jun 25, 2020
+Backtracking Recursion Solution below is 5 ms, the DP iterative/tabulation solution is 10 ms. I think it's because the DP sorted the array first.
+
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        List<List<Integer>> result = new ArrayList<>();
+        backtrack(result, candidates, target, new ArrayList<>(), 0);
+        return result;
+    }
+
+    private void backtrack(List<List<Integer>> result, int[] candidates, int target, List<Integer> prefix, int startAt) {
+        if (target < 0) {
+            return;
+        }
+        if (target == 0) {
+            result.add(new ArrayList<>(prefix));
+        } else {
+            for (int i = startAt; i < candidates.length; i++) {
+                prefix.add(candidates[i]);
+                // todo bug: do not start at i + 1, because we can reuse same elements
+                backtrack(result, candidates, target - candidates[i], prefix, i);
+                prefix.remove(prefix.size() - 1);
+            }
+        }
+    }
+1
+Reply
+Show more replies
+Hide
+
+jjw8053
+Feb 24, 2016
+thanks for this nice answer. I just wonder, would there be any relative performance disadvantage comparing to dfs when in cases where both the target and the candidates are large, e.g. target=1000000, candidates=[499999,500001]?
+
+9
+Show 3 Replies
+Reply
+
+Nakashima
+Feb 07, 2018
+@shpolsky What is the time complexity of this algorithm? I can see the outer layer and middle layer loop gives me O(N * Target). But how do we analyse together with the inner most loop?
+
+8
+Reply
+
+codeforoffer
+Nov 19, 2015
+confusing why need to check " if (cands[j] <= l.get(0)) " ?
+
+10
+Show 5 Replies
+Reply
+
+chua-n
+Jan 08, 2020
+Many thanks. Here posts the equivalent C++ code. Maybe easier to understand.
+
+class Solution {
+public:
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+        // Iterative solution
+        sort(candidates.begin(), candidates.end());
+        vector<vector<vector<int>>> dp; // dp[aim] stores all combinations that add up to aim+1
+        for (int aim = 1; aim <= target; ++aim){
+            vector<vector<int>> combs; // combinations for curr aim
+            for (int i = 0; i < candidates.size() && candidates[i] <= aim; ++i)
+                if (candidates[i] == aim) combs.push_back(vector<int>{candidates[i]});
+                else // if current candidate is less than the curr target (i.e. aim) use previous existing results
+                    for (auto prevOther: dp[aim - candidates[i] - 1])
+                        if (candidates[i] <= prevOther[0]){
+                            vector<int> comb{candidates[i]};
+                            comb.insert(comb.end(), prevOther.begin(), prevOther.end());
+                            combs.push_back(comb);
+                        }
+            dp.push_back(combs);
+        }
+        return dp[target - 1];
+    }
+};
+5
+Reply
+
+NoAnyLove
+Mar 23, 2017
+Thanks for sharing this solution, here is my Python version based on the same idea
+
+class Solution(object):
+    def combinationSum(self, candidates, target):
+        """
+        :type candidates: List[int]
+        :type target: int
+        :rtype: List[List[int]]
+        """
+        candidates.sort()
+        dp = []
+        # run through all target from 1 to target
+        for i in xrange(1, target + 1):
+            # run through all candidates which is smaller than i
+            new_dp = []
+            for j in xrange(len(candidates)):
+                # skip candidate which is larger than current target
+                if candidates[j] > i:
+                    break
+                # special case
+                if candidates[j] == i:
+                    new_dp.append([candidates[j]])
+                else:
+                    if i - candidates[j] - 1 >= 0:
+                        new_dp.extend(comb + [candidates[j]] for comb in dp[i - candidates[j] - 1] if candidates[j] >= comb[-1])
+            dp.append(new_dp)
+            
+        return dp[-1]
+5
+Show 1 Replies
+Reply
+
+18bce192
+50 Days Badge 2022
+Mar 10, 2021
+Similar idea, Actually we don't need to perform sorting.
+here is my code, it is simpler and faster than yours 🙂
+
+class Solution {
+public:
+    vector<vector<int>> combinationSum(vector<int>& nums, int target) {
+        vector <vector <vector <int>>> dp(target+1);
+        dp[0]={{}};
+        for(int i:nums)
+        {
+            for(int j=i;j<=target;j++)
+            {
+                for(auto v:dp[j-i])
+                {
+                    v.push_back(i);
+                    dp[j].push_back(v);
+                }
+            }
+        }
+        return dp[target];
+    }
+};
+8
+Reply
+
+a08805436
+Oct 11, 2016
+what is the time complexity of this solution? Is it O(t^2 * size_of_array) ?
+
+2
+Show 1 Replies
+Reply
+
+wl2929
+Apr 10, 2020
+oh didn't realize that all numbers are positive before reading through your solution
+
+1
+Reply
+
+C++ Best and easy DP Solution
+
+18bce192
+50 Days Badge 2022
+284
+9092
+Mar 10, 2021
+C++
+C
+Dynamic Programming
+Similar idea from the problem coin-change-2 .
+it is simplest and fastest dp solution, we don't need to sort elements 🙂
+
+class Solution {
+public:
+    vector<vector<int>> combinationSum(vector<int>& nums, int target) {
+		// dp vector to store all possible combinations of the target sum
+        vector <vector <vector <int>>> dp(target+1);
+        dp[0]={{}};
+        for(int &i:nums)
+        {
+		// Iterating through all the elements from array nums aka candidates
+            for(int j=i;j<=target;j++)
+            {
+			// Finding all possible ways to achieve sum j from element i
+                for(auto v:dp[j-i])
+                {
+                    v.push_back(i);
+                    dp[j].push_back(v);
+                }
+            }
+        }
+		// Finally, returning our ans 🙃
+        return dp[target];
+    }
+};
+If you liked this solution please upvote🙏 if you have any query plz comment below 👇
+
+Previous
+Share My Python Solution beating 98.17%
+Next
+[Python] bactracking solution, explained
+Comments (8)
+
+Sort by:Best
+Type comment here... (Markdown supported)
+Preview
+Comment
+
+Joaquin144
+100 Days Badge 2022
+Jan 17, 2022
+Your solution is superb.
+My thought process just hit another level.🙏🏻
+
+4
+Reply
+
+iamakshat
+Apr 20, 2021
+for(int i:nums)
+{
+
+        for(int j=i;j<=target;j++)
+        {
+		
+            for(auto v:dp[j-i])
+            {
+                v.push_back(i);
+                dp[j].push_back(v);
+            }
+        }
+    }
+Could you please explain once again, what's happening here?!
+
+Read more
+4
+Show 2 Replies
+Reply
+
+basakshibir
+Aug 25, 2023
+For target >> n. This will turn out to be an unnecessarily expensive approach.
+
+0
+Reply
+
+qt4kth
+50 Days Badge 2023
+Jun 03, 2023
+what about duplicates...eg for dp[5] you will have {2,3} and {3,2}
+
+0
+Reply
+
+mahe113vsp
+100 Days Badge 2023
+May 22, 2023
+Damn how anyone get this kind of ideas
+
+0
+Reply
+
+ychen938
+50 Days Badge 2022
+Dec 28, 2022
+absolutely genius
+
+0
+Reply
+Share
+
+
+mz21
+100 Days Badge 2022
+Jun 01, 2022
+You need to sort the input elements though!
+
+The following test case would not pass otherwise:
+
+[2,3,8,4]
+6

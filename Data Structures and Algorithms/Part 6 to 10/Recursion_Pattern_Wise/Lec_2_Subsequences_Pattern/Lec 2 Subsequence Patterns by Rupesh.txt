@@ -1,0 +1,1821 @@
+package Recursion_Pattern_Wise.Lec_2_Subsequences_Pattern;
+/*Q1 Consecutive 1's not allowed
+MediumAccuracy: 27.46%Submissions: 109K+Points: 4
+Be the comment of the day in POTD and win a GfG T-Shirt!
+Solve right now
+
+banner
+Given a positive integer N, count all possible distinct binary strings of length N such that there are no consecutive 1’s. Output your answer modulo 109 + 7.
+
+Example 1:
+
+Input:
+N = 3
+Output: 5
+Explanation:
+5 strings are (000,
+001, 010, 100, 101).
+Example 2:
+
+Input:
+N = 2
+Output: 3
+Explanation: 
+3 strings are (00,01,10).
+
+Input:
+N = 99996
+Output: 855252772
+Your Task:
+You don't have to print answer or take inputs. Complete the function countStrings() which takes single integer n, as input parameters and returns an integer denoting the answer. 
+
+Expected Time Complexity: O(N)
+Expected Auxiliary Space: O(N)
+
+Constraints:
+1 ≤ N ≤ 105
+
+ */
+public class countStringsWithNoConsecutive1s {
+    long countStrings(int n) {
+    if(n==1) return 2;
+    if(n==2) return 3;
+
+    long a[] = new long[n+1];
+    a[0]=0;
+    a[1]=2;
+    a[2]=3;
+    return recur(n,a);       
+    }
+
+    private long recur(int n, long[] a) {
+        if(n==1) return 2;
+        if(n==2) return 3;
+    
+        if(n>0 && a[n]!=0) return a[n];
+        long ans=recur(n-1, a)+recur(n-2, a);
+        a[n]=ans;
+        return ans;
+    }
+    public static void main(String[] args) {
+        countStringsWithNoConsecutive1s solution = new countStringsWithNoConsecutive1s();
+        System.out.println(solution.countStrings(8)); // Output: 5
+        System.out.println(solution.countStrings(2)); // Output: 3
+        //System.out.println(solution.countStrings(99996)); // Output: 855252772
+    }
+}
+//gfg submission, passes 1110/1115 TCs, lol, not work for N=99996 sadly
+// stack overflow on gfg server
+// not accepting purely recursive soln
+// long countStrings(int n) {
+//     if(n==1) return 2;
+//     if(n==2) return 3;
+//     long a[] = new long[n+1];
+//     a[0]=0;
+//     a[1]=2;
+//     a[2]=3;
+//     return recur(n,a)%1000000007;       
+//     }
+
+//     private long recur(int n, long[] a) {
+//         if(n==1) return 2;
+//         if(n==2) return 3;
+
+//         if(n>0 && a[n]!=0) return a[n];
+//         long ans=recur(n-1, a)%1000000007+recur(n-2, a)%1000000007;
+//         a[n]=ans;
+//         return ans;
+//     }
+
+/* //Iterative soln, works in gfg
+ * package Recursion_Pattern_Wise.Lec_2_Subsequences_Pattern;
+
+public class CountStringsWithNoConsecutive1s {
+    private static final long MOD = 1_000_000_007;
+
+    long countStrings(int n) {
+        if (n == 1) return 2;
+        if (n == 2) return 3;
+
+        long[] a = new long[n + 1];
+        a[1] = 2;
+        a[2] = 3;
+
+        for (int i = 3; i <= n; i++) {
+            a[i] = (a[i - 1] + a[i - 2]) % MOD;
+        }
+
+        return a[n];
+    }
+
+    public static void main(String[] args) {
+        CountStringsWithNoConsecutive1s solution = new CountStringsWithNoConsecutive1s();
+        System.out.println(solution.countStrings(3)); // Output: 5
+        System.out.println(solution.countStrings(2)); // Output: 3
+        System.out.println(solution.countStrings(99996)); // Output: 855252772
+    }
+}
+
+ */
+
+ package Recursion_Pattern_Wise.Lec_2_Subsequences_Pattern;
+/*Q1 continued: Generate and Print Binary Subseqns. with no consecutive 1s via recursion */
+import java.util.ArrayList;
+import java.util.List;
+
+public class GenerateBinaryStrings {
+    
+    // Helper method to generate and collect binary strings
+    private void generateBinaryStrings(int n, String current, List<String> result) {
+        if (n == 0) {
+            result.add(current);
+            return;
+        }
+        
+        // Append '0' and continue recursion
+        generateBinaryStrings(n - 1, current + "0", result);
+        
+        // Append '1' only if the previous character is not '1'
+        if (current.length() == 0 || current.charAt(current.length() - 1) != '1') {
+            generateBinaryStrings(n - 1, current + "1", result);
+        }
+    }
+    
+    // Parent method print all binary strings of length N w/ no consecutive 1s
+    public List<String> generateBinaryStrings(int n) {
+        List<String> result = new ArrayList<>();
+        generateBinaryStrings(n, "", result);
+        return result;
+    }
+    
+    public static void main(String[] args) {
+        GenerateBinaryStrings solution = new GenerateBinaryStrings();
+        int N = 3;
+        List<String> strings = solution.generateBinaryStrings(N);
+        
+        for (String s : strings) {
+            System.out.println(s);
+        }
+    }
+}
+
+package Recursion_Pattern_Wise.Lec_2_Subsequences_Pattern;
+// q2 
+/*22. Generate Parentheses
+Medium
+Topics
+Companies
+Given n pairs of parentheses, write a function to generate all combinations of well-formed parentheses.
+
+ 
+
+Example 1:
+
+Input: n = 3
+Output: ["((()))","(()())","(())()","()(())","()()()"]
+Example 2:
+
+Input: n = 1
+Output: ["()"]
+ 
+
+Constraints:
+
+1 <= n <= 8
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+1.8M
+Submissions
+2.5M
+Acceptance Rate
+74.7%
+ */
+import java.util.ArrayList;
+import java.util.List;
+
+public class GenerateParenthesis {
+    
+    public List<String> genP(int n) {
+        if(n<=0) return new ArrayList<>();
+        List<String> result = new ArrayList<>();
+        genPa(n, "", 0, 0, result);
+        return result;
+    }
+
+    private void genPa(int n, String s, int open, int close, List<String> ans) {
+        if(close==n) {
+            ans.add(s);
+            return;
+        }
+        if(open<n && open>close){
+            genPa(n, s+"(", open+1, close, ans);
+            genPa(n, s+")", open, close+1, ans);
+        }
+        if(open<n && open==close){
+            genPa(n, s+"(", open+1, close, ans);
+        }
+        if(open==n && close<n){
+            genPa(n, s+")", open, close+1, ans);
+        }
+    }
+    public static void main(String[] args) {
+        GenerateParenthesis gp = new GenerateParenthesis();
+        System.out.println(gp.genP(3)); // Expected output: ["((()))","(()())","(())()","()(())","()()()"]
+    }
+
+}
+
+/*
+ * //cleaner code example, for revision
+ * package Recursion_Pattern_Wise.Lec_2_Subsequences_Pattern;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class GenerateParenthesis {
+    
+    public List<String> genP(int n) {
+        if(n <= 0) return new ArrayList<>();
+        List<String> result = new ArrayList<>();
+        genPa(n, "", 0, 0, result);
+        return result;
+    }
+
+    private void genPa(int n, String s, int open, int close, List<String> ans) {
+        // Base case: if the current string s has n pairs of parentheses
+        if(s.length() == n * 2) {
+            ans.add(s);
+            return;
+        }
+
+        // If the number of open parentheses is less than n, add an open parenthesis
+        if(open < n) {
+            genPa(n, s + "(", open + 1, close, ans);
+        }
+
+        // If the number of close parentheses is less than the number of open parentheses, add a close parenthesis
+        if(close < open) {
+            genPa(n, s + ")", open, close + 1, ans);
+        }
+    }
+
+    public static void main(String[] args) {
+        GenerateParenthesis gp = new GenerateParenthesis();
+        System.out.println(gp.genP(3)); // Expected output: ["((()))","(()())","(())()","()(())","()()()"]
+    }
+}
+
+ */
+/*
+ * Time complexity discussion along with solution
+
+ArchitGuleria
+50 Days Badge 2022
+388
+566
+May 22, 2022
+Java
+Backtracking
+Recursion
+For people confused about space complexity, it can be considered to be around O(2^ (2n)).
+This much tight upper bound is sufficient for the interview.
+
+Let me explain how it is O (2^ (2n) ).
+
+The recursion tree will decrease in height linearly as n+n = 2n. Hence, itz height = O (2n).
+It will almost be a complete tree and for a complete tree of height h , the number of nodes = O(2^h).
+
+Hence, the number of nodes here = O 2^(2n) = O(4^n)
+
+class Solution {
+    List<String> strings;
+    public List<String> generateParenthesis(int n) {
+        strings = new LinkedList<>();
+        StringBuilder str = new StringBuilder();
+        
+        generate(str,'(',n-1,n);
+        return strings;
+    }
+    
+    void generate(StringBuilder str,char ch,int m, int n){
+        str.append(ch);
+        if(m==0 && n==0)
+            strings.add(str.toString());
+        else if(m<=n){
+            if(m>0){
+                generate(str,'(',m-1,n);
+                str.deleteCharAt(str.length()-1);
+            }
+            if(n>0){
+                generate(str,')',m,n-1);
+                str.deleteCharAt(str.length()-1);
+            }
+        }
+    }
+}
+ */
+ package Recursion_Pattern_Wise.Lec_2_Subsequences_Pattern;
+
+import java.util.ArrayList;
+import java.util.Collections;
+
+//Q3 
+/*Power Set: Print all the possible subsequences of the String
+
+Problem Statement: Given a string, find all the possible subsequences of the string.
+
+Examples:
+
+Example 1:
+Input: str = "abc"
+Output: a ab abc ac b bc c
+Explanation: Printing all the 7 subsequence for the string "abc".
+
+Example 2:
+Input: str = "aa"
+Output: a a aa 
+Explanation: Printing all the 3 subsequences for the string "aa" */
+public class PrintAllSubsequences {
+    static void recur(int i, String s, String f) {
+        if (i == s.length()) {
+            System.out.print(f+" ");
+            return;
+        }
+        //selecting 
+        recur(i + 1, s,  f+s.charAt(i));
+        //rejecting
+        recur(i + 1, s,  f);
+    }
+    public static void main(String args[]) {
+        String s = "abc";
+        String f = "";
+        System.out.println("All possible subsequences are: ");
+        recur(0, s, f);
+        String s1="abc";
+	    ArrayList<String>ans = AllPossibleStrings(s1);
+	    System.out.println("All possible subsequences are = ");
+	    for (String it : ans) {
+		System.out.print( it+" ");
+	    }
+    }
+    static ArrayList<String> AllPossibleStrings(String s) {
+	int n = s.length();
+	ArrayList<String>ans=new ArrayList<>();
+	for (int num = 0; num < (1 << n); num++) {
+		String sub = "";
+		for (int i = 0; i < n; i++) {
+			//check if the ith bit is set or not
+			if ((num & (1 << i))!=0) {
+				sub += s.charAt(i);
+			}
+		}
+		if (sub.length() > 0) {
+			ans.add(sub);
+		}
+	}
+	//Collections.sort(ans);
+	return ans;
+}
+
+}
+package Recursion_Pattern_Wise.Lec_2_Subsequences_Pattern;
+
+import java.util.ArrayList;
+import java.util.List;
+
+// Q2 LC78
+/*78. Subsets
+Medium
+Topics
+Companies
+Given an integer array nums of unique elements, return all possible 
+subsets
+ (the power set).
+
+The solution set must not contain duplicate subsets. Return the solution in any order.
+
+ 
+
+Example 1:
+
+Input: nums = [1,2,3]
+Output: [[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]]
+Example 2:
+
+Input: nums = [0]
+Output: [[],[0]]
+ 
+
+Constraints:
+
+1 <= nums.length <= 10
+-10 <= nums[i] <= 10
+All the numbers of nums are unique.
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+2M
+Submissions
+2.5M
+Acceptance Rate
+78.4%
+ */
+public class PowerSet {
+    public List<List<Integer>> subsets(int[] a) {
+        int n=a.length;
+        List<List<Integer>> al= new ArrayList<>();
+        recurSubset(0, n, a,al,new ArrayList<Integer>());
+        return al;
+    }
+
+    private void recurSubset(int i, int n, int[] a, List<List<Integer>> al, ArrayList<Integer> setElem) {
+        if(i==n) {
+            //al.add(setElem);
+            al.add(new ArrayList<>(setElem)); // Create a new list to avoid modification issues
+
+            return;
+        }
+
+        //Rejecting curr elem
+        recurSubset(i+1, n, a, al, setElem);
+
+        //Selecting curr elem
+        //below is the wrong attempt
+        //it's wrong, as setting new arraylist damages recursive calls 
+        // ArrayList<Integer> nextSet = setElem; //nextSet refers to same obj setElem
+        // nextSet.add(a[i]); // changes og setElem, damaging recursive calls
+        // // recurSubset(i+1, n, a, al, setElem.add(a[i]));
+        // recurSubset(i+1, n, a, al, nextSet);
+        setElem.add(a[i]);
+        recurSubset(i + 1, n, a, al, setElem);
+        setElem.remove(setElem.size() - 1); // Remove the last elem to backtrack
+        /*
+        // another way to do it correctly
+         List<Integer> nextSet = new ArrayList<>(setElem); // Create a new list
+         nextSet.add(a[i]);
+         recurSubset(i + 1, n, a, al, nextSet);
+         */
+    }
+
+    public static void main(String[] args) {
+        PowerSet ps = new PowerSet();
+        int[] nums = {1, 2, 3};
+        List<List<Integer>> subsets = ps.subsets(nums);
+        for (List<Integer> subset : subsets) {
+            System.out.println(subset);
+        }
+
+    }
+
+   
+}
+/*// Iterative soln, for revision
+ * public List<List<Integer>> subsets(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+        result.add(new ArrayList<>());
+        for(int n : nums){
+            int size = result.size();
+            for(int i=0; i<size; i++){
+                List<Integer> subset = new ArrayList<>(result.get(i));
+                subset.add(n);
+                result.add(subset);
+            }
+        }
+        return result;
+    }
+        /*aidid
+Mar 18, 2019
+Because the numbers are distinct, 
+we know that all unique subsets given a number 
+are just the already existing subsets with the new number added. */
+// */
+
+package Recursion_Pattern_Wise.Lec_2_Subsequences_Pattern;
+
+import java.sql.Time;
+import java.util.HashMap;
+import java.util.Map;
+
+//Q4 gfg
+/*Better String
+HardAccuracy: 44.5%Submissions: 46K+Points: 8
+Given a pair of strings of equal lengths, Geek wants to find the better string. The better string is the string having more number of distinct subsequences.
+If both the strings have equal count of distinct subsequence then return str1.
+
+Example 1:
+
+Input:
+str1 = "gfg", str2 = "ggg"
+Output: "gfg"
+Explanation: "gfg" have 6 distinct subsequences whereas "ggg" have 3 distinct subsequences. 
+Example 2:
+
+Input: str1 = "a", str2 = "b"
+Output: "a"
+Explanation: Both the strings have only 1 distinct subsequence. 
+Your Task:
+You don't need to read input or print anything. Your task is to complete the function betterString() which takes str1 and str2 as input parameters and returns the better string.
+
+Expected Time Complexity: O( N ), where N is the length of both provided strings.
+
+Expected Auxiliary Space: O( N )
+
+Constraints:
+1 <= N <= 30
+
+ */
+public class BetterStrings {
+    public static String betterString(String s1, String s2) {
+        int n1=s1.length();
+        int n2=s2.length();
+        int a=countDistinctSubseqns(s1,n1);
+        int b=countDistinctSubseqns(s2,n2);
+        if(a>=b) return s1;
+        return s2;
+
+    }
+    private static int countDistinctSubseqns(String s, int n) {
+        Map<Character,Integer> hm=new HashMap<>();
+        int[] distinctTillind=new int[n+1];
+        distinctTillind[0]=1;// ini to 0 if null string not counted, or just -1 at end
+        for(int i=1;i<=n;i++){
+            char elem=s.charAt(i-1);
+            distinctTillind[i]=2*distinctTillind[i-1];
+            if(hm.containsKey(elem)) 
+                distinctTillind[i]-=distinctTillind[hm.get(elem)];
+            hm.put(elem, i-1);
+        } 
+        System.out.println("Distinct subsequences in "+s+" = " + (distinctTillind[n]-1));
+        return distinctTillind[n]; // as only relative comparison matters, -1 not essential, 
+        // required only if exact non-null subsequences count needed
+    }
+    public static void main(String[] args) {
+        String str1 = "gfg";
+        String str2 = "ggg";
+        System.out.println(betterString(str1, str2)); // Output: "gfg"
+        
+        str1 = "a";
+        str2 = "b";
+        System.out.println(betterString(str1, str2)); // Output: "a"
+    }
+
+    // Test Cases Passed: 692 /1116 Time Limit Exceeded
+    // public static String betterString(String s1, String s2) {
+    //     int n1=s1.length();
+    //     int n2=s2.length();
+    //     HashMap<String,Integer> hm1=new HashMap<>();
+    //     HashMap<String,Integer> hm2=new HashMap<>();
+    //     recurSub(s1,n1,0,"",hm1);
+    //     recurSub(s2,n2,0,"",hm2);
+    //     if(hm1.size()>hm2.size()) return s1;
+    //     return s2;
+    // }
+
+    // private static void recurSub(String s, int n, int i, String sub, HashMap<String, Integer> hm) {
+    //     //basse
+    //     if(i==n){
+    //         if(hm.containsKey(sub)) hm.put(sub, hm.get(sub)+1);
+    //         else hm.put(sub, 1);
+    //         return;
+    //     }
+    //     //reject
+    //     recurSub(s, n, i+1, sub, hm);
+    //     //select
+    //     recurSub(s, n, i+1, sub+s.charAt(i), hm);
+    // }
+ 
+}
+package Recursion_Pattern_Wise.Lec_2_Subsequences_Pattern;
+/*Q5
+ * Perfect Sum Problem
+MediumAccuracy: 20.58%Submissions: 277K+Points: 4
+Be the comment of the day in POTD and win a GfG T-Shirt!
+Solve right now
+
+banner
+Given an array arr of non-negative integers and an integer sum, the task is to count all subsets of the given array with a sum equal to a given sum.
+
+Note: Answer can be very large, so, output answer modulo 109+7.
+
+Example 1:
+
+Input: 
+N = 6
+arr = [5, 2, 3, 10, 6, 8]
+sum = 10
+Output: 
+3
+Explanation: 
+{5, 2, 3}, {2, 8}, {10} are possible subsets.
+Example 2:
+Input: 
+N = 5
+arr = [2, 5, 1, 4, 3]
+sum = 10
+Output: 
+3
+Explanation: 
+{2, 1, 4, 3}, {5, 1, 4}, {2, 5, 3} are possible subsets.
+Your Task:  
+You don't need to read input or print anything. Complete the function perfectSum() which takes N, array arr and sum as input parameters and returns an integer value.
+
+Expected Time Complexity: O(N*sum)
+Expected Auxiliary Space: O(N*sum)
+
+Constraints:
+1 ≤ N*sum ≤ 106
+0 ≤ arr[i] ≤ 106
+
+ */
+public class PerfectSumNonOverlapping {
+    //Will write Top-down DP code later, during revision
+    //Bottom-up DP code
+    public int perfectSum2(int a[],int n, int k) 
+	{ 
+	    int dp[][]=new int[n+1][k+1];
+	    dp[0][0]=1;
+	    for(int j=1; j<=k; j++) dp[0][k]=0;
+	    for(int i=1; i<=n; i++){
+	        for(int j=0; j<=k; j++){
+	            int excl=dp[i-1][j]%1000000007;
+	            int incl=0;
+	            int rem=j-a[i-1];
+	            if(rem>=0) incl=dp[i-1][rem]%1000000007;
+	            dp[i][j]=(excl+incl)%1000000007;
+	        }
+	    } return dp[n][k];
+	}
+    //Recursive Soln, trying combos
+    public int perfectSum(int a[],int n, int k) 
+	{ 
+        return recurSub(a,n,k,0,0);
+	}
+
+    private int recurSub(int[] a, int n, int k, int i, int sum) {
+        if(i==n){
+            if (sum==k) return 1;
+            return 0;
+        }
+        //Reject
+        int l=recurSub(a, n, k, i+1, sum)%1000000007;
+        //Select
+        int r=0;
+        if(sum+a[i]<=k)
+        r+=recurSub(a, n, k, i+1, sum+a[i])%1000000007;
+        return (r+l)%1000000007;
+    } 
+
+
+}
+package Recursion_Pattern_Wise.Lec_2_Subsequences_Pattern;
+//q6
+/* Subset Sum
+Moderate
+80/80
+Average time to solve is 25m
+Contributed by
+39 upvotes
+Problem statement
+You are given an array 'A' of 'N' integers. You have to return true if there exists a subset of elements of 'A' that sums up to 'K'. Otherwise, return false.
+
+
+
+For Example
+'N' = 3, 'K' = 5, 'A' = [1, 2, 3].
+Subset [2, 3] has sum equal to 'K'.
+So our answer is True.
+Detailed explanation ( Input/output format, Notes, Images )
+Sample Input 1 :
+4 13
+4 3 5 2
+Sample Output 1 :
+No
+Sample Input 2 :
+5 14
+4 2 5 6 7
+Sample Output 2 :
+Yes
+Constraints :
+1 <= 'N' <= 10^3
+1 <= 'A[i]' <= 10^3
+1 <= 'K' <= 10^3
+Time Limit: 1 sec
+ */
+public class SubsetWithSumKorNot {
+    // Normal recursive soln, as chapter intended
+    public static boolean isSubsetPresent(int n, int k,int []a) {
+        return recurSub(a,n,k,0,0);
+    }
+
+    private static boolean recurSub(int[] a, int n, int k, int i, int sum) {
+        // Base Case
+        if(i==n){
+            if(sum==k) return true;
+            return false;
+        }
+        //Reject ith elem
+        boolean excl=recurSub(a, n, k, i+1, sum);
+        //Select ith elem
+        boolean incl=((sum+a[i])<=k)? recurSub(a, n, k, i+1, sum+a[i]): false;
+
+        return (incl||excl);
+
+    }
+    /*
+    TLE for TC 6
+    94 84
+    22 17 19 46 48 27 22 39 20 13 18 50 36 45 4 12 23 34 24 15 42 12 4 19 48 45 13 8 38 10 24 42 30 29 17 36 41 43 39 7 41 43 15 49 47 6 41 30 21 1 7 2 44 49 30 24 35 5 7 41 17 27 32 9 45 40 27 24 38 39 19 33 30 42 34 16 40 9 5 31 28 7 24 37 22 46 25 23 21 30 28 24 48 13 
+    true
+    */
+
+}
+// //Code 360 submission, using bottom up DP approach
+// public class Solution {
+//     public static boolean isSubsetPresent(int n, int k,int []a) {
+//         // Write your code here
+//         int dp[][]=new int[n+1][k+1];
+// 	    dp[0][0]=1;
+// 	    for(int j=1; j<=k; j++) dp[0][k]=0;
+// 	    for(int i=1; i<=n; i++){
+// 	        for(int j=0; j<=k; j++){
+// 	            int excl=dp[i-1][j]%1000000007;
+// 	            int incl=0;
+// 	            int rem=j-a[i-1];
+// 	            if(rem>=0) incl=dp[i-1][rem]%1000000007;
+// 	            dp[i][j]=(excl+incl)%1000000007;
+// 	        }
+// 	    } return (dp[n][k]>0);
+
+//     }
+// }
+
+
+// Code 360 editorial, optimal solution using dp, pasted here to revise
+// /*
+//     Time Complexity: O(N*K)
+//     Space Complexity: O(N*K)
+
+//     where 'N'is the length of the array 'A' and 'K' is the given sum.
+// */
+// public class Solution {
+//     public static boolean isSubsetPresent(int n, int k,int []a) {
+//         // dp[i][j] is true if we can create 'A' subset sum of 'j' from first 'i' elements.
+//         boolean [][]dp = new boolean[n + 1][];
+
+//         // If 'K' is 0, then answer is true.
+//         for (int i = 0; i <= n; i++)
+//         {
+//             dp[i] = new boolean[k + 1];
+//             dp[i][0] = true;
+//         }
+
+//         // If 'K' ' is not 0 and 'N' is 0, the answer is false.
+//         for (int i = 1; i <= k; i++)
+//         {
+//             dp[0][i] = false;
+//         }
+
+//         // Fill the table in bottom up manner.
+//         for (int i = 1; i <= n; i++)
+//         {
+//             for (int j = 1; j <= k; j++)
+//             {
+//                 if (j < a[i - 1])
+//                 {
+//                     dp[i][j] = dp[i - 1][j];
+//                 }
+//                 else
+//                 {
+//                     dp[i][j] = dp[i - 1][j] || dp[i - 1][j - a[i - 1]];
+//                 }
+//             }
+//         }
+
+//         return dp[n][k];
+//     }
+// }
+package Recursion_Pattern_Wise.Lec_2_Subsequences_Pattern;
+/*Q8 
+40. Combination Sum II
+Solved
+Medium
+Topics
+Companies
+Given a collection of candidate numbers (candidates) and a target number (target), find all unique combinations in candidates where the candidate numbers sum to target.
+
+Each number in candidates may only be used once in the combination.
+
+Note: The solution set must not contain duplicate combinations.
+
+ 
+
+Example 1:
+
+Input: candidates = [10,1,2,7,6,1,5], target = 8
+Output: 
+[
+[1,1,6],
+[1,2,5],
+[1,7],
+[2,6]
+]
+Example 2:
+
+Input: candidates = [2,5,2,1,2], target = 5
+Output: 
+[
+[1,2,2],
+[5]
+]
+ 
+
+Constraints:
+
+1 <= candidates.length <= 100
+1 <= candidates[i] <= 50
+1 <= target <= 30
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+990.2K
+Submissions
+1.8M
+Acceptance Rate
+54.7%
+ */
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+public class CombinationSum02 {
+    public static List<List<Integer>> combinationSum2(int[] a, int k) {
+        List < List < Integer >> ans = new ArrayList < > ();
+        Arrays.sort(a);// to prune recursion tree
+        int n = a.length;
+        recurCSum2(a, n, k, 0, ans, new ArrayList <Integer> ());
+        return ans;
+    }
+
+    private static void recurCSum2(int[] a, int n, int k, int i, List<List<Integer>> ans, ArrayList<Integer> set) {
+        if(k==0){
+            //add curr set to ans
+            ans.add(new ArrayList<Integer>(set));
+            return; //terminate recursion subtree there, as all elems > 0
+        }
+
+        for(int j=i; j<n; j++){
+            if(j>i && a[j]==a[j-1]) continue; //skip duplis of ith elem, taking advantage of sorting
+            if(a[j]>k) break;
+            set.add(a[j]);//consider and add ith elem as new start
+            recurCSum2(a, n, k-a[j], j+1, ans, set);// propagate down the tree
+            set.remove(set.size()-1);// remove this elem to backtrack
+        }
+    }
+    public static void main(String args[]) {
+        int a[]={10,1,2,7,6,1,5};
+        List < List < Integer >> ans = combinationSum2(a, 8);
+        System.out.println(ans.toString());
+    }   
+}
+/*
+ * //some solns found on lc forum
+ * 3 backtracking variations [Java] beats 100%
+
+kunalsuri
+100 Days Badge 2023
+234
+4104
+May 17, 2021
+Java
+Backtracking
+Backtracking With Visited Array (using space)
+
+class Solution {
+    public int combinationSum2(int[] arr, int tar, int idx, List<Integer> smallAns, List<List<Integer>> res) {
+        if (tar == 0) {
+            ArrayList<Integer> base = new ArrayList<>(smallAns);
+            res.add(base);
+            return 1;
+        }
+        boolean[] visited = new boolean[50];
+        int count = 0;
+        for (int i = idx; i < arr.length; ++i) {
+            if (!visited[arr[i]] && tar - arr[i] >= 0) {
+                
+                visited[arr[i]] = true;
+                
+                smallAns.add(arr[i]);
+                count += combinationSum2(arr, tar - arr[i], i + 1, smallAns, res);
+                smallAns.remove(smallAns.size() - 1);
+            }
+        }
+        return count;
+    }
+    public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+        List<List<Integer>> res = new ArrayList<>();
+        List<Integer> smallAns = new ArrayList<>();
+        
+        Arrays.sort(candidates);
+        
+        combinationSum2(candidates, target, 0, smallAns, res);
+        return res;
+    }
+}
+Backtracking With Prev Variable (space efficient)
+
+class Solution {
+    public int combinationSum2(int[] arr, int tar, int idx, List<Integer> smallAns, List<List<Integer>> res) {
+        if (tar == 0) {
+            ArrayList<Integer> base = new ArrayList<>(smallAns);
+            res.add(base);
+            return 1;
+        }
+        
+        int count = 0;
+        int prev = -1;
+        for (int i = idx; i < arr.length; ++i) {
+            if (prev != arr[i] && tar - arr[i] >= 0) {
+                smallAns.add(arr[i]);
+                count += combinationSum2(arr, tar - arr[i], i + 1, smallAns, res);
+                smallAns.remove(smallAns.size() - 1);
+            }
+            
+            if (tar - arr[i] < 0)
+                break;
+            
+            prev = arr[i];
+        }
+        return count;
+    }
+    public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+        List<List<Integer>> res = new ArrayList<>();
+        List<Integer> smallAns = new ArrayList<>();
+        
+        Arrays.sort(candidates);
+        
+        combinationSum2(candidates, target, 0, smallAns, res);
+        return res;
+    }
+}
+BackTracking Subsequence method
+
+class Solution {
+    public int combinationSum2(int[] arr, int tar, int idx, List<Integer> smallAns, List<List<Integer>> res) {
+        if (tar == 0 || idx >= arr.length) {
+            if (tar == 0) {
+                List<Integer> base = new ArrayList<>(smallAns);
+                res.add(base);
+                return 1;
+            }
+            return 0;
+        }
+            
+        int count = 0;
+
+        if (tar - arr[idx] >= 0) {
+            smallAns.add(arr[idx]);
+            count += combinationSum2(arr, tar - arr[idx], idx + 1, smallAns, res);
+            smallAns.remove(smallAns.size() - 1);
+        }
+
+        idx++;
+        while (idx < arr.length && arr[idx - 1] == arr[idx])
+            idx++;
+
+        count += combinationSum2(arr, tar, idx, smallAns, res);
+        return count;
+    }
+    public List<List<Integer>> combinationSum2(int[] arr, int tar) {
+        List<List<Integer>> res = new ArrayList<>();
+        List<Integer> smallAns = new ArrayList<>();
+        Arrays.sort(arr);
+        combinationSum2(arr, tar, 0, smallAns, res);
+        return res;
+    }
+}
+If you liked it, even a little bit then pls consider giving this solution a Upvote
+Thank You :)
+two DP solutions in Java (with explanation)
+
+clock330
+Annual Badge 2022
+1578
+908
+Nov 14, 2020
+Dynamic Programming
+Method 1: With Hash Table
+Consider a 2D dp array, where dp[i][j] is all combinations using candidates[0] to candidates[i] that sum to j. Our goal is dp[n - 1][target], where n is the number of candidates.
+
+The transition function is dp[i][j] = d[i - 1][j] + d[i - 1][j - candidates[i]].add(candidates[i]).
+
+The first term on right hand side, d[i - 1][j], is all combinations using candidates[0] to candidates[i - 1] that sum to j. This is part of d[i][j], when we don't include candidates[i] in the combination (because the sum is already j).
+
+The second term on right hand side, d[i - 1][j - candidates[i]] is all combinations using candidates[0] to candidates[i - 1] that sum to j - candidates[i]. This is other parts of d[i][j] when we include candidates[i] in the combination (because j - candidates[i] + candidates[i] = j.
+
+.add(candidates[i]) means we are adding candidates[i] to each of the combination in d[i - 1][j - candidates[i]]
+
+Since the candidates[] array has duplicates, we need to avoid adding duplicate combinations to our result. We can use hash table to accomplish this, the dp array can be defined as:
+
+// dp array simplified to 1D, as we always use d[i][j] and d[i - 1][j] (the last two rows of the 2D dp array
+Set<List<Integer>>[] dp = new Set[target + 1];
+We also need to sort the candidates array to avoid duplicates. Consider candidates being [1,6,1,1], and target is 7. If we don't sort, we would have [1,6],[6,1],[6,1] as the combination. The hash table will only screen the two [6,1], but not [1,6],[6,1], because they are considered different List<Integer>. If we sort the candidate so it becomes [1,1,1,6], and the three combinations sum to 7 is [1,6],[1,6],[1,6], hash table can screen off duplicates, only one [1,6] will be present in the result.
+
+Below is the java code:
+
+class Solution {
+    public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+        // we need to sort candidates, to avoid duplicate combibation
+        Arrays.sort(candidates);
+
+        // initialize dp array
+        Set<List<Integer>>[] dp = new Set[target + 1];
+        for (int i = 0; i <= target; i++) {
+            dp[i] = new HashSet<>();
+        }
+
+        // base case when target is 0 and not picking first candidate
+        dp[0].add(new ArrayList<>());
+
+        // populate the dp array
+        for (int i = 0; i < candidates.length; i++) {
+            for (int j = target; j >= candidates[i]; j--) {
+                for (List<Integer> comb : dp[j - candidates[i]]) {
+                    List<Integer> newComb = new ArrayList<>(comb);
+                    newComb.add(candidates[i]);
+                    dp[j].add(newComb);
+                }
+            }
+        }
+
+        return new ArrayList<>(dp[target]);
+    }
+}
+Method 2: Without Hash Table
+This method has the same time and space complexity as method 1, so there is no advantage with respect to time/space. Just another way of thinking.
+
+We keep two lists, combs to store all the temporary combinations we encountered, sums to store the sum for those combinations. When adding candidates[i] to our current collection of combinations, we check if its been encountered before. If so, we will not add it to earlier combinations (because those combinations already contain this number). For any combinations that sum to target, we add it to the final result.
+
+class Solution {
+    public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+        // we need to sort the array to skip duplicates
+        Arrays.sort(candidates);
+        
+        // initialize combs and sums
+        List<List<Integer>> combs = new ArrayList<>(), res = new ArrayList<>();
+        List<Integer> sums = new ArrayList<>();        
+        combs.add(new ArrayList<>());
+        sums.add(0);
+
+        int startIndex = 0, n = candidates.length, size = combs.size();
+        for (int i = 0; i < candidates.length; i++) {
+            // determine the startIndex to add candidates[i]
+            startIndex = i > 0 && candidates[i] == candidates[i-1] ? size : 0;
+            size = combs.size();
+            // try to add candidates[i] to previous combinations
+            // if sum == target, add to result list
+            for (int j = startIndex; j < size; j++) {
+                List<Integer> temp = new ArrayList<>(combs.get(j));
+                temp.add(candidates[i]);
+                int sum = sums.get(j) + candidates[i];
+                if (sum == target) {
+                    res.add(temp);
+                } else if (sum < target) {
+                    combs.add(temp);
+                    sums.add(sum);
+                }
+            }
+        }
+        return res;
+    }
+}
+ */
+
+ package Recursion_Pattern_Wise.Lec_2_Subsequences_Pattern;
+/*Q9 
+Subset Sums
+MediumAccuracy: 72.55%Submissions: 107K+Points: 4
+Be the comment of the day in POTD and win a GfG T-Shirt!
+Solve right now
+
+banner
+Given a list arr of n integers, return sums of all subsets in it. Output sums can be printed in any order.
+
+ 
+
+Example 1:
+
+Input:
+n = 2
+arr[] = {2, 3}
+Output:
+0 2 3 5
+Explanation:
+When no elements is taken then Sum = 0.
+When only 2 is taken then Sum = 2.
+When only 3 is taken then Sum = 3.
+When element 2 and 3 are taken then 
+Sum = 2+3 = 5.
+Example 2:
+
+Input:
+n = 3
+arr = {5, 2, 1}
+Output:
+0 1 2 3 5 6 7 8
+Your Task:  
+You don't need to read input or print anything. Your task is to complete the function subsetSums() which takes a list/vector and an integer n as an input parameter and returns the list/vector of all the subset sums.
+
+Expected Time Complexity: O(2n)
+Expected Auxiliary Space: O(2n)
+
+Constraints:
+1 <= n <= 15
+0 <= arr[i] <= 104 */
+import java.util.ArrayList;
+
+public class SubsetSum01 {
+    ArrayList<Integer> subsetSums(ArrayList<Integer> a, int n) {
+        ArrayList <Integer> ans = new ArrayList < > ();
+        recurSubSum(a, n, 0, 0, ans);
+        return ans;
+    }
+
+    private void recurSubSum(ArrayList<Integer> a, int n, int sum, int i, ArrayList<Integer> ans) {
+        if(i==n) {//base
+            ans.add(sum); return;
+        }
+        recurSubSum(a, n, (sum+a.get(i)), i+1, ans); //select
+        recurSubSum(a, n, sum, i+1, ans);//reject
+    }
+
+}
+package Recursion_Pattern_Wise.Lec_2_Subsequences_Pattern;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+/*Q10 90. Subsets II
+Medium
+Topics
+Companies
+Given an integer array nums that may contain duplicates, return all possible 
+subsets
+ (the power set).
+
+The solution set must not contain duplicate subsets. Return the solution in any order.
+
+ 
+
+Example 1:
+
+Input: nums = [1,2,2]
+Output: [[],[1],[1,2],[1,2,2],[2],[2,2]]
+Example 2:
+
+Input: nums = [0]
+Output: [[],[0]]
+ 
+
+Constraints:
+
+1 <= nums.length <= 10
+-10 <= nums[i] <= 10
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+935.4K
+Submissions
+1.6M
+Acceptance Rate
+57.5%
+ */
+public class SubsetSum02 {
+    public List<List<Integer>> subsetsWithDup(int[] a) {
+        List<List<Integer>> ans = new ArrayList<>();
+        //List<Integer> current = new ArrayList<>();
+        int n=a.length;
+        Arrays.sort(a); // Sort the a[] to handle duplicates
+        //recurSub2(a, n, 0, current, ans);
+        recurSub2(a, n, 0, new ArrayList<Integer>(), ans);
+        return ans;
+    }
+
+    private void recurSub2(int[] a, int n, int i, List<Integer> current, List<List<Integer>> ans) {
+        ans.add(new ArrayList<>(current));// add prev elem set to list of subsets 
+        if(i==n) return;//optional
+        //Iterate over possible next elem to make curr set, which is superset of prev set 
+        for(int j=i;j<n;j++){
+            if(j>i && a[j]==a[j-1]) continue; //skip duplicates at this level
+            current.add(a[j]);//add elem for current set as last elem, superset of prev set
+            //if((j+1)<n)
+            recurSub2(a, n, j+1, current, ans);//for next supersets
+            current.remove(current.size()-1);// backtrack to prev set, subset of curr set
+        }
+    }
+
+    public static void main(String[] args) {
+        SubsetSum02 obj = new SubsetSum02();
+
+        // Test Case 1: Simple case with duplicates
+        int[] nums1 = {1, 2, 2};
+        System.out.println("Test Case 1: " + obj.subsetsWithDup(nums1));
+
+        // Test Case 2: No duplicates
+        int[] nums2 = {1, 2, 3};
+        System.out.println("Test Case 2: " + obj.subsetsWithDup(nums2));
+
+        // Test Case 3: Single element
+        int[] nums3 = {0};
+        System.out.println("Test Case 3: " + obj.subsetsWithDup(nums3));
+
+        // Test Case 4: All elements are the same
+        int[] nums4 = {1, 1, 1};
+        System.out.println("Test Case 4: " + obj.subsetsWithDup(nums4));
+
+        // Test Case 5: Larger set with duplicates
+        int[] nums5 = {4, 4, 4, 1, 4};
+        System.out.println("Test Case 5: " + obj.subsetsWithDup(nums5));
+    }
+}
+/*
+ * //another way to do it using hashset
+ * //
+ * class Solution {
+
+    HashMap<String, Boolean> map;
+    List<List<Integer>> answer;
+
+    public List<List<Integer>> subsetsWithDup(int[] nums) {
+        map = new HashMap<String, Boolean>();
+        answer = new ArrayList<>();
+
+        // Count Sort - O(k)
+        int[] countMap = new int[21];
+        for (int num : nums) countMap[num + 10]++;
+        for (int i = 0, j = 0; i < 21; i++) while (countMap[i]-- > 0) nums[j++] = i - 10;
+        // Sorting done !
+
+        List<Integer> empty = new ArrayList<>();
+        addSubSets(empty, 0, nums);
+        return answer;
+    }
+
+    private void addSubSets(List<Integer> curSet, int pos, int[] set) {
+        answer.add(curSet);
+
+        for (int i = pos; i < set.length; i++) {
+
+            if (i == pos || set[i] != set[i - 1]) {
+                List<Integer> nextSet = new ArrayList<>(curSet);
+                nextSet.add(set[i]);
+                addSubSets(nextSet, i + 1, set);
+            }
+        }
+    }
+}
+ */
+
+ package Recursion_Pattern_Wise.Lec_2_Subsequences_Pattern;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/*Q11 216. Combination Sum III
+Medium
+Topics
+Companies
+Find all valid combinations of k numbers that sum up to n such that the following conditions are true:
+
+Only numbers 1 through 9 are used.
+Each number is used at most once.
+Return a list of all possible valid combinations. The list must not contain the same combination twice, and the combinations may be returned in any order.
+
+ 
+
+Example 1:
+
+Input: k = 3, n = 7
+Output: [[1,2,4]]
+Explanation:
+1 + 2 + 4 = 7
+There are no other valid combinations.
+Example 2:
+
+Input: k = 3, n = 9
+Output: [[1,2,6],[1,3,5],[2,3,4]]
+Explanation:
+1 + 2 + 6 = 9
+1 + 3 + 5 = 9
+2 + 3 + 4 = 9
+There are no other valid combinations.
+Example 3:
+
+Input: k = 4, n = 1
+Output: []
+Explanation: There are no valid combinations.
+Using 4 different numbers in the range [1,9], the smallest sum we can get is 1+2+3+4 = 10 and since 10 > 1, there are no valid combination.
+ 
+
+Constraints:
+
+2 <= k <= 9
+1 <= n <= 60
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+519.4K
+Submissions
+743.4K
+Acceptance Rate
+69.9% */
+public class CombiSum03 {
+    //Attemopt 2, optimized
+    public List<List<Integer>> combinationSum3(int k, int n) {
+        List<List<Integer>> ans = new ArrayList<>();
+        recurCsum3(1, n, k, new ArrayList<Integer>(), ans);
+        return ans;
+    }
+
+    private void recurCsum3(int i, int n, int k, List<Integer> set, List<List<Integer>> ans) {
+        if((n==0)&&(k==0)){
+            ans.add(new ArrayList<>(set));
+            return;
+        }
+        if((n<=0)&&(k>0)) return;
+        if((k==0)&&(n!=0)) return;
+        for(int j=i;j<=9;j++){//j=i+1 is wrong, i not considered yet
+            if(j<=n && k>=1){
+                set.add(j);
+                recurCsum3(j+1, n-j, k-1, set, ans);//only j is wrong, causes repetiions in considering i, j+1 mandatory
+                set.remove(set.size()-1);
+            }
+        }
+        // Some mistakes below, figure why again for revision
+        // for(int j=i;j<=9;j++){
+        //     if(j<=n && k>=1){
+        //         set.add(j);
+        //         recurCsum3(j, n-j, k-1, set, ans);
+        //         set.remove(set.size()-1);
+        //     }
+        
+    }
+
+    public static void main(String[] args) {
+        CombiSum03 obj = new CombiSum03();
+
+        // Test Case 1
+        System.out.println("Test Case 1: " + obj.combinationSum3(3, 7));
+
+        // Test Case 2
+        System.out.println("Test Case 2: " + obj.combinationSum3(3, 9));
+
+        // Test Case 3
+        System.out.println("Test Case 3: " + obj.combinationSum3(4, 1));
+
+        // Test Case 4
+        System.out.println("Test Case 4: " + obj.combinationSum3(2, 18));
+    }
+}
+
+// Attempt 1, works, is simpler, but higher time due to some unnecessay recursive calls, same TC tho
+// public class CombiSum03 {
+//     public List<List<Integer>> combinationSum3(int k, int n) {
+//         List<List<Integer>> ans = new ArrayList<>();
+//         recurCsum3(1,n,k,new ArrayList<Integer>(),ans);
+//         return ans;
+//     }
+
+//     private void recurCsum3(int i, int n, int k, ArrayList<Integer> set, List<List<Integer>> ans) {
+//         if((n==0)&&(k==0)){
+//             ans.add(new ArrayList<Integer>(set));
+//             return;
+//         } 
+//         if(i>9) return;
+//         //select i
+//         if(i<=n){
+//             set.add(i);
+//             recurCsum3(i+1, n-i, k-1, set, ans);
+//             set.remove(set.size()-1);
+//         }
+//         //reject i
+//         recurCsum3(i+1, n, k, set, ans);
+//     }
+// }
+// //Attempt 3, also optimal
+// class Solution {
+//     //Attemopt 2
+//         public List<List<Integer>> combinationSum3(int k, int n) {
+//             List<List<Integer>> ans = new ArrayList<>();
+//             recurCsum3(0, n, k, new ArrayList<Integer>(), ans);
+//              // if start w/ i=0, instead of 1, modify recurCSum3 a little
+//             return ans;
+//         }
+    
+//         private void recurCsum3(int i, int n, int k, List<Integer> set, List<List<Integer>> ans) {
+//             if((n==0)&&(k==0)){
+//                 ans.add(new ArrayList<>(set));
+//                 return;
+//             }
+//             if((n<=0)&&(k>0)) return;
+//             if((k==0)&&(n!=0)) return;
+//             for(int j=i+1;j<=9;j++){//j=i+1 is right here, i starts at 0, which we wanna skip
+//                 if(j<=n && k>=1){
+//                     set.add(j);
+//                     recurCsum3(j, n-j, k-1, set, ans);
+//                      //only j is right, cuz here consider ith no. in next fn. call, j+1 is wrong
+//                     set.remove(set.size()-1);
+//                 }
+//             }
+//         }
+//     }
+
+/*//ANother soln, found on LC, backward iteration
+public List<List<Integer>> combinationSum3(int k, int n) {
+        List<List<Integer>> list = new ArrayList<>();
+        combinations(k, n, 9, 0, new ArrayList<>(), list);
+        return list;
+    }
+    private void combinations(int k, int n, int end, int sum, ArrayList<Integer> curr_list,    List<List<Integer>> list){
+        if(sum == n && curr_list.size() == k){
+            list.add(new ArrayList(curr_list));
+            return;
+        }
+        for(int i=end; i >= 1; i--){
+            if(sum > n || curr_list.size() > k) break;
+            curr_list.add(0, i);
+            combinations(k, n, i-1, sum+i, curr_list, list);
+            curr_list.remove(0);
+        }
+    }
+         */
+
+package Recursion_Pattern_Wise.Lec_2_Subsequences_Pattern;
+
+import java.util.LinkedList;
+import java.util.List;
+
+/*Q12 17. Letter Combinations of a Phone Number
+Medium
+Topics
+Companies
+Given a string containing digits from 2-9 inclusive, return all possible letter combinations that the number could represent. Return the answer in any order.
+
+A mapping of digits to letters (just like on the telephone buttons) is given below. Note that 1 does not map to any letters.
+
+
+ 
+
+Example 1:
+
+Input: digits = "23"
+Output: ["ad","ae","af","bd","be","bf","cd","ce","cf"]
+Example 2:
+
+Input: digits = ""
+Output: []
+Example 3:
+
+Input: digits = "2"
+Output: ["a","b","c"]
+ 
+
+Constraints:
+
+0 <= digits.length <= 4
+digits[i] is a digit in the range ['2', '9'].
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+2.1M
+Submissions
+3.4M
+Acceptance Rate
+60.7% */
+public class PhoneLetterCombo {
+    public List<String> letterCombinations(String digits) {
+        List<String> ans = new LinkedList<>();
+        int n=digits.length();
+        if(digits == null || digits.length() == 0) return ans;
+        char[][] map = {{},{},{'a','b','c'},{'d','e','f'},{'g','h','i'},{'j','k','l'},
+        {'m','n','o'},{'p','q','r','s'},{'t','u','v'},{'w','x','y','z'}};
+        recurBuild(digits,n,ans,map,new StringBuilder(),0);
+        return ans;
+    }
+
+    private void recurBuild(String s, int n, List<String> ans, char[][] map, StringBuilder sb, int i) {
+        //if(i==n){ // giving wrong answer, stack overflow or array out of bounds, relates to referencing
+        if(i==s.length()){
+            ans.add(new String(sb));
+            return;
+        }
+        //char to digit conversion 
+        int num = s.charAt(i)-'0';
+        //iterate thru all chars associated with the no.
+        for(int j=0;j<map[num].length;j++){
+            //consider jth char mapped to ith num in digits
+            sb.append(map[num][j]); //add
+            recurBuild(s, num, ans, map, sb, i+1);
+            sb.deleteCharAt(sb.length()-1); //backtrack by deleting last char
+        }
+    }
+    
+}
+/*//another soln., for later revision
+My java solution with FIFO queue
+
+lirensun
+1254
+235201
+Feb 06, 2015
+public List<String> letterCombinations(String digits) {
+		LinkedList<String> ans = new LinkedList<String>();
+		if(digits.isEmpty()) return ans;
+		String[] mapping = new String[] {"0", "1", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+		ans.add("");
+		for(int i =0; i<digits.length();i++){
+			int x = Character.getNumericValue(digits.charAt(i));
+			while(ans.peek().length()==i){
+				String t = ans.remove();
+				for(char s : mapping[x].toCharArray())
+					ans.add(t+s);
+			}
+		}
+		return ans;
+	}
+A version without first loop, but same time complexity. Both are single queue BFS solutions.:
+
+public List<String> letterCombinations(String digits) {
+		LinkedList<String> ans = new LinkedList<String>();
+		if(digits.isEmpty()) return ans;
+		String[] mapping = new String[] {"0", "1", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+		ans.add("");
+		while(ans.peek().length()!=digits.length()){
+			String remove = ans.remove();
+			String map = mapping[digits.charAt(remove.length())-'0'];
+			for(char c: map.toCharArray()){
+				ans.addLast(remove+c);
+			}
+		}
+		return ans;
+	}
+ */
+ package Recursion_Pattern_Wise.Lec_3_TryingOutAllCombos;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/*Q1 131. Palindrome Partitioning
+Medium
+Topics
+Companies
+Given a string s, partition s such that every 
+substring
+ of the partition is a 
+palindrome
+. Return all possible palindrome partitioning of s.
+
+ 
+
+Example 1:
+
+Input: s = "aab"
+Output: [["a","a","b"],["aa","b"]]
+Example 2:
+
+Input: s = "a"
+Output: [["a"]]
+ 
+
+Constraints:
+
+1 <= s.length <= 16
+s contains only lowercase English letters.
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+901.9K
+Submissions
+1.3M
+Acceptance Rate
+69.4% */
+public class Palindrome_Paritioning {
+    public List<List<String>> partition(String s) {
+        List<List<String>> ans = new ArrayList<>();
+        int n = s.length();
+        recurPalPartition(s,n,0,new ArrayList<String>(), ans);
+        return ans;
+    }
+    //DFS approach
+    private void recurPalPartition(String s, int n, int i, ArrayList<String> currSet, List<List<String>> ans) {
+        if(i==n){// Base: last parition always at end of string
+            ans.add(new ArrayList<>(currSet));
+            return;
+        }
+        //Iterate through s checking for pals. and finding valid paritions
+        for(int j=i; j<n;j++){
+            //check if s[i to j] is pal. or not
+            if(isPal(s,i,j)){
+                // if yes, add to current partion
+                String sub=s.substring(i, j+1);
+                currSet.add(sub);
+                // propagate further into recursion depth to find next partiions
+                recurPalPartition(s, n, j+1, currSet, ans);
+                // Backtrack by removing to explore next parallel possibility
+                currSet.remove(currSet.size()-1);
+            }
+        }
+    }
+    private boolean isPal(String s, int i, int j) {
+       //2 ptr. approach
+       //keep a L at atart and R at end, go to mid while checking for matches
+       int L=i; int R=j;
+       while(L<=R)
+       {if(s.charAt(L++)!=s.charAt(R--)){return false;} 
+        }
+        return true;
+    }
+}
+package Recursion_Pattern_Wise.Lec_3_TryingOutAllCombos;
+/*Q2 79. Word Search
+Medium
+Topics
+Companies
+Given an m x n grid of characters board and a string word, return true if word exists in the grid.
+
+The word can be constructed from letters of sequentially adjacent cells, where adjacent cells are horizontally or vertically neighboring. The same letter cell may not be used more than once.
+
+ 
+
+Example 1:
+
+
+Input: board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "ABCCED"
+Output: true
+Example 2:
+
+
+Input: board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "SEE"
+Output: true
+Example 3:
+
+
+Input: board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "ABCB"
+Output: false
+ 
+
+Constraints:
+
+m == board.length
+n = board[i].length
+1 <= m, n <= 6
+1 <= word.length <= 15
+board and word consists of only lowercase and uppercase English letters.
+ 
+
+Follow up: Could you use search pruning to make your solution faster with a larger board?
+
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+1.7M
+Submissions
+4M
+Acceptance Rate
+43.0% */
+public class Word_Search {
+    public boolean exist(char[][] board, String word) {
+        int m=board.length;
+        int n=board[0].length;
+        int drow[]={-1,+1,0,0};//top,bot,rit,lft offsets
+        int dcol[]={0,0,+1,-1};
+        //FInd 1st letter of s in board
+        for(int i=0; i<m;i++){
+            for(int j=0; j<n; j++){
+                if(board[i][j]==word.charAt(0)){
+                    int indx=0;
+                    if(searchNextLetter(board, m, n, word, i, j, indx, drow, dcol)) return true;
+                }
+            }
+        } return false;
+    }
+
+    private boolean searchNextLetter(char[][] board, int m, int n, String word, int row, int col, int indx, int[] drow, int[] dcol) {
+        if(indx==word.length()) return true;//Base-found all letters
+        // all edge/corner cases and not found/already used cases
+        if(row<0||col<0||row==m||col==n||board[row][col]!=word.charAt(indx)||board[row][col]=='!') return false;
+        // to avoid reuse of same char that's alredy been used
+        char c = board[row][col];
+        board[row][col]='!';
+        //Adjacent checks - top, bot, rit, lft here
+        boolean [] adj=new boolean[4];
+        boolean cumul = false;// var. to tell if match for indx th pos. at any adjacent found at all
+        for(int k=0;k<4;k++){
+            adj[k] = searchNextLetter(board, m, n, word, (row + drow[k]), (col + dcol[k]), indx+1, drow, dcol);
+            cumul = cumul||adj[k];
+        }
+        board[row][col]=c;//backtrack, restore prev. state of board
+        return cumul;
+    }
+}
+// // fastest soln. found on LC, for later learning
+//https://leetcode.com/problems/word-search/solutions/4965080/100-beats-fully-explained-code-with-comments-2-approaches/
+// class Solution {
+//     // Main function to check if the word exists on the board
+//     public boolean exist(char[][] board, String word) {
+//         int n = board.length; // Number of rows in the board
+//         int m = board[0].length; // Number of columns in the board
+        
+//         boolean[][] visited = new boolean[n][m]; // Array to keep track of visited cells
+        
+//         char[] wordChar = word.toCharArray(); // Convert the word into a character array
+        
+//         // Quick check: If the length of the word exceeds the total number of cells on the board, it can't exist
+//         if (wordChar.length > n * m)
+//             return false;
+        
+//         int counts[] = new int[256]; // Array to store counts of each character
+        
+//         // Count the occurrence of each character on the board
+//         for (int i = 0; i < n; i++) {
+//             for (int j = 0; j < m; j++) {
+//                 counts[board[i][j]]++;
+//             }
+//         }
+        
+//         // Adjust the order of characters in the wordChar array based on their frequency counts to optimize search
+//         int len = wordChar.length;
+//         for(int i=0; i<len/2; i++) {
+//             if(counts[wordChar[i]] > counts[wordChar[len - 1 - i]]) {
+//                 for(int j=0; j<len/2; j++) {
+//                     char temp = wordChar[j];
+//                     wordChar[j] = wordChar[len - 1 - j];
+//                     wordChar[len - 1 - j] = temp;
+//                 }
+//                 break;
+//             }
+//         }
+        
+//         // Decrease counts of characters in the word from the board
+//         for (char c : wordChar) {
+//             if (--counts[c] < 0)
+//                 return false; // If there are more occurrences of a character in the word than on the board, return false
+//         }
+        
+//         // Iterate through each cell in the board and start searching for the word
+//         for (int i = 0; i < n; i++) {
+//             for (int j = 0; j < m; j++) {
+//                 if (visit(board, wordChar, 0, i, j, n, m, visited))
+//                     return true; // If the word is found starting from this cell, return true
+//             }
+//         }
+//         return false; // If the loop completes without finding the word, return false
+//     }
+
+//     // Helper function to recursively search for the word starting from a given cell
+//     private boolean visit(char[][] board, char[] word, int start, int x, int y,
+//             int n, int m, boolean[][] visited) {
+//         // Base case: If all characters in the word are found, return true
+//         if (start == word.length)
+//             return true;
+        
+//         // Check for out-of-bounds, already visited cells, and character mismatch
+//         if (x < 0 || x >= n || y < 0 || y >= m || visited[x][y])
+//             return false;
+        
+//         // If the current character in the word does not match the character on the board, return false
+//         if (word[start] != board[x][y])
+//             return false;
+        
+//         visited[x][y] = true; // Mark the current cell as visited
+        
+//         // Recursively search in all four directions from the current cell
+//         boolean found = visit(board, word, start + 1, x + 1, y, n, m, visited)
+//                 || visit(board, word, start + 1, x - 1, y, n, m, visited)
+//                 || visit(board, word, start + 1, x, y + 1, n, m, visited)
+//                 || visit(board, word, start + 1, x, y - 1, n, m, visited);
+        
+//         visited[x][y] = false; // Backtrack: Unmark the current cell as visited
+        
+//         return found; // Return whether the word was found starting from the current cell
+//     }
+// }
+//another nice explanation
+// https://leetcode.com/problems/word-search/solutions/1908561/c-how-to-prune-the-dfs-to-0ms/

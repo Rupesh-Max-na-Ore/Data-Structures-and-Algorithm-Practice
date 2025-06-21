@@ -1,0 +1,275 @@
+package Bit_Manipulation.Interview_Problems;
+/*Q1 
+Code
+
+
+Testcase
+Testcase
+Test Result
+2220. Minimum Bit Flips to Convert Number
+Solved
+Easy
+Topics
+Companies
+Hint
+A bit flip of a number x is choosing a bit in the binary representation of x and flipping it from either 0 to 1 or 1 to 0.
+
+For example, for x = 7, the binary representation is 111 and we may choose any bit (including any leading zeros not shown) and flip it. We can flip the first bit from the right to get 110, flip the second bit from the right to get 101, flip the fifth bit from the right (a leading zero) to get 10111, etc.
+Given two integers start and goal, return the minimum number of bit flips to convert start to goal.
+
+ 
+
+Example 1:
+
+Input: start = 10, goal = 7
+Output: 3
+Explanation: The binary representation of 10 and 7 are 1010 and 0111 respectively. We can convert 10 to 7 in 3 steps:
+- Flip the first bit from the right: 1010 -> 1011.
+- Flip the third bit from the right: 1011 -> 1111.
+- Flip the fourth bit from the right: 1111 -> 0111.
+It can be shown we cannot convert 10 to 7 in less than 3 steps. Hence, we return 3.
+Example 2:
+
+Input: start = 3, goal = 4
+Output: 3
+Explanation: The binary representation of 3 and 4 are 011 and 100 respectively. We can convert 3 to 4 in 3 steps:
+- Flip the first bit from the right: 011 -> 010.
+- Flip the second bit from the right: 010 -> 000.
+- Flip the third bit from the right: 000 -> 100.
+It can be shown we cannot convert 3 to 4 in less than 3 steps. Hence, we return 3.
+ 
+
+Constraints:
+
+0 <= start, goal <= 109
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+87.2K
+Submissions
+103.1K
+Acceptance Rate
+84.6% */
+public class MinimumBitFlipsToTransform {
+    public int minBitFlips(int start, int goal) {
+        if(start==goal) return 0;
+        int n = start ^ goal; // n has bits set that need to be flipped
+        int cnt=0;
+        // count no. of set bits in n == # bits need to be flipped in start to get goal
+        while(n!=0){
+            n= n&(n-1); // unset rightmost set bit (fli[])
+            cnt++;
+        } return cnt;
+    }
+}
+
+package Bit_Manipulation.Interview_Problems;
+/*Q2 136. Single Number
+Solved
+Easy
+Topics
+Companies
+Hint
+Given a non-empty array of integers nums, every element appears twice except for one. Find that single one.
+
+You must implement a solution with a linear runtime complexity and use only constant extra space.
+
+ 
+
+Example 1:
+
+Input: nums = [2,2,1]
+Output: 1
+Example 2:
+
+Input: nums = [4,1,2,1,2]
+Output: 4
+Example 3:
+
+Input: nums = [1]
+Output: 1
+ 
+
+Constraints:
+
+1 <= nums.length <= 3 * 104
+-3 * 104 <= nums[i] <= 3 * 104
+Each element in the array appears twice except for one element which appears only once.
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+2.8M
+Submissions
+3.9M
+Acceptance Rate
+73.3 */
+public class SIngleNumberAmongCouples {
+    public int singleNumber(int[] a) {
+        //Utilize ^ property of x^x=0
+        int xor=0;
+        for(int i=0; i< a.length; i++) xor = xor^a[i];
+        return xor;
+    }
+}
+package Bit_Manipulation.Interview_Problems;
+/*Q3 78. Subsets
+Solved
+Medium
+Topics
+Companies
+Given an integer array nums of unique elements, return all possible 
+subsets
+ (the power set).
+
+The solution set must not contain duplicate subsets. Return the solution in any order.
+
+ 
+
+Example 1:
+
+Input: nums = [1,2,3]
+Output: [[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]]
+Example 2:
+
+Input: nums = [0]
+Output: [[],[0]]
+ 
+
+Constraints:
+
+1 <= nums.length <= 10
+-10 <= nums[i] <= 10
+All the numbers of nums are unique.
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+2M
+Submissions
+2.5M
+Acceptance Rate
+78.5% */
+import java.util.ArrayList;
+import java.util.List;
+
+public class PowerSet {
+    //using bit manip, recursive alredy done
+    public List<List<Integer>> subsets(int[] a) {
+        int n=a.length; int subsets=1<<n;
+        List<List<Integer>> al= new ArrayList<>();
+        for(int j=0; j< subsets; j++){
+            List<Integer> CurrSub= new ArrayList<>();
+            for(int i=0; i<n; i++){
+                //if ith bit set, add corresponding elem from a[] to current set
+                if((j & (1<<i))!=0) CurrSub.add(a[i]);
+            } al.add(CurrSub);
+        }
+        return al;
+    }
+    
+}
+package Bit_Manipulation.Interview_Problems;
+/*Q4 Find XOR of numbers from L to R.
+EasyAccuracy: 50.0%Submissions: 15K+Points: 2
+Be the comment of the day in POTD and win a GfG T-Shirt!
+Solve right now
+
+banner
+You are given two integers L and R, your task is to find the XOR of elements of the range [L, R].
+
+Example:
+
+Input: 
+L = 4, R = 8 
+Output:
+8 
+Explanation:
+4 ^ 5 ^ 6 ^ 7 ^ 8 = 8
+Your Task:
+
+Your task is to complete the function findXOR() which takes two integers l and r and returns the XOR of numbers from l to r.
+
+Expected Time Complexity: O(1).
+
+Expected Auxiliary Space: O(1).
+
+Constraints:
+
+1<=l<=r<=109 */
+public class XorRange {
+    public static int findXORfromLtoR(int l, int r) {
+        return findXORfrom0toN(l-1) ^ findXORfrom0toN(r);
+    }
+
+    private static int findXORfrom0toN(int n) {
+        if(n%4 == 0) return n;
+        else if(n%4 == 1) return 1;
+        else if(n%4 == 2) return n+1;
+        //else if(n%4 == 3) return 0;
+        return 0;
+    }
+}
+package Bit_Manipulation.Interview_Problems;
+/*Q5 Two numbers with odd occurrences
+MediumAccuracy: 49.49%Submissions: 44K+Points: 4
+Be the comment of the day in POTD and win a GfG T-Shirt!
+Solve right now
+
+banner
+Given an unsorted array, Arr[] of size N and that contains even number of occurrences for all numbers except two numbers. Find the two numbers in decreasing order which has odd occurrences.
+
+Example 1:
+
+Input:
+N = 8
+Arr = {4, 2, 4, 5, 2, 3, 3, 1}
+Output: {5, 1} 
+Explaination: 5 and 1 have odd occurrences.
+
+Example 2:
+
+Input:
+N = 8
+Arr = {1 7 5 7 5 4 7 4}
+Output: {7, 1}
+Explaination: 7 and 1 have odd occurrences.
+
+Your Task:
+You don't need to read input or print anything. Your task is to complete the function twoOddNum() which takes the array Arr[] and its size N as input parameters and returns the two numbers in decreasing order which have odd occurrences.
+
+
+Expected Time Complexity: O(N)
+Expected Auxiliary Space: O(1)
+
+
+Constraints:
+2 ≤ N ≤ 106
+1 ≤ Arri ≤ 1012
+
+ */
+public class TwoOddOccurrences {
+    public int[] twoOddNum(int a[], int n)
+    {
+        long xor=0; 
+        //1. get the xor of 2 nos.
+        for(int i=0;i<n;i++) xor^=a[i];
+        //2. get rightmost set bit, indicating difference, as both nos.distict
+        //long rightmostSet= (xor&(xor-1))^xor;// (xor&(xor-1)) clears right most set bit, the &xor re-extracts it
+        long rightmostSet= xor&(-xor);
+        //3. iterate, put in different buckets based on the righmost bit set or unset
+        long b0=0; long b1=0;
+        for(int i=0;i<n;i++){
+            if((rightmostSet & a[i]) == 0) b0^=a[i];
+            else b1^=a[i];
+        } 
+        // Ensure the result is in decreasing order
+        if (b0 > b1) return new int[]{(int)b0, (int)b1};
+        else return new int[]{(int)b1, (int)b0};
+        
+    }
+}

@@ -1,0 +1,1352 @@
+package Strings_Basic_and_Medium.Medium_String_Problems;
+/*Q1
+ * 
+Code
+Testcase
+Testcase
+Test Result
+451. Sort Characters By Frequency
+Solved
+Medium
+Topics
+Companies
+Given a string s, sort it in decreasing order based on the frequency of the characters. The frequency of a character is the number of times it appears in the string.
+
+Return the sorted string. If there are multiple answers, return any of them.
+
+ 
+
+Example 1:
+
+Input: s = "tree"
+Output: "eert"
+Explanation: 'e' appears twice while 'r' and 't' both appear once.
+So 'e' must appear before both 'r' and 't'. Therefore "eetr" is also a valid answer.
+Example 2:
+
+Input: s = "cccaaa"
+Output: "aaaccc"
+Explanation: Both 'c' and 'a' appear three times, so both "cccaaa" and "aaaccc" are valid answers.
+Note that "cacaca" is incorrect, as the same characters must be together.
+Example 3:
+
+Input: s = "Aabb"
+Output: "bbAa"
+Explanation: "bbaA" is also a valid answer, but "Aabb" is incorrect.
+Note that 'A' and 'a' are treated as two different characters.
+ 
+
+Constraints:
+
+1 <= s.length <= 5 * 105
+s consists of uppercase and lowercase English letters and digits.
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+737.7K
+Submissions
+1M
+Acceptance Rate
+72.6%
+ */
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+
+public class SortByFrequency {
+
+    public String frequencySort(String s) {
+        HashMap<Character, Integer> FREQ = new HashMap<>();
+        int max = Integer.MIN_VALUE;
+        for (int i = 0; i < s.length(); i ++) {
+            char c = s.charAt(i);
+            if (!FREQ.containsKey(c)) {
+                FREQ.put(c, 0);
+            }
+            FREQ.put(c, FREQ.get(c) + 1);
+            max = Math.max(max, FREQ.get(c));
+        }
+        HashMap<Integer, Queue<Character>> freqToCharList = new HashMap<>();
+        for (Character c:FREQ.keySet()) {
+            int cnt = FREQ.get(c);
+            if (!freqToCharList.containsKey(cnt)) {
+                freqToCharList.put(cnt, new LinkedList<Character>());
+            }
+            freqToCharList.get(cnt).add(c);
+        }
+        StringBuilder SortedAns = new StringBuilder();
+        for (int i = max; i > 0; i --) {
+            if (freqToCharList.containsKey(i)) {
+                while (!freqToCharList.get(i).isEmpty()) {
+                    char c = freqToCharList.get(i).poll();
+                    for (int j = 0; j < i; j ++) {
+                        SortedAns.append(c);
+                    }    
+                }
+            }
+
+        }
+        return SortedAns.toString();
+    }
+
+    public String frequencySort2(String s){
+    final int n = s.length();
+    StringBuilder SortedAns = new StringBuilder();
+    int[] Freq = new int[128];
+    // buckets[i] = characters that appear 'i' times in s
+    List<Character>[] buckets = new List[n + 1];
+
+    for (final char c : s.toCharArray())
+      ++Freq[c];
+
+    for (int i = 0; i < 128; ++i) {
+      final int freq = Freq[i];
+      if (freq > 0) {
+        if (buckets[freq] == null)
+        {
+            buckets[freq] = new ArrayList<>();
+        }
+        buckets[freq].add((char) i);
+      }
+    }
+
+    for (int freq = n; freq > 0; --freq)
+      {
+        if (buckets[freq] != null)
+        {
+            for (final char c : buckets[freq])
+          {
+            for (int i = 0; i < freq; ++i)
+            SortedAns.append(c);
+            }
+        }
+    }
+
+    return SortedAns.toString();
+    }
+}
+
+// //lc submission, use max to reduce time taken by small cases
+// class Solution {
+//     public String frequencySort(String s) {
+// final int n = s.length();
+//     StringBuilder SortedAns = new StringBuilder();
+//     int[] Freq = new int[128];
+//     // buckets[i] = characters that appear 'i' times in s
+//     List<Character>[] buckets = new List[n + 1];
+//     int max=0;
+//     for (final char c : s.toCharArray())
+//      { ++Freq[c];
+//         max=(Freq[c]>max)? Freq[c]:max;
+//      }
+
+//     for (int i = 0; i < 128; ++i) {
+//       final int freq = Freq[i];
+//       if (freq > 0) {
+//         if (buckets[freq] == null)
+//         {
+//             buckets[freq] = new ArrayList<>();
+//         }
+//         buckets[freq].add((char) i);
+//       }
+//     }
+
+//     for (int freq = max; freq > 0; --freq)
+//       {
+//         if (buckets[freq] != null)
+//         {
+//             for (final char c : buckets[freq])
+//           {
+//             for (int i = 0; i < freq; ++i)
+//             SortedAns.append(c);
+//             }
+//         }
+//     }
+
+//     return SortedAns.toString();
+//     }
+// }
+
+package Strings_Basic_and_Medium.Medium_String_Problems;
+/*Q2
+ * 1614. Maximum Nesting Depth of the Parentheses
+Easy
+Topics
+Companies
+Hint
+Given a valid parentheses string s, return the nesting depth of s. The nesting depth is the maximum number of nested parentheses.
+
+ 
+
+Example 1:
+
+Input: s = "(1+(2*3)+((8)/4))+1"
+
+Output: 3
+
+Explanation:
+
+Digit 8 is inside of 3 nested parentheses in the string.
+
+Example 2:
+
+Input: s = "(1)+((2))+(((3)))"
+
+Output: 3
+
+Explanation:
+
+Digit 3 is inside of 3 nested parentheses in the string.
+
+Example 3:
+
+Input: s = "()(())((()()))"
+
+Output: 3
+
+ 
+
+Constraints:
+
+1 <= s.length <= 100
+s consists of digits 0-9 and characters '+', '-', '*', '/', '(', and ')'.
+It is guaranteed that parentheses expression s is a VPS.
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+331K
+Submissions
+395.5K
+Acceptance Rate
+83.7%
+ */
+public class MaxNestingDepthofParentheses {
+    public int maxDepth(String s) {
+        int max = 0;
+        int opened = 0;
+    
+        for (char c : s.toCharArray())
+          {
+            if (c == '('){
+            max = (max >= ++opened)? max:opened;
+          }
+          else if (c == ')')
+            {
+                --opened;
+            }
+    }
+        return max;
+      }
+}
+package Strings_Basic_and_Medium.Medium_String_Problems;
+/*Q3
+ * 
+Code
+Testcase
+Test Result
+Test Result
+13. Roman to Integer
+Easy
+Topics
+Companies
+Hint
+Roman numerals are represented by seven different symbols: I, V, X, L, C, D and M.
+
+Symbol       Value
+I             1
+V             5
+X             10
+L             50
+C             100
+D             500
+M             1000
+For example, 2 is written as II in Roman numeral, just two ones added together. 12 is written as XII, which is simply X + II. The number 27 is written as XXVII, which is XX + V + II.
+
+Roman numerals are usually written largest to smallest from left to right. However, the numeral for four is not IIII. Instead, the number four is written as IV. Because the one is before the five we subtract it making four. The same principle applies to the number nine, which is written as IX. There are six instances where subtraction is used:
+
+I can be placed before V (5) and X (10) to make 4 and 9. 
+X can be placed before L (50) and C (100) to make 40 and 90. 
+C can be placed before D (500) and M (1000) to make 400 and 900.
+Given a roman numeral, convert it to an integer.
+
+ 
+
+Example 1:
+
+Input: s = "III"
+Output: 3
+Explanation: III = 3.
+Example 2:
+
+Input: s = "LVIII"
+Output: 58
+Explanation: L = 50, V= 5, III = 3.
+Example 3:
+
+Input: s = "MCMXCIV"
+Output: 1994
+Explanation: M = 1000, CM = 900, XC = 90 and IV = 4.
+ 
+
+Constraints:
+
+1 <= s.length <= 15
+s contains only the characters ('I', 'V', 'X', 'L', 'C', 'D', 'M').
+It is guaranteed that s is a valid roman numeral in the range [1, 3999].
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+3.7M
+Submissions
+6M
+Acceptance Rate
+61.4%
+ */
+public class Roman_Numerals {
+    public int romanToInt(String s) {
+        char[] ch= s.toCharArray();
+        int ans=0;
+        for(int i=0; i<ch.length;i++){
+            int val= ConvertRomanToInt(ch[i]);
+            int preVal= (i>=1)?ConvertRomanToInt(ch[i-1]):0;
+            ans+= val;
+            if(i>=1 && preVal<val) ans-=2*preVal;
+
+        } return ans;
+    }
+
+    private int ConvertRomanToInt(char c) {
+        switch(c){
+            case 'I': return 1;
+            case 'V': return 5;
+            case 'X': return 10;
+            case 'L': return 50;
+            case 'C': return 100;
+            case 'D': return 500;
+            case 'M': return 1000;
+        } return 0; // never executed
+    }
+
+    public static void main(String[] args) {
+        Roman_Numerals converter = new Roman_Numerals();
+
+        // Test cases
+        String s1 = "III";
+        String s2 = "LVIII";
+        String s3 = "MCMXCIV";
+
+        System.out.println("Roman numeral III converts to: " + converter.romanToInt(s1)); // Output: 3
+        System.out.println("Roman numeral LVIII converts to: " + converter.romanToInt(s2)); // Output: 58
+        System.out.println("Roman numeral MCMXCIV converts to: " + converter.romanToInt(s3)); // Output: 1994
+    }
+}
+package Strings_Basic_and_Medium.Medium_String_Problems;
+/*Q3 part 2
+ * 12. Integer to Roman
+Medium
+Topics
+Companies
+Seven different symbols represent Roman numerals with the following values:
+
+Symbol	Value
+I	1
+V	5
+X	10
+L	50
+C	100
+D	500
+M	1000
+Roman numerals are formed by appending the conversions of decimal place values from highest to lowest. Converting a decimal place value into a Roman numeral has the following rules:
+
+If the value does not start with 4 or 9, select the symbol of the maximal value that can be subtracted from the input, append that symbol to the result, subtract its value, and convert the remainder to a Roman numeral.
+If the value starts with 4 or 9 use the subtractive form representing one symbol subtracted from the following symbol, for example, 4 is 1 (I) less than 5 (V): IV and 9 is 1 (I) less than 10 (X): IX. Only the following subtractive forms are used: 4 (IV), 9 (IX), 40 (XL), 90 (XC), 400 (CD) and 900 (CM).
+Only powers of 10 (I, X, C, M) can be appended consecutively at most 3 times to represent multiples of 10. You cannot append 5 (V), 50 (L), or 500 (D) multiple times. If you need to append a symbol 4 times use the subtractive form.
+Given an integer, convert it to a Roman numeral.
+
+ 
+
+Example 1:
+
+Input: num = 3749
+
+Output: "MMMDCCXLIX"
+
+Explanation:
+
+3000 = MMM as 1000 (M) + 1000 (M) + 1000 (M)
+ 700 = DCC as 500 (D) + 100 (C) + 100 (C)
+  40 = XL as 10 (X) less of 50 (L)
+   9 = IX as 1 (I) less of 10 (X)
+Note: 49 is not 1 (I) less of 50 (L) because the conversion is based on decimal places
+Example 2:
+
+Input: num = 58
+
+Output: "LVIII"
+
+Explanation:
+
+50 = L
+ 8 = VIII
+Example 3:
+
+Input: num = 1994
+
+Output: "MCMXCIV"
+
+Explanation:
+
+1000 = M
+ 900 = CM
+  90 = XC
+   4 = IV
+ 
+
+Constraints:
+
+1 <= num <= 3999
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+1.3M
+Submissions
+2M
+Acceptance Rate
+65.0%
+ */
+public class RomanNumerals2 {
+    public String intToRoman(int num) {
+        int[] vals = {1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1};
+        String[] RomanLiterals = {"M",  "CM", "D",  "CD", "C",  "XC", "L",
+                                  "XL", "X",  "IX", "V",  "IV", "I"};
+        StringBuilder ans = new StringBuilder();
+    
+        for (int i = 0; i < vals.length; ++i) {
+          if (num == 0) break;
+          while (num >= vals[i]) {
+            int div = num/vals[i];
+            num = num%vals[i];
+            for (int j=1;j<=div;j++){
+                ans.append(RomanLiterals[i]);
+            }
+          }
+        }
+    
+        return ans.toString();
+      }
+}
+
+package Strings_Basic_and_Medium.Medium_String_Problems;
+/*
+ * Q5
+ * 8. String to Integer (atoi)
+Solved
+Medium
+Topics
+Companies
+Implement the myAtoi(string s) function, which converts a string to a 32-bit signed integer.
+
+The algorithm for myAtoi(string s) is as follows:
+
+Whitespace: Ignore any leading whitespace (" ").
+Signedness: Determine the sign by checking if the next character is '-' or '+', assuming positivity is neither present.
+Conversion: Read the integer by skipping leading zeros until a non-digit character is encountered or the end of the string is reached. If no digits were read, then the result is 0.
+Rounding: If the integer is out of the 32-bit signed integer range [-231, 231 - 1], then round the integer to remain in the range. Specifically, integers less than -231 should be rounded to -231, and integers greater than 231 - 1 should be rounded to 231 - 1.
+Return the integer as the final result.
+
+ 
+
+Example 1:
+
+Input: s = "42"
+
+Output: 42
+
+Explanation:
+
+The underlined characters are what is read in and the caret is the current reader position.
+Step 1: "42" (no characters read because there is no leading whitespace)
+         ^
+Step 2: "42" (no characters read because there is neither a '-' nor '+')
+         ^
+Step 3: "42" ("42" is read in)
+           ^
+Example 2:
+
+Input: s = " -042"
+
+Output: -42
+
+Explanation:
+
+Step 1: "   -042" (leading whitespace is read and ignored)
+            ^
+Step 2: "   -042" ('-' is read, so the result should be negative)
+             ^
+Step 3: "   -042" ("042" is read in, leading zeros ignored in the result)
+               ^
+Example 3:
+
+Input: s = "1337c0d3"
+
+Output: 1337
+
+Explanation:
+
+Step 1: "1337c0d3" (no characters read because there is no leading whitespace)
+         ^
+Step 2: "1337c0d3" (no characters read because there is neither a '-' nor '+')
+         ^
+Step 3: "1337c0d3" ("1337" is read in; reading stops because the next character is a non-digit)
+             ^
+Example 4:
+
+Input: s = "0-1"
+
+Output: 0
+
+Explanation:
+
+Step 1: "0-1" (no characters read because there is no leading whitespace)
+         ^
+Step 2: "0-1" (no characters read because there is neither a '-' nor '+')
+         ^
+Step 3: "0-1" ("0" is read in; reading stops because the next character is a non-digit)
+          ^
+Example 5:
+
+Input: s = "words and 987"
+
+Output: 0
+
+Explanation:
+
+Reading stops at the first non-digit character 'w'.
+
+ 
+
+Constraints:
+
+0 <= s.length <= 200
+s consists of English letters (lower-case and upper-case), digits (0-9), ' ', '+', '-', and '.'.
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+1.5M
+Submissions
+8.9M
+Acceptance Rate
+17.3%
+ */
+public class AtoiProblem {
+    public int myAtoi(String s) {
+        char[]str=s.toCharArray();
+        int i=0;
+
+        //skip all starting spaces           
+        while(i<str.length && str[i]==' ')i++;
+
+        //check if string is empty or only contains spaces
+        if(i==str.length)return 0;
+
+        //check for the first sign
+        int sign=1;
+        if(str[i]=='-'){
+            sign=-1;
+            i++;
+        }
+        else if(str[i]=='+')i++;
+
+        //long var to hold num because int var will overflow
+        long num=0l;
+
+        //continue untill the character is a number
+        while(i<str.length && Character.isDigit(str[i]))
+            {
+                num*=10l;
+                num+=str[i++]-'0'; //ascii char code to int coversion
+
+                //check for overflow
+                if(num>Integer.MAX_VALUE)
+                {
+                    if(sign==-1)return Integer.MIN_VALUE;
+                    else return Integer.MAX_VALUE;
+                }
+
+                //i++;
+            }
+        //return the result along with its sign
+        return sign*(int)num;
+    }
+}
+package Strings_Basic_and_Medium.Medium_String_Problems;
+/*
+ * Q5
+ * Count number of substrings
+MediumAccuracy: 20.46%Submissions: 90K+Points: 4
+Get Internship at GfG by submitting your Entries in: Data Science Blogathon
+
+banner
+Given a string of lowercase alphabets, count all possible substrings (not necessarily distinct) that have exactly k distinct characters. 
+
+Example 1:
+
+Input:
+S = "aba", K = 2
+Output:
+3
+Explanation:
+The substrings are: "ab", "ba" and "aba".
+Example 2:
+
+Input: 
+S = "abaaca", K = 1
+Output:
+7
+Explanation:
+The substrings are: "a", "b", "a", "aa", "a", "c", "a". 
+Your Task:
+You don't need to read input or print anything. Your task is to complete the function substrCount() which takes the string S and an integer K as inputs and returns the number of substrings having exactly K distinct characters.
+
+Expected Time Complexity: O(|S|).
+Expected Auxiliary Space: O(1).
+
+Constraints:
+1 ≤ |S| ≤ 106
+1 ≤ K ≤ 26
+
+
+ */
+import java.util.HashMap;
+
+public class CountSubstringWithKUniqueChars {
+    public long substrCount(String s, int k) {
+        if (k == 0) return 0;
+        if(k>s.length()) return 0;
+        return atMostKDistinct(s, k) - atMostKDistinct(s, k - 1);
+        //return ExactKDistinct(s, k);
+    }
+    // // Not work for some repeat cases, will figure later
+    // private long ExactKDistinct(String s, int k) {
+    //     if (k == 0) return 0;
+    //     if(k>s.length()) return 0;
+    //     HashMap<Character, Integer> freq = new HashMap<>();
+    //     int start = 0;
+    //     long count = 0;
+    //     long cnt=0;
+    //     for (int end = 0; end < s.length(); end++) {
+    //         char ch = s.charAt(end);
+    //         freq.put(ch, freq.getOrDefault(ch, 0) + 1);
+    //         if(freq.size() > k)
+    //         {while (freq.size() > k) {
+    //             char startChar = s.charAt(start);
+    //             freq.put(startChar, freq.get(startChar) - 1);
+    //             if (freq.get(startChar) == 0) {
+    //                 freq.remove(startChar);
+    //             } else if(freq.get(startChar) >0 && freq.size() > k) cnt++;
+    //             start++;
+    //             //if(freq.size() == k) cnt++;
+    //         }}
+    //         if(freq.size() == k) cnt++;
+    //         //count += end - start + 1;
+    //     }
+
+    //     while(start<s.length()){
+    //         if(freq.size() >= k)
+    //         {
+    //             while (freq.size() >= k) {
+    //                 char startChar = s.charAt(start);
+    //                 freq.put(startChar, freq.get(startChar) - 1);
+    //                 if (freq.get(startChar) == 0) {
+    //                     freq.remove(startChar);
+    //                 }
+    //                 start++;
+    //             if(freq.size() == k) cnt++;
+    //             }
+                
+    //         } else start++;
+    //     }
+    //     //return count;
+    //     return cnt;
+    // }
+
+
+    private long atMostKDistinct(String s, int k) {
+        if (k == 0) return 0;
+        if(k>s.length()) return 0;
+        HashMap<Character, Integer> freq = new HashMap<>();
+        int start = 0;
+        long count = 0;
+        
+        for (int end = 0; end < s.length(); end++) {
+            char ch = s.charAt(end);
+            freq.put(ch, freq.getOrDefault(ch, 0) + 1);
+            
+            while (freq.size() > k) {
+                char startChar = s.charAt(start);
+                freq.put(startChar, freq.get(startChar) - 1);
+                if (freq.get(startChar) == 0) {
+                    freq.remove(startChar);
+                }
+                start++;
+            }
+            count += end - start + 1;
+        }
+        return count;
+    }
+
+    public static void main(String[] args) {
+        CountSubstringWithKUniqueChars obj = new CountSubstringWithKUniqueChars();
+        // Test cases
+        String s1 = "aba";
+        int k1 = 2;
+        System.out.println("Count of substrings with " + k1 + " distinct characters: " + obj.substrCount(s1, k1)); // Output: 3
+
+        String s2 = "abaaca";
+        int k2 = 1;
+        System.out.println("Count of substrings with " + k2 + " distinct characters: " + obj.substrCount(s2, k2)); // Output: 7
+
+        String s3 = "abcabdabbcfa";
+        int k3 = 2;
+        System.out.println("Count of substrings with " + k3 + " distinct characters: " + obj.substrCount(s3, k3)); // Output: 12
+    }
+    // Brute way
+    // long substrCount (String s, int k) {
+    //     long cnt=0;
+    //     int n=s.length();
+    //     for(int i=0;i<n;i++){
+    //         for(int j=i;j<n;j++){
+    //             String substr=s.substring(i, j+1);
+    //             int cntUni=CountUniqueChars(substr);
+    //             if(cntUni==k) cnt++;
+    //         }
+    //     } return cnt;
+    // }
+
+    // private int CountUniqueChars(String s) {
+    //     HashMap <Character,Integer> freq=new HashMap<>();
+    //     int unique=0;
+    //     for (char ch: s.toCharArray()){
+    //         if(freq.containsKey(ch)) freq.put(ch, freq.get(ch)+1);
+    //         else {
+    //             freq.put(ch,1);
+    //             unique++;
+    //         }
+    //     } return unique;
+    // }
+}
+
+// // Array soln, only soln that gfg would accept, code 360 accepts both tho
+// class Solution
+// {
+//     public long substrCount(String s, int k) {
+//         if (k == 0) return 0;
+//         if(k>s.length()) return 0;
+//         //return countSubstringsWithAtMostKDistinctChars(s, k);
+//         return countSubstringsWithAtMostKDistinctChars(s, k) - countSubstringsWithAtMostKDistinctChars(s, k - 1);
+//     }
+
+//     private long countSubstringsWithAtMostKDistinctChars(String s, int k) {
+//         if (k == 0) return 0;
+//         if(k>s.length()) return 0;
+//         int i = 0, j = 0, currCount = 0;
+// 		int result = 0;
+
+// 		// Array to store count of characters.
+// 		int[] count = new int[26];
+
+// 		while (j < s.length()) {
+// 			// Index for current character.
+// 			int index = s.charAt(j) - 'a';
+
+// 			// Increment count for the current character.
+// 			count[index]++;
+
+// 			if (count[index] == 1) {
+// 				currCount++;
+// 			}
+
+// 			// Decrement count and increase ith pointer.
+// 			while (currCount > k) {
+// 				count[s.charAt(i) - 'a']--;
+// 				if (count[s.charAt(i) - 'a'] == 0) {
+// 					currCount--;
+// 				}
+
+// 				i++;
+// 			}
+
+// 			// Total substrings.
+// 			result += (j - i + 1);
+// 			j++;
+// 		}
+// 		return result;
+//     }
+// }
+
+// // FInal GFG submission, array based, works, best soln.
+// public class CountSubstringWithKUniqueChars {
+//     public long substrCount(String s, int k) {
+//         if (k == 0) return 0;
+//         if(k>s.length()) return 0;
+//         return countSubstringsWithAtMostKDistinctChars(s, k) - countSubstringsWithAtMostKDistinctChars(s, k - 1);
+//     }
+
+//     private long countSubstringsWithAtMostKDistinctChars(String s, int k) {
+//         if (k == 0) return 0;
+//         if(k>s.length()) return 0;
+//         int[] freq = new int[26]; // Array to store frequency of characters
+//         int start = 0;
+//         long count = 0;
+//         int uniqueCount = 0;
+
+//         for (int end = 0; end < s.length(); end++) {
+//             char ch = s.charAt(end);
+//             if (freq[ch - 'a'] == 0) uniqueCount++; // New character added to window
+//             freq[ch - 'a']++;
+
+//             while (uniqueCount > k) {
+//                 char startChar = s.charAt(start);
+//                 freq[startChar - 'a']--;
+//                 if (freq[startChar - 'a'] == 0) uniqueCount--; // Character removed from window
+//                 start++;
+//             }
+//             count += end - start + 1;
+//         }
+//         return count;
+//     }
+
+//     public static void main(String[] args) {
+//         CountSubstringWithKUniqueChars obj = new CountSubstringWithKUniqueChars();
+//         // Test cases
+//         String s1 = "aba";
+//         int k1 = 2;
+//         System.out.println("Count of substrings with " + k1 + " distinct characters: " + obj.substrCount(s1, k1)); // Output: 3
+
+//         String s2 = "abaaca";
+//         int k2 = 1;
+//         System.out.println("Count of substrings with " + k2 + " distinct characters: " + obj.substrCount(s2, k2)); // Output: 7
+
+//         String s3 = "abcabdabbcfa";
+//         int k3 = 2;
+//         System.out.println("Count of substrings with " + k3 + " distinct characters: " + obj.substrCount(s3, k3)); // Output: 16
+//     }
+// }
+package Strings_Basic_and_Medium.Medium_String_Problems;
+/*
+ * Q6
+ * 5. Longest Palindromic Substring
+Solved
+Medium
+Topics
+Companies
+Hint
+Given a string s, return the longest 
+palindromic
+ 
+substring
+ in s.
+
+ 
+
+Example 1:
+
+Input: s = "babad"
+Output: "bab"
+Explanation: "aba" is also a valid answer.
+Example 2:
+
+Input: s = "cbbd"
+Output: "bb"
+ 
+
+Constraints:
+
+1 <= s.length <= 1000
+s consist of only digits and English letters.
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+3.1M
+Submissions
+9.1M
+Acceptance Rate
+33.9%
+ */
+public class LongestPalindromeInString {
+    public String longestPalindrome(String s) {
+        int n= s.length();
+        if (n <= 1) {
+            return s;
+        }
+
+        String maxStr = s.substring(0, 1);
+        int maxLen=1;
+        for (int i = 0; i < n - 1; i++) {
+            // early exit, maxLen reach peak here if left ptr already above n/2 when maxLen> n/2
+            // cuz after this whatever Pal substring we get, its len is at max n/2-1 (==(n/4)*2-1 for even pals in best(max) case)
+            if (maxLen > n/2 && i>n/2) return maxStr;
+            // keep track of potential odd and even pals simultaneously
+            String odd = expandFromCenter(s, n, i, i); int oddLen=odd.length();
+            String even = expandFromCenter(s, n, i, i + 1); int evenLen=even.length();
+            // // early exit, maxLen reach peak here if left ptr already above n/2 when maxLen> n/2
+            // if (maxLen > n/2 && i>n/2) return maxStr; 
+            
+            if (oddLen > maxLen) {
+                maxStr = odd;
+                maxLen = oddLen;
+            }
+            if (evenLen > maxLen) {
+                maxStr = even;
+                maxLen = evenLen;
+            }
+        }
+
+        return maxStr;
+    }
+
+    private String expandFromCenter(String s, int n, int l, int r) {
+        while ((l >= 0) && (r < n) && (s.charAt(l) == s.charAt(r))) {
+            l--;
+            r++;
+        }
+        return s.substring(l + 1, r); // because after the loop ends, l and r are one step beyond the actual palindrome bounds.
+    }
+
+    public static void main(String[] args) {
+        LongestPalindromeInString obj = new LongestPalindromeInString();
+
+        // Test cases
+        String s1 = "babad";
+        System.out.println("Longest Palindromic Substring in " + s1 + ": " + obj.longestPalindrome(s1)); // Output: "bab" or "aba"
+
+        String s2 = "cbbd";
+        System.out.println("Longest Palindromic Substring in " + s2 + ": " + obj.longestPalindrome(s2)); // Output: "bb"
+
+        String s3 = "a";
+        System.out.println("Longest Palindromic Substring in " + s3 + ": " + obj.longestPalindrome(s3)); // Output: "a"
+
+        String s4 = "ac";
+        System.out.println("Longest Palindromic Substring in " + s4 + ": " + obj.longestPalindrome(s4)); // Output: "a" or "c"
+    }
+}
+package Strings_Basic_and_Medium.Medium_String_Problems;
+
+import java.util.TreeMap;
+
+//Q7
+/*
+ * 1781. Sum of Beauty of All Substrings
+Medium
+Topics
+Companies
+Hint
+The beauty of a string is the difference in frequencies between the most frequent and least frequent characters.
+
+For example, the beauty of "abaacc" is 3 - 1 = 2.
+Given a string s, return the sum of beauty of all of its substrings.
+
+ 
+
+Example 1:
+
+Input: s = "aabcb"
+Output: 5
+Explanation: The substrings with non-zero beauty are ["aab","aabc","aabcb","abcb","bcb"], each with beauty equal to 1.
+Example 2:
+
+Input: s = "aabcbaa"
+Output: 17
+ 
+
+Constraints:
+
+1 <= s.length <= 500
+s consists of only lowercase English letters.
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+49.3K
+Submissions
+75.6K
+Acceptance Rate
+65.2%
+ */
+public class BeautyOfString {
+
+
+    // MultiSet Soln., better for Integers
+    // public int beautySum(String s) {
+    //     int sum = 0;  // This variable will hold the sum of beauty values of all substrings.
+    //     int length = s.length();  // Get the length of the input string s.
+        
+    //     // Loop over each character in the string to start a new substring
+    //     for (int i = 0; i < length; i++) {
+    //         int[] counts = new int[26];  // This array keeps track of the frequency of each character in the current substring.
+    //         TreeMap<Integer, Integer> map = new TreeMap<>();  // This map keeps track of the frequencies of frequencies (meta-frequency).
+            
+    //         // Loop over each character starting from i to form substrings
+    //         for (int j = i; j < length; j++) {
+    //             char c = s.charAt(j);  // Get the current character.
+    //             int index = c - 'a';  // Convert the character to an index (0 for 'a', 1 for 'b', etc.).
+    //             counts[index]++;  // Increment the frequency of the current character.
+    //             int count = counts[index];  // Get the new frequency of the current character.
+                
+    //             // Update the TreeMap with the new frequency
+    //             map.put(count, map.getOrDefault(count, 0) + 1);  // Increment the count of the current frequency in the TreeMap.
+                
+    //             // Decrement the count of the previous frequency in the TreeMap
+    //             if (map.containsKey(count - 1)) {  // Check if the previous frequency exists in the TreeMap.
+    //                 map.put(count - 1, map.get(count - 1) - 1);  // Decrement its count.
+    //                 if (map.get(count - 1) == 0)  // If the count of the previous frequency becomes zero, remove it from the TreeMap.
+    //                     map.remove(count - 1);
+    //             }
+                
+    //             // Get the highest frequency and lowest frequency in the current substring
+    //             int maxFreq = map.lastKey();  // Get the highest frequency in the TreeMap.
+    //             int minFreq = map.firstKey();  // Get the lowest frequency in the TreeMap.
+                
+    //             // Calculate the beauty of the current substring and add it to the sum
+    //             sum += maxFreq - minFreq;  // The beauty is the difference between the highest and lowest frequencies.
+    //         }
+    //     }
+        
+    //     return sum;  // Return the total sum of beauties of all substrings.
+    // }
+        // Array soln., better fpr limited range of strings
+    public int beautySum(String s) {
+        int n = s.length();
+        int sum = 0;
+
+        // Iterate over all possible substrings
+        for (int i = 0; i < n; i++) {
+            int[] freq = new int[26]; // Array to store frequency of each character in the substring
+            for (int j = i; j < n; j++) {
+                freq[s.charAt(j) - 'a']++;
+                sum += calculateBeauty(freq);
+            }
+        }
+
+        return sum;
+    }
+
+    private int calculateBeauty(int[] freq) {
+        int max = 0;
+        int min = Integer.MAX_VALUE;
+
+        // Find the max and min freq among chars that have non-zero freq
+        for (int count : freq) {
+            if (count > 0) {
+                if (count > max) max = count;
+                if (count < min) min = count;
+            }
+        }
+
+        return max - min;
+    }
+    public static void main(String[] args) {
+        BeautyOfString obj = new BeautyOfString();
+
+        // Test cases
+        String s1 = "aabcb";
+        System.out.println("Sum of beauty for \"" + s1 + "\": " + obj.beautySum(s1)); // Output: 5
+
+        String s2 = "aabcbaa";
+        System.out.println("Sum of beauty for \"" + s2 + "\": " + obj.beautySum(s2)); // Output: 17
+    }
+
+    
+}
+// 2nd attempt, works
+// public int beautySum(String s) {
+    //     int n = s.length();
+    //     int sum = 0;
+
+    //     // Iterate over all possible substrings
+    //     for (int i = 0; i < n; i++) {
+    //         int[] freq = new int[26]; // Array to store frequency of each character in the substring
+    //         for (int j = i; j < n; j++) {
+    //             freq[s.charAt(j) - 'a']++;
+    //             sum += calculateBeauty(freq);
+    //         }
+    //     }
+
+    //     return sum;
+    // }
+
+    // private int calculateBeauty(int[] freq) {
+    //     int max = 0;
+    //     int min = Integer.MAX_VALUE;
+
+    //     // Find the max and min freq among chars that have non-zero freq
+    //     for (int count : freq) {
+    //         if (count > 0) {
+    //             if (count > max) max = count;
+    //             if (count < min) min = count;
+    //         }
+    //     }
+
+    //     return max - min;
+    // }
+
+    // // First attempt, not work, some errors
+    // public int beautySum(String s) {
+    //     int n=s.length();
+    //     if(n<=1) return 0; // as hi - lo == 1-1 = 0 == 0-0
+    //     int sum=0;
+    //     for(int i=0; i<n; i++) // i tracks start point of substring
+    //     {
+
+    //         for(int j=i; j<n; j++) // j tracks end point of substring
+    //         {
+    //             String sub=s.substring(i, j+1);
+    //             System.out.println(sub + ": ");
+    //             sum+= beauty(sub);
+    //         }
+    //     } return sum;
+    // }
+
+    // private int beauty(String s){
+    //     int n=s.length();
+    //     if(n<=1) return 0; // as hi - lo == 1-1 = 0 == 0-0
+    //     int freq[] = new int[26]; // lowercase
+    //     int max=-1; int maxI=-1;
+    //     int min=n; int minI=n;
+    //     for(char ch: s.toCharArray()){
+    //         int ind = ch - 'a';
+    //         freq[ind]++;
+    //         max=(freq[ind]>max)? freq[ind] : max;
+    //         // min=(freq[ind]<min)? freq[ind] : min;
+    //         if(freq[ind]<=min){
+    //             minI=ind;
+    //             min=freq[ind];
+    //         }
+    //         if(ind == minI && freq[ind]>min) {
+    //             min=freq[ind];
+    //         }
+    //         // if(ind!=minI){
+    //         //     minI=ind;
+    //         // }
+    //         System.out.println("min= "+min+" max= "+max+" diff= "+(max - min));
+    //     }
+    //     //int beauty = max - min;
+    //     return max - min;
+    //     /*
+    //                 * bcbaa:
+    //         min= 1 max= 1 diff= 0
+    //         min= 1 max= 1 diff= 0
+    //         min= 1 max= 2 diff= 1
+    //         min= 1 max= 2 diff= 1
+    //         min= 2 max= 2 diff= 0
+    //                 */
+    // }
+
+    package Strings_Basic_and_Medium.Medium_String_Problems;
+/*
+ * Q8 part 1
+ * 541. Reverse String II
+Easy
+Topics
+Companies
+Given a string s and an integer k, reverse the first k characters for every 2k characters counting from the start of the string.
+
+If there are fewer than k characters left, reverse all of them. If there are less than 2k but greater than or equal to k characters, then reverse the first k characters and leave the other as original.
+
+ 
+
+Example 1:
+
+Input: s = "abcdefg", k = 2
+Output: "bacdfeg"
+Example 2:
+
+Input: s = "abcd", k = 2
+Output: "bacd"
+ 
+
+Constraints:
+
+1 <= s.length <= 104
+s consists of only lowercase English letters.
+1 <= k <= 104
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+247.1K
+Submissions
+486.6K
+Acceptance Rate
+50.8%
+ */
+public class ReverseKplacesInString {
+    public String reverseStr(String s, int k) {
+        int n=s.length();
+        StringBuilder sb = new StringBuilder();
+        int shifts=(n+k-1)/k; // ceil of n/k
+        for (int i=1; i<= shifts; i++){
+            int l=(i-1)*k; int r= Math.min((l+k-1), n-1);
+            if(i%2==0){
+                while(l<=r){
+                    sb.append(s.charAt(l));
+                    l++;
+                }
+            }
+            else if(i%2!=0){
+                while(r>=l){
+                    sb.append(s.charAt(r));
+                    r--;
+                }
+            }
+        } return sb.toString();
+    }
+
+    public static void main(String[] args) {
+        ReverseKplacesInString solution = new ReverseKplacesInString();
+        
+        // Test cases
+        String s1 = "abcdefg";
+        int k1 = 2;
+        System.out.println(solution.reverseStr(s1, k1));  // Output: "bacdfeg"
+        
+        String s2 = "abcd";
+        int k2 = 2;
+        System.out.println(solution.reverseStr(s2, k2));  // Output: "bacd"
+    }
+}
+
+// // More efficient soln.
+// class Solution {
+//     public String reverseStr(String s, int k) {
+//         char[] str = s.toCharArray();
+//         int n = str.length;
+//         for(int i = 0 ; i <= n-1; i += 2*k){
+//             if(i+k-1 <= n-1){
+//                 reverseK(i,i+k-1,str);
+//             }else{
+// 				//for fewer than k characters left (edge case)
+//                 reverseK(i,n-1,str);
+//             }
+//         }
+//         String ans = new String(str);
+//         return ans;
+//     }
+//     public void reverseK(int i, int j, char[] str){
+//         while(i < j){
+//             char temp = str[i];
+//             str[i] = str[j];
+//             str[j] = temp;
+//             i++;
+//             j--;
+//         }
+//     }
+// }
+
+package Strings_Basic_and_Medium.Medium_String_Problems;
+/*
+ * Q8 part 2
+ * 557. Reverse Words in a String III
+Easy
+Topics
+Companies
+Given a string s, reverse the order of characters in each word within a sentence while still preserving whitespace and initial word order.
+
+ 
+
+Example 1:
+
+Input: s = "Let's take LeetCode contest"
+Output: "s'teL ekat edoCteeL tsetnoc"
+Example 2:
+
+Input: s = "Mr Ding"
+Output: "rM gniD"
+ 
+
+Constraints:
+
+1 <= s.length <= 5 * 104
+s contains printable ASCII characters.
+s does not contain any leading or trailing spaces.
+There is at least one word in s.
+All the words in s are separated by a single space.
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+906.2K
+Submissions
+1.1M
+Acceptance Rate
+83.1%
+ */
+public class ReverseStringCharByChar {
+    public String reverseWords(String s) {
+        int l=0;
+        int r=0;
+        int n=s.length();
+        if(n==1) return s;
+        char str[]=s.toCharArray();
+        while(l<n){
+            while(r<n && str[r]!=' ')  r++;
+            //reverse part
+            //r-1 cuz r is currently pointing at blank space when r++ stops on encountering a space
+            reverse(str,l,r-1);             
+            l=r+1;
+            // skip all spaces after reversal
+            while(l<n && str[l]==' ') l++;
+            r=l;
+        }
+        return new String(str);
+    }
+     public void reverse(char s[],int l,int r){
+         while(l<r){
+             char tmp=s[l];
+             s[l]=s[r];
+             s[r]=tmp;
+             l++;
+             r--;
+         }
+     }
+
+}
+// // Another soln using regular expression, but less efficient ultimately
+// class Solution {
+``
+//     static String reverse(StringBuilder s){
+//         return s.reverse().toString();
+//     }
+//     public String reverseWords(String s) {
+//         String arr[] = s.split(" ");
+
+//         int n = arr.length;
+
+//         StringBuilder ans = new StringBuilder("");
+
+//         for(int i=0; i<n; i++){
+//             StringBuilder x = new StringBuilder(arr[i]);
+//             ans.append(reverse(x));
+
+//             if(i!=n-1) ans.append(" ");
+//         }
+//         return ans.toString();
+//     }
+// }

@@ -1,0 +1,71 @@
+package Linked_Lists.Medium_DLL_Qs;
+
+import Linked_Lists.Doubly_Linked_List.DoublyLinkedList.Node;
+//Q1
+public class DeleteAllOccursOfK {
+    static Node deleteAllOccurOfX(Node h, int x) {
+        if(h==null) return h;
+        Node t=h;
+        while(t!=null){
+            if(t.value==x){
+                if(t==h) h=h.next;
+                Node pt=t.previous;
+                Node ft=t.next;
+                if(pt!=null) pt.next=ft;
+                if(ft!=null) ft.previous=pt;
+
+                t=ft;
+            } else t=t.next;
+
+        } return h;
+    }
+}
+package Linked_Lists.Medium_DLL_Qs;
+
+import java.util.ArrayList;
+
+import Linked_Lists.Doubly_Linked_List.DoublyLinkedList.Node;
+//Q2
+public class FindPairWithKSum {
+    public static ArrayList<ArrayList<Integer>> findPairsWithGivenSum(int k, Node h) {
+        if(h==null||h.next==null) return new ArrayList<ArrayList<Integer>>();
+        ArrayList<ArrayList<Integer>> AL = new ArrayList<>();
+        Node L = h;
+        Node R = h;
+        while(R.next!=null) R=R.next;
+        while(L.value<R.value){
+            int sum=L.value+R.value;
+            if(sum==k) {
+                ArrayList<Integer> pair = new ArrayList<>();
+                pair.add(L.value);
+                pair.add(R.value);
+                AL.add(pair);
+                L=L.next;
+                R=R.previous;
+            } else if(sum<k) L=L.next;
+            else R=R.previous;
+        } return AL;
+    }
+
+}
+package Linked_Lists.Medium_DLL_Qs;
+
+import Linked_Lists.Doubly_Linked_List.DoublyLinkedList.Node;
+// Q3
+public class DeleteDuplis {
+    Node removeDuplicates(Node h){
+        if(h==null||h.next==null) return h;
+        Node l=h;
+        while(l!=null && l.next!=null){
+            Node r = l.next;
+            while(r!=null && r.value==l.value) r=r.next;
+            l.next=r;
+            if(r!=null) r.previous=l;
+
+            l=r;
+            // or l=l.next;// any one for l to go to next unique elem
+        } return h;  
+    }
+
+}
+

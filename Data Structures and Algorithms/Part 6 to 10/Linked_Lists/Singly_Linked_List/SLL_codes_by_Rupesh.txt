@@ -1,0 +1,497 @@
+package Linked_Lists.Singly_Linked_List;
+// Q1 Implementation and Theory part
+class LinkedList {
+    Node head;
+
+    static class Node {
+        int value;
+        Node next;
+
+        Node(int d) {
+            value = d;
+            next = null;
+        }
+
+        Node(){
+            value=0;
+            next = null;
+        }
+    }
+
+    static void print(Node t) {
+        while (t != null) {
+            System.out.print(t.value + "->");
+            t = t.next;
+        }
+        System.out.println("null");
+    }
+
+    public static void main(String[] args) {
+        LinkedList linkedList = new LinkedList();
+
+        linkedList.head = new Node(1);
+        Node second = new Node(2);
+        Node third = new Node(3);
+
+        linkedList.head.next = second;
+        second.next = third;
+
+        System.out.print("LinkedList: ");
+        print(linkedList.head);
+    }
+}
+package Linked_Lists.Singly_Linked_List;
+
+import Linked_Lists.Singly_Linked_List.LinkedList.Node;
+
+/*
+ * Q1
+ * Introduction to Linked List
+EasyAccuracy: 66.76%Submissions: 17K+Points: 2
+Get Internship at GfG by submitting your Entries in: Data Science Blogathon
+
+banner
+Geek loves linked list data structure. Given an array of integer arr of size n, Geek wants to construct the linked list from arr.
+
+Construct the linked list from arr and return the head of the linked list.
+
+Example 1:
+
+Input:
+n = 5
+arr = [1,2,3,4,5]
+Output:
+1 2 3 4 5
+Explanation: Linked list for the given array will be 1->2->3->4->5.
+Example 2:
+
+Input:
+n = 2
+arr = [2,4]
+Output:
+2 4
+Explanation: Linked list for the given array will be 2->4.
+Constraints:
+1 <= n <= 105
+1 <= arr[i] <= 100
+
+Your Task:
+You don't need to read input or print anything. Your task is to complete the function constructLL() which takes arr[] as input parameters and returns the head of the Linked List.
+
+Expected Time Complexity: O(n)
+Expected Auxiliary Space: O(n)
+ */
+/*
+class Node { 
+    int data; 
+    Node next; 
+
+    Node() { data = 0; }
+    Node(int d) { data = d; }  //constructor to create a new node
+} 
+*/
+public class ArrayToLL {
+    static Node constructLL(int a[]) {
+        int n = a.length;
+        if(n==0) return null;
+        // LinkedList SLL = new LinkedList();
+        // SLL.head = new Node(a[0]);
+        // Node travel = SLL.head;
+        // for(int i=1; i<n; i++){
+        //     travel.next= new Node(a[i]); // Never forget to increment travel ptr
+        // }
+        // return SLL.head;
+        //---------------------------------
+        // Create the head of the linked list
+        Node head = new Node(a[0]);
+        Node travel = head;
+        // Loop to add the rest of the nodes
+        for (int i = 1; i < a.length; i++) {
+            travel.next = new Node(a[i]);
+            travel = travel.next; // Move the travel pointer to the next node
+        }
+        return head;
+    }
+
+    public static void main(String[] args) {
+        int a[]={1,2,3,4};
+        Node head = ArrayToLL.constructLL(a);
+        LinkedList.print(head);
+    }
+
+}
+
+// // gfg submission
+// /*
+// class Node { 
+//     int data; 
+//     Node next; 
+
+//     Node() { data = 0; }
+//     Node(int d) { data = d; }  //constructor to create a new node
+// } 
+// */
+// class Solution {
+//     static Node constructLL(int a[]) {
+//         int n = a.length;
+//         if(n==0) return null;
+//         // Create the head of the linked list
+//         Node head = new Node(a[0]);
+//         Node travel = head;
+//         // Loop to add the rest of the nodes
+//         for (int i = 1; i < a.length; i++) {
+//             travel.next = new Node(a[i]);
+//             travel = travel.next; // Move the travel pointer to the next node
+//         }
+//         return head;
+//     }
+// }
+/*
+ * Q2
+ * 
+Linked List Insertion
+BasicAccuracy: 43.96%Submissions: 193K+Points: 1
+Get Internship at GfG by submitting your Entries in: Data Science Blogathon
+
+banner
+Create a link list of size N according to the given input literals. Each integer input is accompanied by an indicator which can either be 0 or 1. If it is 0, insert the integer in the beginning of the link list. If it is 1, insert the integer at the end of the link list. 
+Hint: When inserting at the end, make sure that you handle NULL explicitly.
+
+Example 1:
+
+Input:
+LinkedList: 9->0->5->1->6->1->2->0->5->0
+Output: 5 2 9 5 6
+Explanation:
+Length of Link List = N = 5
+9 0 indicated that 9 should be
+inserted in the beginning. Modified
+Link List = 9.
+5 1 indicated that 5 should be
+inserted in the end. Modified Link
+List = 9,5.
+6 1 indicated that 6 should be
+inserted in the end. Modified Link
+List = 9,5,6.
+2 0 indicated that 2 should be
+inserted in the beginning. Modified
+Link List = 2,9,5,6.
+5 0 indicated that 5 should be
+inserted in the beginning. Modified
+Link List = 5,2,9,5,6. 
+Final linked list = 5, 2, 9, 5, 6.
+
+Example 2:
+
+Input:
+LinkedList: 5->1->6->1->9->1
+Output: 5 6 9
+
+Your Task:
+You only need to complete the functions insertAtBeginning() and insertAtEnd() that takes the head of link list and integer value of the data to be inserted as inputs and returns the head of the modified link list. 
+
+Expected Time Complexity: O(1) for insertAtBeginning() and O(N) for insertAtEnd().
+Expected Auxiliary Space: O(1) for both.
+
+Constraints:
+1 <= N <= 104
+ */
+
+ package Linked_Lists.Singly_Linked_List;
+
+ import Linked_Lists.Singly_Linked_List.LinkedList.Node;
+ 
+ public class Insert {
+     //Function to insert a node at the beginning of the linked list.
+     Node insertAtBeginning(Node head, int x)
+     {
+         // Make next of newly created node to same Node as pointed by Head
+         Node newNode = new Node(x);
+         // Make next of newly created node point to the current head
+         newNode.next = head;
+         // Node newHead = newNode;
+         // return newHead; // works but not required to create new ptr
+         // The new node itself becomes the new head of the list
+         return newNode;
+     }
+     
+     //Function to insert a node at the end of the linked list.
+     Node insertAtEnd(Node head, int x)
+     {
+         // Travel to End Node of SLL and make its next point to newly created node
+         Node newNode = new Node(x);
+          // If the list is empty, the new node becomes the head
+          if (head == null) {
+             return newNode;
+         }
+         // Travel to the end of the list
+         Node travel = head;
+         while(travel.next!=null){
+             travel=travel.next;
+         }
+         // Make the last node's next point to the new node
+         travel.next = newNode;
+         return head;
+     }
+ 
+     public static void main(String[] args) {
+         Insert insert = new Insert();
+         Node head = null;
+ 
+         // Example 1
+         int[] data = {9, 5, 6, 2, 5};
+         int[] indicators = {0, 1, 1, 0, 0};
+         for (int i = 0; i < data.length; i++) {
+             if (indicators[i] == 0) {
+                 head = insert.insertAtBeginning(head, data[i]);
+             } else {
+                 head = insert.insertAtEnd(head, data[i]);
+             }
+         }
+         LinkedList.print(head);  // Expected Output: 5->2->9->5->6->null
+ 
+         // Example 2
+         head = null;  // Reset the list
+         int[] data2 = {5, 6, 9};
+         int[] indicators2 = {1, 1, 1};
+         for (int i = 0; i < data2.length; i++) {
+             if (indicators2[i] == 0) {
+                 head = insert.insertAtBeginning(head, data2[i]);
+             } else {
+                 head = insert.insertAtEnd(head, data2[i]);
+             }
+         }
+         LinkedList.print(head);  // Expected Output: 5->6->9->null
+     }
+ }
+/*
+ * Q3
+ * 237. Delete Node in a Linked List
+Medium
+Topics
+Companies
+There is a singly-linked list head and we want to delete a node node in it.
+
+You are given the node to be deleted node. You will not be given access to the first node of head.
+
+All the values of the linked list are unique, and it is guaranteed that the given node node is not the last node in the linked list.
+
+Delete the given node. Note that by deleting the node, we do not mean removing it from memory. We mean:
+
+The value of the given node should not exist in the linked list.
+The number of nodes in the linked list should decrease by one.
+All the values before node should be in the same order.
+All the values after node should be in the same order.
+Custom testing:
+
+For the input, you should provide the entire linked list head and the node to be given node. node should not be the last node of the list and should be an actual node in the list.
+We will build the linked list and pass the node to your function.
+The output will be the entire list after calling your function.
+ 
+
+Example 1:
+
+
+Input: head = [4,5,1,9], node = 5
+Output: [4,1,9]
+Explanation: You are given the second node with value 5, the linked list should become 4 -> 1 -> 9 after calling your function.
+Example 2:
+
+
+Input: head = [4,5,1,9], node = 1
+Output: [4,5,9]
+Explanation: You are given the third node with value 1, the linked list should become 4 -> 5 -> 9 after calling your function.
+ 
+
+Constraints:
+
+The number of the nodes in the given list is in the range [2, 1000].
+-1000 <= Node.val <= 1000
+The value of each node in the list is unique.
+The node to be deleted is in the list and is not a tail node.
+Seen this question in a real interview before?
+1/5
+Yes
+No
+Accepted
+1.4M
+Submissions
+1.8M
+Acceptance Rate
+79.9%
+
+ */
+
+ /**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+
+ package Linked_Lists.Singly_Linked_List;
+
+ import Linked_Lists.Singly_Linked_List.LinkedList.Node;
+ 
+ public class Delete {
+     // Fn to Delete non-tail Node w/o head ptr, given only access to that node
+     // First attempt, O(n)
+     public void deleteNode(Node node) {
+         if (node == null || node.next == null) 
+             return; // If node is null or node is last node, do nothing
+ 
+         // Create Ptr to keep track of Previous Node while traversing
+         Node prevNode = null;
+         // Traverse SLL by ++ing node till we hit null
+         while (node != null && node.next != null) {
+             // Copy(Overwrite) the val of next node to curr node
+             node.value = node.next.value;
+             prevNode = node; // Update previous node ptr to pt to curr node
+             node = node.next; // Move to the next node
+         }
+ 
+         // If prev node exists (probable), set its next ptr to null to remove the last node
+         if (prevNode != null) {
+             prevNode.next = null;
+         }
+     }
+ 
+     public void deleteTail(Node h){
+         // if SLL is vacant or has 1 node, just loose the head by returning null
+         if (h == null || h.next == null) return;
+         Node travel = h;
+         // Traverse till 2nd last node
+         while (travel.next.next!=null) travel=travel.next;
+ 
+         travel.next=null; // remove link of 2nd last node from last node, deleting it        
+ 
+     }
+ 
+     public static void main(String[] args) {
+         // Creating a test linked list: 4 -> 5 -> 1 -> 9
+         LinkedList linkedList = new LinkedList();
+         linkedList.head = new Node(4);
+         linkedList.head.next = new Node(5);
+         linkedList.head.next.next = new Node(1);
+         linkedList.head.next.next.next = new Node(9);
+ 
+         // Node to be deleted
+         Node nodeToDelete = linkedList.head.next; // Node with value 5
+ 
+         // Deleting the node
+         Delete delete = new Delete();
+         delete.deleteNode(nodeToDelete);
+ 
+         // Printing the modified linked list
+         LinkedList.print(linkedList.head); // Expected output: 4 -> 1 -> 9 -> null
+ 
+         delete.deleteTail(linkedList.head);
+         // Printing the modified linked list
+         LinkedList.print(linkedList.head); // Expected output: 4 -> 1 -> null
+ 
+ 
+     }
+ }
+ 
+ // // LC submission, better actually O(1)
+ // // Soln. is applicable only because it is mentioned in the question that it is not the last node(tail)
+ // public void deleteNode(ListNode node) {
+ //     // Copy the value of the next node to the current node.
+ //     node.val = node.next.val;
+ //     // Adjust the next pointer to skip the next node.
+ //     node.next = node.next.next;
+ // }
+ 
+ package Linked_Lists.Singly_Linked_List;
+
+import Linked_Lists.Singly_Linked_List.LinkedList.Node;
+// Q4
+public class Length {
+    // Fn to find no. of nodes in a SLL
+    public static int length(Node h){
+        if(h==null) return 0;
+        if(h.next==null) return 1;
+        Node travel = h;
+        int cnt=1;
+        while(travel.next != null){
+            travel=travel.next;
+            cnt++;
+        }
+        return cnt;
+    }
+    // // Another way to write
+    // public static int length(Node h) {
+    //     int count = 0;
+    //     Node travel = h;
+    //     while (travel != null) {
+    //         count++;
+    //         travel = travel.next;
+    //     }
+    //     return count;
+    // }
+    public static void main(String[] args) {
+        // Test the length function
+        LinkedList linkedList = new LinkedList();
+        linkedList.head = new Node(1);
+        linkedList.head.next = new Node(2);
+        linkedList.head.next.next = new Node(3);
+        linkedList.head.next.next.next = new Node(4);
+
+        System.out.println("Length of the linked list: " + Length.length(linkedList.head)); // Expected output: 4
+    }
+}
+package Linked_Lists.Singly_Linked_List;
+//Q5
+import Linked_Lists.Singly_Linked_List.LinkedList.Node;
+
+public class Search {
+    //Fn that tells if a no. is present in SLL
+    static boolean searchKey(Node head, int key) {
+        if(head==null) return false;
+        Node travel = head;
+        while(travel != null) {
+            if(travel.value==key) return true;
+            travel=travel.next;
+        }
+        return false;
+    }
+
+    //Fn that returns ptr to node if the int is present in SLL
+    public static Node search(Node h, int x){
+        if(h==null) return null;
+        Node travel = h;
+        while(travel != null) {
+            if(travel.value==x) return travel;
+            travel=travel.next;
+        }
+        return null;
+    }
+
+    public static void main(String[] args) {
+        // Test the search functions
+        LinkedList linkedList = new LinkedList();
+        linkedList.head = new Node(1);
+        linkedList.head.next = new Node(2);
+        linkedList.head.next.next = new Node(3);
+        linkedList.head.next.next.next = new Node(4);
+
+        System.out.println("Is 3 present? " + searchKey(linkedList.head, 3)); // Expected output: true
+        System.out.println("Is 5 present? " + searchKey(linkedList.head, 5)); // Expected output: false
+
+        Node resultNode = search(linkedList.head, 3);
+        if (resultNode != null) {
+            System.out.println("Node with value 3 found: " + resultNode.value); // Expected output: 3
+        } else {
+            System.out.println("Node with value 3 not found");
+        }
+
+        resultNode = search(linkedList.head, 5);
+        if (resultNode != null) {
+            System.out.println("Node with value 5 found: " + resultNode.value);
+        } else {
+            System.out.println("Node with value 5 not found"); // Expected output: Node with value 5 not found
+        }
+    }
+}
